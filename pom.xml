@@ -29,7 +29,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <net.sf.opencsv.version>2.3</net.sf.opencsv.version>
+        <tool.proguard.version>5.3.2</tool.proguard.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- скажем "нет" варнингам! -->
+        <myFinalName>obf_${project.name}_${java.version}_${os.name}</myFinalName>
     </properties>
 
     <dependencies>
@@ -55,11 +57,44 @@
                             <mainClass>ru.otus.lottery.Main</mainClass>
                         </manifest>
                     </archive>
-                    <finalName>hoorah_${project.name}_${java.version}_${os.name}</finalName>
+                    <finalName>${myFinalName}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.13</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>${tool.proguard.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals><goal>proguard</goal></goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>${tool.proguard.version}</proguardVersion>
+                    <options>
+                        <option>-keep public class ru.otus.lottery.Main{public static void main(java.lang.String[]);}</option>
+                        <option>-keep class junit.** { *; }</option>
+                        <option>-keep class au.** { *; }</option>
+                        <option>-keep class org.** { *; }</option>
+                    </options>
+                    <injar>${myFinalName}.jar</injar>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                        <lib>${java.home}/lib/jce.jar</lib>
+                    </libs>
                 </configuration>
             </plugin>
         </plugins>
