@@ -85,7 +85,7 @@
                 <configuration>
                     <proguardVersion>${tool.proguard.version}</proguardVersion>
                     <options>
-                        <option>-keep public class ru.otus.lottery.Main{public static void main(java.lang.String[]);}</option>
+                        <option>-keep public class *{public *;}</option>
                         <option>-keep class junit.** { *; }</option>
                         <option>-keep class au.** { *; }</option>
                         <option>-keep class org.** { *; }</option>
