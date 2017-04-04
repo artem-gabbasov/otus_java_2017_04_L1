@@ -29,7 +29,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <net.sf.opencsv.version>2.3</net.sf.opencsv.version>
-        <tool.proguard.version>5.3.2</tool.proguard.version>
+        <tool.proguard.version>5.3.3</tool.proguard.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- скажем "нет" варнингам! -->
         <myFinalName>obf_${project.name}_${java.version}_${os.name}</myFinalName>
     </properties>
@@ -50,25 +50,9 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>ru.otus.lottery.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <finalName>${myFinalName}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>com.github.wvengen</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.0.13</version>
+                <version>2.0.14</version>
                 <dependencies>
                     <dependency>
                         <groupId>net.sf.proguard</groupId>
@@ -78,7 +62,7 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals><goal>proguard</goal></goals>
                     </execution>
                 </executions>
@@ -90,7 +74,9 @@
                         <option>-keep class au.** { *; }</option>
                         <option>-keep class org.** { *; }</option>
                     </options>
-                    <injar>${myFinalName}.jar</injar>
+                    <!--<injar>${myFinalName}.jar</injar>-->
+                    <includeDependency>true</includeDependency>
+                    <includeDependencyInjar>true</includeDependencyInjar>
                     <libs>
                         <lib>${java.home}/lib/rt.jar</lib>
                         <lib>${java.home}/lib/jce.jar</lib>
