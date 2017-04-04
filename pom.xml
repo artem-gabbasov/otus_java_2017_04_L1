@@ -81,6 +81,7 @@
                         <lib>${java.home}/lib/rt.jar</lib>
                         <lib>${java.home}/lib/jce.jar</lib>
                     </libs>
+                    <outjar>${myFinalName}.jar</outjar>
                 </configuration>
             </plugin>
         </plugins>
