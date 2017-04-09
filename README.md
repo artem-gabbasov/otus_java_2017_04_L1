@@ -1,3 +1,8 @@
-# otus_java_2017_04_L1
-Артём Габбасов
-Artem Gabbasov
+# Домашние задания для курса "Разработчик Java" в Otus.ru
+
+Группа 2017-04.3
+Автор
+
+Artem Gabbasov (Артём Габбасов)
+
+artem.gabbasov@gmail.com
