@@ -2,6 +2,7 @@ package ru.otus.l41;
 
 import javax.management.*;
 import java.lang.management.ManagementFactory;
+import java.util.Date;
 
 /**
  * Created by tully.
@@ -34,26 +35,24 @@ import java.lang.management.ManagementFactory;
 
 
  jinfo -- list VM parameters
- jhat / jvisialvm -- analyze heap dump
+ jhat / jvisualvm -- analyze heap dump
 
  */
 
+// У меня использовались параметры:
+// -Xms512m
+// -Xmx512m
+
 public class Main {
     public static void main(String... args) throws Exception {
-        System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
+        System.out.println(new Date() + "\n" +
+                "Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
 
-        int size = 5 * 1000 * 1000;
-        //int size = 50 * 1024 * 1024;//for OOM with -Xms512m
-        //int size = 50 * 1024 * 102; //for small dump
+        // Создаём объект, который будет следить за сборками мусора
+        new GCMonitor();
 
-
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        ObjectName name = new ObjectName("ru.otus:type=Benchmark");
-        Benchmark mbean = new Benchmark();
-        mbs.registerMBean(mbean, name);
-
-        mbean.setSize(size);
-        mbean.run();
+        // Создаём и запускаем объект, который создаёт мусор
+        new GarbageCreator().run();
     }
 
 }
