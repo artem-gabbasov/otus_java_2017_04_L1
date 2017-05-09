@@ -1,12 +1,10 @@
 package ru.otus.l51.tests;
 
 import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
-import ru.otus.l51.tests.ClassListTester;
 
 import java.util.*;
 
@@ -14,7 +12,7 @@ import java.util.*;
  * Created by Artem Gabbasov on 09.05.2017.
  */
 public class PackageTester {
-    private List<Class<?>> classes;
+    private final List<Class<?>> classes;
 
     public PackageTester(String packageName) {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
