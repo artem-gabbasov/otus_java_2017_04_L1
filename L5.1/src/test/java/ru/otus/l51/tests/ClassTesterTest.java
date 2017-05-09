@@ -1,5 +1,7 @@
-package ru.otus.l51;
+package ru.otus.l51.tests;
 
+import ru.otus.l51.MyAssert;
+import ru.otus.l51.tests.ReflectionHelper;
 import ru.otus.l51.annotations.testing.After;
 import ru.otus.l51.annotations.testing.Before;
 import ru.otus.l51.annotations.testing.Test;

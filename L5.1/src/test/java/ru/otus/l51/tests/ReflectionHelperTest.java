@@ -1,7 +1,8 @@
-package ru.otus.l51;
+package ru.otus.l51.tests;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ru.otus.l51.tests.ReflectionHelper;
 
 /**
  * Created by tully.

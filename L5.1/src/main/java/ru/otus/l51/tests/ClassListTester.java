@@ -1,4 +1,6 @@
-package ru.otus.l51;
+package ru.otus.l51.tests;
+
+import ru.otus.l51.tests.ClassTester;
 
 import java.util.List;
 

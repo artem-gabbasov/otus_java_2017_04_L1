@@ -1,4 +1,4 @@
-package ru.otus.l51;
+package ru.otus.l51.tests;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
