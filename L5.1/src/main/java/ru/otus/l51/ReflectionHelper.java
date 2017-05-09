@@ -15,17 +15,22 @@ class ReflectionHelper {
     private ReflectionHelper() {
     }
 
-    static <T> T instantiate(Class<T> type, Object... args) {
+    static <T> T instantiate(Class<T> type, Object[] args, Class<?>[] classes) {
+        if (args.length != classes.length) throw new IllegalArgumentException("Lengths of \"args\" and \"classes\" must match");
         try {
             if (args.length == 0) {
                 return type.newInstance();
             } else {
-                return type.getConstructor(toClasses(args)).newInstance(args);
+                return type.getConstructor(classes).newInstance(args);
             }
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    static <T> T instantiate(Class<T> type, Object... args) {
+        return instantiate(type, args, toClasses(args));
     }
 
     static Object getFieldValue(Object object, String name) {
@@ -63,11 +68,12 @@ class ReflectionHelper {
         }
     }
 
-    static Object callMethod(Object object, String name, Object... args) {
+    static Object callMethod(Object object, String name, Object[] args, Class<?>[] classes) {
         Method method = null;
         boolean isAccessible = true;
+        if (args.length != classes.length) throw new IllegalArgumentException("Lengths of \"args\" and \"classes\" must match");
         try {
-            method = object.getClass().getDeclaredMethod(name, toClasses(args));
+            method = object.getClass().getDeclaredMethod(name, classes);
             isAccessible = method.isAccessible();
             method.setAccessible(true);
             return method.invoke(object, args);
@@ -79,6 +85,10 @@ class ReflectionHelper {
             }
         }
         return null;
+    }
+
+    static Object callMethod(Object object, String name, Object... args) {
+        return callMethod(object, name, args, toClasses(args));
     }
 
     static private Class<?>[] toClasses(Object[] args) {

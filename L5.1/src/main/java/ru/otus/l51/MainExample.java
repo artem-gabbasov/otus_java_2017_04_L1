@@ -19,12 +19,12 @@ import java.util.List;
         lastChanged = "2017-04-19",
         lastChangedBy = "tully"
 )
-public class Main<T extends @Email String> { //ElementType.TYPE_USE
+public class MainExample<T extends @Email String> { //ElementType.TYPE_USE
     @SuppressWarnings({"unused", "FieldCanBeLocal"}) //ElementType.FIELD
     private final int size;
 
     @Deprecated //ElementType.CONSTRUCTOR
-    public Main(int size) {
+    public MainExample(int size) {
         this.size = size;
     }
 
@@ -33,7 +33,7 @@ public class Main<T extends @Email String> { //ElementType.TYPE_USE
         @NotNull List<String> list =  //ElementType.LOCAL_VARIABLE
                 new @NonEmpty ArrayList<>(); //ElementType.TYPE_USE
 
-        Main.<@Email String>cast(list);
+        MainExample.<@Email String>cast(list);
     }
 
     private static <E> E cast(Object object) {
