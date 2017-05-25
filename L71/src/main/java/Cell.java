@@ -1,24 +1,29 @@
+import java.util.Objects;
+
 /**
  * Created by Artem Gabbasov on 24.05.2017.
  *
  * Класс ячейки банкомата, отвечающей за конкретный номинал банкнот.
  * Все суммы целочисленные, т.к. в данной задаче нет цели моделировать работу с копейками
  */
-public class Cell implements Restorable {
+public class Cell implements Restorable, Comparable<Cell> {
     private final long faceValue;
     private long count;
-    private final Cell next;
+    private Cell next = null;
 
     /**
      *
      * @param faceValue     Номинал купюр данной ячейки
      * @param initialCount  Изначальное количество купюр
-     * @param next          Следующая ячейка для Chain of responsibility
      */
-    public Cell(long faceValue, long initialCount, Cell next) {
+    public Cell(long faceValue, long initialCount) {
         this.faceValue = faceValue;
         count = initialCount;
-        this.next = next;
+    }
+
+    public Cell(long faceValue, Object state) {
+        this.faceValue = faceValue;
+        setState(state);
     }
 
     public long getFaceValue() {
@@ -31,6 +36,15 @@ public class Cell implements Restorable {
 
     public void setCount(long count) {
         this.count = count;
+    }
+
+    /**
+     * Задаёт следующую ячейку для Chain of responsibility
+     *
+     * @param next          Следующая ячейка для Chain of responsibility
+     */
+    public void setNext(Cell next) {
+        this.next = next;
     }
 
     /**
@@ -104,5 +118,29 @@ public class Cell implements Restorable {
     @Override
     public void setState(Object state) {
         setCount((Long)state);
+    }
+
+    @Override
+    public int compareTo(Cell o) {
+        if (o == null) throw new NullPointerException();
+
+        if (faceValue < o.faceValue) return -1;
+        if (faceValue > o.faceValue) return 1;
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
+
+        Cell cell = (Cell)o;
+        return (faceValue == cell.faceValue && this.count == cell.count);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(faceValue, count);
     }
 }

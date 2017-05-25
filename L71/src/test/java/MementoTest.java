@@ -6,7 +6,7 @@ import org.junit.Test;
 public class MementoTest {
     @Test
     public void restore() {
-        Cell cell = new Cell(500, 4, null);
+        Cell cell = new Cell(500, 4);
         Memento<Cell> m = new Memento<>(cell);
         cell.setCount(0);
         m.restore();
