@@ -6,7 +6,7 @@ import java.util.Objects;
  * Класс ячейки банкомата, отвечающей за конкретный номинал банкнот.
  * Все суммы целочисленные, т.к. в данной задаче нет цели моделировать работу с копейками
  */
-public class Cell implements Restorable, Comparable<Cell> {
+public class Cell implements Restorable {
     private final long faceValue;
     private long count;
     private Cell next = null;
@@ -118,15 +118,6 @@ public class Cell implements Restorable, Comparable<Cell> {
     @Override
     public void setState(Object state) {
         setCount((Long)state);
-    }
-
-    @Override
-    public int compareTo(Cell o) {
-        if (o == null) throw new NullPointerException();
-
-        if (faceValue < o.faceValue) return -1;
-        if (faceValue > o.faceValue) return 1;
-        return 0;
     }
 
     @Override

@@ -105,17 +105,6 @@ public class CellTest {
     }
 
     @Test
-    public void compareTo() {
-        Cell cell100 = new Cell(100, 3);
-        Cell cell500 = new Cell(500, 4);
-        Cell cell500_ = new Cell(500, 4);
-        // сравниваем по номиналу
-        assert (cell500.compareTo(cell100) > 0);
-        assert (cell100.compareTo(cell500) < 0);
-        assert (cell500_.compareTo(cell500) == 0);
-    }
-
-    @Test
     public void equalsTest() {
         Cell cell1 = new Cell(500, 4);
         Cell cell2 = new Cell(100, 3);
