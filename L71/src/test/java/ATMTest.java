@@ -68,7 +68,7 @@ public class ATMTest {
         ATM atm = new ATM(cellsArray);
 
         Cell[] expectedArray = Arrays.copyOf(cellsArray, cellsArray.length);
-        expectedArray[1].setCount(15);
+        expectedArray[1] = new Cell(500, 15);
 
         atm.updateCell(500, 15L);
 
@@ -84,8 +84,7 @@ public class ATMTest {
 
         ATM atm = new ATM(cellsArray);
 
-        Cell[] expectedArray = Arrays.copyOf(cellsArray, cellsArray.length);
-        expectedArray = Arrays.copyOf(expectedArray, 3);
+        Cell[] expectedArray = Arrays.copyOf(cellsArray, 3);
         expectedArray[2] = new Cell(1000, 20);
 
         atm.updateCell(1000, 20L);
@@ -101,9 +100,9 @@ public class ATMTest {
 
         ATM atm = new ATM(cellsArray);
 
-        Cell[] expectedArray = Arrays.copyOf(cellsArray, cellsArray.length);
-        expectedArray[0].setCount(1);
-        expectedArray[1].setCount(0);
+        Cell[] expectedArray = new Cell[2];
+        expectedArray[0] = new Cell(50, 1);
+        expectedArray[1] = new Cell(500, 0);
 
         atm.withdrawAmount(3 * 500 + 3 * 50);
 
@@ -157,5 +156,33 @@ public class ATMTest {
         ATM atm = new ATM(null);
 
         assert atm.getRemainder() == 0;
+    }
+
+    @Test
+    public void saveAndRestore() {
+        Cell[] cellsArray = new Cell[2];
+        cellsArray[0] = new Cell(50, 4);
+        cellsArray[1] = new Cell(500, 3);
+
+        ATM atm = new ATM(cellsArray);
+
+        Cell[] expectedArray = Arrays.copyOf(cellsArray, cellsArray.length);
+
+        atm.withdrawAmount(3 * 500 + 3 * 50);
+        atm.restore();
+
+        assert Arrays.equals((Cell[])atm.getState(), expectedArray);
+
+        atm.withdrawAmount(500);
+        expectedArray[1] = new Cell(500, 2);
+        atm.saveState();
+
+        atm.withdrawAmount(2 * 500);
+
+        assert !Arrays.equals((Cell[])atm.getState(), expectedArray);
+
+        atm.restore();
+
+        assert Arrays.equals((Cell[])atm.getState(), expectedArray);
     }
 }

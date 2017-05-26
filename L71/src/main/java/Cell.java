@@ -90,7 +90,7 @@ public class Cell implements Restorable, Comparable<Cell> {
      */
     public boolean handleWithdrawRequest(long amount) {
         // сохраняем текущее состояние на случай, если понадобится его откатить (если запрошенную сумму не удастся набрать)
-        Memento<Cell> m = new Memento<>(this);
+        Memento m = new Memento(this);
 
         long remainder = withdrawAmount(amount);
         if (remainder == 0) return true;

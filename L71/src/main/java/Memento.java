@@ -1,11 +1,11 @@
 /**
  * Created by Artem Gabbasov on 25.05.2017.
  */
-class Memento<T extends Restorable> {
-    private final T originator;
+class Memento {
+    private final Restorable originator;
     private final Object state;
 
-    public Memento(T originator) {
+    public Memento(Restorable originator) {
         this.originator = originator;
         state = originator.getState();
     }

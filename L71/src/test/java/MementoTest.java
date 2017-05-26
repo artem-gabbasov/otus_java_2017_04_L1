@@ -7,7 +7,7 @@ public class MementoTest {
     @Test
     public void restore() {
         Cell cell = new Cell(500, 4);
-        Memento<Cell> m = new Memento<>(cell);
+        Memento m = new Memento(cell);
         cell.setCount(0);
         m.restore();
         assert cell.getCount() == 4;

@@ -6,7 +6,7 @@ import java.util.*;
  * Класс, моделирующий работу банкомата
  *
  */
-public class ATM implements Restorable {
+public class ATM implements Restorable, Maintainable {
     /* отсортированное по возрастанию номиналов начальное состояние ячеек.
         В качестве ключа используется номинал.
         Сортировка нужна, чтобы в нужном порядке набирать купюры
@@ -17,6 +17,7 @@ public class ATM implements Restorable {
         В Values будем хранить состояния ячеек
      */
     private SortedMap<Long, Object> cells;
+    private Memento canonicalState;
 
     /**
      * @param cells                         Список изначальных состояний ячеек данного банкомата
@@ -24,6 +25,7 @@ public class ATM implements Restorable {
      */
     public ATM(Cell[] cells) throws IllegalArgumentException {
         setState(cells);
+        saveState();
     }
 
     @Override
@@ -116,5 +118,18 @@ public class ATM implements Restorable {
         return list.stream()
                 .mapToLong(Cell::getRemainder)
                 .sum();
+    }
+
+    public void saveState() {
+        canonicalState = new Memento(this);
+    }
+
+    public void restore() {
+        canonicalState.restore();
+    }
+
+    @Override
+    public void onAddition() {
+        saveState();
     }
 }
