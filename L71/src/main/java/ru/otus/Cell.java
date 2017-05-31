@@ -1,3 +1,5 @@
+package ru.otus;
+
 import java.util.Objects;
 
 /**
@@ -6,22 +8,17 @@ import java.util.Objects;
  * Класс ячейки банкомата, отвечающей за конкретный номинал банкнот.
  * Все суммы целочисленные, т.к. в данной задаче нет цели моделировать работу с копейками
  */
-public class Cell implements Restorable {
+public class Cell implements Restorable<Long> {
     private final long faceValue;
     private long count;
     private Cell next = null;
 
     /**
      *
-     * @param faceValue     Номинал купюр данной ячейки
-     * @param initialCount  Изначальное количество купюр
+     * @param faceValue     номинал купюр данной ячейки
+     * @param state         количество купюр
      */
-    public Cell(long faceValue, long initialCount) {
-        this.faceValue = faceValue;
-        count = initialCount;
-    }
-
-    public Cell(long faceValue, Object state) {
+    public Cell(long faceValue, long state) {
         this.faceValue = faceValue;
         setState(state);
     }
@@ -111,13 +108,13 @@ public class Cell implements Restorable {
     }
 
     @Override
-    public Object getState() {
+    public Long getState() {
         return count;
     }
 
     @Override
-    public void setState(Object state) {
-        setCount((Long)state);
+    public void setState(Long state) {
+        setCount(state);
     }
 
     @Override

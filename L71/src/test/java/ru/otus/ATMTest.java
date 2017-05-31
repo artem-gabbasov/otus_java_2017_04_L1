@@ -1,5 +1,9 @@
+package ru.otus;
+
 import org.junit.Assert;
 import org.junit.Test;
+import ru.otus.ATM;
+import ru.otus.Cell;
 
 import java.util.*;
 

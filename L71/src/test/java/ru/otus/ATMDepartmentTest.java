@@ -1,4 +1,9 @@
+package ru.otus;
+
 import org.junit.Test;
+import ru.otus.ATM;
+import ru.otus.ATMDepartment;
+import ru.otus.Cell;
 
 import java.util.Arrays;
 

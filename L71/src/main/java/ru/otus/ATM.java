@@ -1,3 +1,5 @@
+package ru.otus;
+
 import java.util.*;
 
 /**
@@ -6,7 +8,7 @@ import java.util.*;
  * Класс, моделирующий работу банкомата
  *
  */
-public class ATM implements Restorable, Maintainable {
+public class ATM implements Restorable<Cell[]>, Maintainable {
     /* отсортированное по возрастанию номиналов начальное состояние ячеек.
         В качестве ключа используется номинал.
         Сортировка нужна, чтобы в нужном порядке набирать купюры
@@ -16,7 +18,7 @@ public class ATM implements Restorable, Maintainable {
 
         В Values будем хранить состояния ячеек
      */
-    private SortedMap<Long, Object> cells;
+    private SortedMap<Long, Long> cells;
     private Memento canonicalState;
 
     /**
@@ -29,7 +31,7 @@ public class ATM implements Restorable, Maintainable {
     }
 
     @Override
-    public Object getState() {
+    public Cell[] getState() {
         List<Cell> list = createCellsList();
         Cell[] result = new Cell[list.size()];
         return list.toArray(result);
@@ -48,16 +50,15 @@ public class ATM implements Restorable, Maintainable {
      * @param state                         состояние данного банкомата (массив задаваемых состояний ячеек)
      * @throws IllegalArgumentException     если какой-либо номинал встречается дважды
      */
-    public void setState(Object state) throws IllegalArgumentException {
+    public void setState(Cell[] state) throws IllegalArgumentException {
         if (state == null) {
             cells = new TreeMap<>();
             return;
         }
 
-        Cell[] cellsArray = (Cell[])state;
         cells = new TreeMap<>();
-        for (Cell cell : cellsArray) cells.put(cell.getFaceValue(), cell.getState());
-        if (cells.size() < cellsArray.length) throw new IllegalArgumentException("There are duplicates");
+        for (Cell cell : state) cells.put(cell.getFaceValue(), cell.getState());
+        if (cells.size() < state.length) throw new IllegalArgumentException("There are duplicates");
     }
 
     /**
@@ -67,7 +68,7 @@ public class ATM implements Restorable, Maintainable {
      * @param faceValue номинал ячейки, которую надо обновить
      * @param state     задаваемое состояние
      */
-    public void updateCell(long faceValue, Object state) {
+    public void updateCell(long faceValue, long state) {
         cells.put(faceValue, state);
     }
 
@@ -81,7 +82,7 @@ public class ATM implements Restorable, Maintainable {
         List<Cell> list = createCellsList();
         Cell chain = getChainOfResponsibility(list);
 
-        if (chain == null) throw new IllegalArgumentException("ATM has no notes");
+        if (chain == null) throw new IllegalArgumentException("ru.otus.ATM has no notes");
 
         if (!chain.handleWithdrawRequest(amount)) throw new IllegalArgumentException("Incorrect amount");
         else {
@@ -91,7 +92,7 @@ public class ATM implements Restorable, Maintainable {
     }
 
     /**
-     * Строит Chain of Responsibility по заданным для данного ATM ячейкам
+     * Строит Chain of Responsibility по заданным для данного ru.otus.ATM ячейкам
      *
      * @param list  список ячеек, из которых будет состоять цепочка (предполагается, что он отсортирован по возрастанию)
      * @return      первая ячейка цепи (с наибольшим номиналом)

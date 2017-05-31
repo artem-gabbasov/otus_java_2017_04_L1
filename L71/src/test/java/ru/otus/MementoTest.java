@@ -1,4 +1,8 @@
+package ru.otus;
+
 import org.junit.Test;
+import ru.otus.Cell;
+import ru.otus.Memento;
 
 /**
  * Created by Artem Gabbasov on 25.05.2017.

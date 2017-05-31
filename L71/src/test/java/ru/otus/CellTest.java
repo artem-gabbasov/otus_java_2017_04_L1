@@ -1,5 +1,8 @@
+package ru.otus;
+
 import org.junit.Assert;
 import org.junit.Test;
+import ru.otus.Cell;
 
 /**
  * Created by Artem Gabbasov on 24.05.2017.
