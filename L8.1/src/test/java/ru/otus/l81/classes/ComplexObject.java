@@ -1,6 +1,8 @@
 package ru.otus.l81.classes;
 
 import javax.json.JsonValue;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -23,6 +25,8 @@ public class ComplexObject {
     @SuppressWarnings("unused")
     private enum e {A, B, C}
     private e enumVal = e.B;
+    private BigInteger bigInteger = new BigInteger("1234567890987654321234567890987654321");
+    private BigDecimal bigDecimal = new BigDecimal("1234567890987654321234567890987654321.123456789");
     private int[] intArray = {4, 5, 6, 7};
     private Object[] objectArray = {"stringConst", new String("stringObj"), new SimpleObject()};
     private double[] emptyArray = new double[0];
