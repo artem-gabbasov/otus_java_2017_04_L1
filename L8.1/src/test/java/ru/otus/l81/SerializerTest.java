@@ -3,6 +3,7 @@ package ru.otus.l81;
 import com.google.gson.Gson;
 import org.junit.Test;
 import ru.otus.l81.classes.ComplexObject;
+import ru.otus.l81.classes.InheritedObject;
 import ru.otus.l81.classes.SimpleObject;
 import ru.otus.l81.serializers.Serializer;
 import ru.otus.l81.serializers.SerializerFactoryImpl;
@@ -24,6 +25,11 @@ public class SerializerTest {
     @Test
     public void serializeSimpleObject() throws IllegalAccessException {
         performTest(new SimpleObject());
+    }
+
+    @Test
+    public void serializeInheritedObject() throws IllegalAccessException {
+        performTest(new InheritedObject());
     }
 
     @Test

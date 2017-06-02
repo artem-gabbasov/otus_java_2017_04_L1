@@ -59,19 +59,24 @@ public class ObjectBuilderSerializer implements Serializer {
     private JsonObjectBuilder serialize(Object o) throws IllegalAccessException {
         JsonObjectBuilder model = Json.createObjectBuilder();
 
-        for (Field field : o.getClass().getDeclaredFields()) {
-            if ((field.getModifiers() & Modifier.TRANSIENT) > 0) continue;
+        Class<?> tmpClass = o.getClass();
 
-            boolean isAccessible = true;
-            try {
-                isAccessible = field.isAccessible();
-                field.setAccessible(true);
-                processOneField(model, field, field.get(o));
-            } finally {
-                if (!isAccessible) {
-                    field.setAccessible(false);
+        while (tmpClass != null) {
+            for (Field field : tmpClass.getDeclaredFields()) {
+                if ((field.getModifiers() & Modifier.TRANSIENT) > 0) continue;
+
+                boolean isAccessible = true;
+                try {
+                    isAccessible = field.isAccessible();
+                    field.setAccessible(true);
+                    processOneField(model, field, field.get(o));
+                } finally {
+                    if (!isAccessible) {
+                        field.setAccessible(false);
+                    }
                 }
             }
+            tmpClass = tmpClass.getSuperclass();
         }
 
         return model;

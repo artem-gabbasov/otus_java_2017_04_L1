@@ -7,8 +7,10 @@ package ru.otus.l81.classes;
 @SuppressWarnings({"CanBeFinal", "unused"})
 public class SimpleObject {
     @SuppressWarnings("FieldCanBeLocal")
-    private int val = 4;
-    private ComplexObject nullObj = null;
+    protected int val = 4;
+    protected ComplexObject nullObj = null;
+
+    private String priv = "ate";
 
     @Override
     public String toString() {
