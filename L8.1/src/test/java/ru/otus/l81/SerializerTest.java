@@ -16,11 +16,9 @@ public class SerializerTest {
         Serializer serializer = new SerializerFactoryImpl().createSerializer(o);
         String myResult = serializer.getAsString();
         String gsonResult = new Gson().toJson(o);
-        if (!myResult.equals(gsonResult)) {
-            System.out.println("myResult: " + myResult);
-            System.out.println("gsonResult: " + gsonResult);
-            assert false;
-        }
+        System.out.println("myResult: " + myResult);
+        System.out.println("gsonResult: " + gsonResult);
+        assert myResult.equals(gsonResult);
     }
 
     @Test
