@@ -45,4 +45,10 @@ public class ComplexObject {
         objectList.add(new Object());
     }
     private EnumSet<JsonValue.ValueType> enumSet = EnumSet.of(JsonValue.ValueType.OBJECT, JsonValue.ValueType.FALSE, JsonValue.ValueType.NUMBER);
+    private Map<String, String> map = new TreeMap<>();
+    {
+        map.put("a", "abstract");
+        map.put("c", "class");
+        map.put("b", "byte");
+    }
 }

@@ -3,6 +3,7 @@ package ru.otus.l81.modelbuilders;
 import ru.otus.l81.serializers.Serializer;
 
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -54,6 +55,11 @@ public class ArrayModelBuilder implements ModelBuilder {
 
     @Override
     public void addToModel(JsonArrayBuilder value) {
+        model.add(value);
+    }
+
+    @Override
+    public void addToModel(JsonObjectBuilder value) {
         model.add(value);
     }
 

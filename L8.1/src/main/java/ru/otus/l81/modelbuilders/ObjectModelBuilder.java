@@ -61,6 +61,11 @@ public class ObjectModelBuilder implements ModelBuilder {
     }
 
     @Override
+    public void addToModel(JsonObjectBuilder value) {
+        model.add(name, value);
+    }
+
+    @Override
     public void addToModel(Serializer value) {
         value.addToObjectBuilder(model, name);
     }

@@ -12,6 +12,8 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Artem Gabbasov on 01.06.2017.
@@ -93,6 +95,7 @@ public class ObjectBuilderSerializer implements Serializer {
         if (BigInteger.class.isAssignableFrom(clazz)) modelBuilder.addToModel((BigInteger) value); else
         if (BigDecimal.class.isAssignableFrom(clazz)) modelBuilder.addToModel((BigDecimal) value); else
         if (checkForArray(clazz)) modelBuilder.addToModel(processArray(getArray(clazz, value))); else
+        if (Map.class.isAssignableFrom(clazz)) modelBuilder.addToModel(processMap((Map)value)); else
         // иначе обрабатываем просто как Object
         modelBuilder.addToModel(new SerializerFactoryImpl().createSerializer(value));
     }
@@ -133,5 +136,22 @@ public class ObjectBuilderSerializer implements Serializer {
         }
 
         return arrayBuilder;
+    }
+
+    /**
+     * Пробегает Map и сериализует её
+     * @param map                       map, элементы которой необходимо пробежать
+     * @return                          билдер, созданный по map
+     * @throws IllegalAccessException   если какой-либо элемент содержит объект, к какому-то из полей которого нет доступа
+     */
+    private JsonObjectBuilder processMap(Map<?,?> map) throws IllegalAccessException {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        for (Map.Entry entry : map.entrySet()) {
+            Object value = entry.getValue();
+            addValueToModel(new ObjectModelBuilder(builder, entry.getKey().toString()), value.getClass(), value);
+        }
+
+        return builder;
     }
 }

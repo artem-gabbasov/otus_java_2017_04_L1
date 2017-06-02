@@ -3,6 +3,7 @@ package ru.otus.l81.modelbuilders;
 import ru.otus.l81.serializers.Serializer;
 
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -22,5 +23,6 @@ public interface ModelBuilder {
     void addToModel(BigInteger value);
     void addToModel(BigDecimal value);
     void addToModel(JsonArrayBuilder value);
+    void addToModel(JsonObjectBuilder value);
     void addToModel(Serializer value);
 }
