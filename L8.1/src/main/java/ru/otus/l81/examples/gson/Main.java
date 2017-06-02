@@ -1,10 +1,11 @@
-package ru.otus.l81.gson;
+package ru.otus.l81.examples.gson;
 
 import com.google.gson.Gson;
 
 /**
  * Created by tully.
  */
+@SuppressWarnings("WeakerAccess")
 public class Main {
     public static void main(String[] args) {
         BagOfPrimitives obj = new BagOfPrimitives();

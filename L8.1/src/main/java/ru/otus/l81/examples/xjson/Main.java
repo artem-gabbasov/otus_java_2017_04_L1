@@ -1,4 +1,4 @@
-package ru.otus.l81.xjson;
+package ru.otus.l81.examples.xjson;
 
 
 import javax.json.*;
@@ -9,6 +9,7 @@ import java.io.StringWriter;
 /**
  * Created by tully.
  */
+@SuppressWarnings("WeakerAccess")
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         JsonReader reader = Json.createReader(new FileReader("jsondata.txt"));

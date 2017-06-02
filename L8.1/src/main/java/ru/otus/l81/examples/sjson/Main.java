@@ -1,4 +1,4 @@
-package ru.otus.l81.sjson;
+package ru.otus.l81.examples.sjson;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * Created by tully.
  */
+@SuppressWarnings("WeakerAccess")
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();

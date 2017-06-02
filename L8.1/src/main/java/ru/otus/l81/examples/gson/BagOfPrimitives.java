@@ -1,8 +1,9 @@
-package ru.otus.l81.gson;
+package ru.otus.l81.examples.gson;
 
 /**
  * Created by tully.
  */
+@SuppressWarnings("CanBeFinal")
 class BagOfPrimitives {
     private int value1 = 1;
     private String value2 = "abc";
@@ -19,6 +20,7 @@ class BagOfPrimitives {
         BagOfPrimitives that = (BagOfPrimitives) o;
 
         if (value1 != that.value1) return false;
+        //noinspection SimplifiableIfStatement
         if (value3 != that.value3) return false;
         return value2 != null ? value2.equals(that.value2) : that.value2 == null;
     }

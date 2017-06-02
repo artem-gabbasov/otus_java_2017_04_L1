@@ -1,4 +1,4 @@
-package ru.otus.l81.io;
+package ru.otus.l81.examples.io;
 
 import org.apache.commons.io.FileUtils;
 
@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by tully.
  */
+@SuppressWarnings("WeakerAccess")
 public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         Student student = new Student(32, "tully", "java");

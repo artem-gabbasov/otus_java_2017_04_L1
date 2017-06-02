@@ -1,10 +1,11 @@
-package ru.otus.l81.io;
+package ru.otus.l81.examples.io;
 
 import java.io.*;
 
 /**
  * Created by tully.
  */
+@SuppressWarnings("WeakerAccess")
 public class JavaIO {
     public static void writeObject(String file, Object student) {
         try (FileOutputStream fos = new FileOutputStream(file)) {

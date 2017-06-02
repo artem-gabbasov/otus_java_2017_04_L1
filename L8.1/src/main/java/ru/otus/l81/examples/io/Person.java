@@ -1,10 +1,11 @@
-package ru.otus.l81.io;
+package ru.otus.l81.examples.io;
 
 import java.io.Serializable;
 
 /**
  * Created by tully.
  */
+@SuppressWarnings("WeakerAccess")
 public class Person implements Serializable{
     private final int age;
     private final String name;
