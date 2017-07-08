@@ -1,6 +1,7 @@
 package ru.otus.anytype.setters;
 
 import ru.otus.anytype.UnsupportedTypeException;
+import ru.otus.anytype.ValueException;
 
 /**
  * Created by Artem Gabbasov on 07.06.2017.
@@ -9,5 +10,5 @@ import ru.otus.anytype.UnsupportedTypeException;
  */
 @SuppressWarnings("unused")
 public interface ValueSetter {
-    void setObject(Object value) throws UnsupportedTypeException, Exception;
+    void setObject(Object value) throws UnsupportedTypeException, ValueException;
 }

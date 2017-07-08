@@ -15,7 +15,7 @@ import java.util.Collections;
 public class ValueSetHelperTest {
     @SuppressWarnings({"UnnecessaryBoxing", "BooleanConstructorCall"})
     @Test
-    public void setter() throws Exception {
+    public void setter() throws ValueException, UnsupportedTypeException {
         TestValueSetterImpl setter = new TestValueSetterImpl();
         TestValueSetHelper helper = new TestValueSetHelper(setter);
 
@@ -33,7 +33,7 @@ public class ValueSetHelperTest {
 
     @SuppressWarnings("InstantiatingObjectToGetClassObject")
     @Test
-    public void getter() throws Exception {
+    public void getter() throws UnsupportedTypeException, ValueException {
         TestValueGetterImpl getter = new TestValueGetterImpl();
         TestValueGetHelper helper = new TestValueGetHelper(getter);
 

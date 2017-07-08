@@ -19,17 +19,29 @@ public class PreparedStatementValueSetter extends AbstractGeneralValueSetter {
     }
 
     @Override
-    public void setInt(int value) throws SQLException {
-        stmt.setInt(++index, value);
+    public void setInt(int value) throws SQLValueException {
+        try {
+            stmt.setInt(++index, value);
+        } catch (SQLException e) {
+            throw new SQLValueException(e);
+        }
     }
 
     @Override
-    public void setLong(long value) throws SQLException {
-        stmt.setLong(++index, value);
+    public void setLong(long value) throws SQLValueException {
+        try {
+            stmt.setLong(++index, value);
+        } catch (SQLException e) {
+            throw new SQLValueException(e);
+        }
     }
 
     @Override
-    public void setString(String value) throws SQLException {
-        stmt.setString(++index, value);
+    public void setString(String value) throws SQLValueException {
+        try {
+            stmt.setString(++index, value);
+        } catch (SQLException e) {
+            throw new SQLValueException(e);
+        }
     }
 }

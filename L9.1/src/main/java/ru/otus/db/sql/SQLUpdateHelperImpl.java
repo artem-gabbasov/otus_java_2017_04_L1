@@ -1,5 +1,7 @@
 package ru.otus.db.sql;
 
+import ru.otus.anytype.UnsupportedTypeException;
+import ru.otus.anytype.ValueException;
 import ru.otus.anytype.setters.GeneralValueSetter;
 import ru.otus.anytype.ValueSetHelper;
 import ru.otus.db.PreparedStatementValueSetter;
@@ -34,11 +36,7 @@ public class SQLUpdateHelperImpl implements SQLUpdateHelper {
             stmt.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                throw e1;
-            }
+            connection.rollback();
             throw e;
         }
     }
@@ -104,7 +102,7 @@ public class SQLUpdateHelperImpl implements SQLUpdateHelper {
             for(Object value : values) {
                 helper.accept(valueSetter, value);
             }
-        } catch (Exception e) {
+        } catch (ValueException|UnsupportedTypeException e) {
             e.printStackTrace();
         }
     }

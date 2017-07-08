@@ -4,6 +4,7 @@ import ru.otus.anytype.UnsupportedTypeException;
 import ru.otus.anytype.getters.AbstractGeneralValueGetter;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Created by Artem Gabbasov on 18.06.2017.
@@ -20,17 +21,29 @@ public class ResultSetValueGetter extends AbstractGeneralValueGetter {
     }
 
     @Override
-    public int getInt() throws UnsupportedTypeException, Exception {
-        return resultSet.getInt(columnName);
+    public int getInt() throws UnsupportedTypeException, SQLValueException {
+        try {
+            return resultSet.getInt(columnName);
+        } catch (SQLException e) {
+            throw new SQLValueException(e);
+        }
     }
 
     @Override
-    public long getLong() throws UnsupportedTypeException, Exception {
-        return resultSet.getLong(columnName);
+    public long getLong() throws UnsupportedTypeException, SQLValueException {
+        try {
+            return resultSet.getLong(columnName);
+        } catch (SQLException e) {
+            throw new SQLValueException(e);
+        }
     }
 
     @Override
-    public String getString() throws UnsupportedTypeException, Exception {
-        return resultSet.getString(columnName);
+    public String getString() throws UnsupportedTypeException, SQLValueException {
+        try {
+            return resultSet.getString(columnName);
+        } catch (SQLException e) {
+            throw new SQLValueException(e);
+        }
     }
 }

@@ -18,8 +18,6 @@ public class SQLQueryHelperImpl implements SQLQueryHelper {
             stmt.setLong(1, id);
             stmt.executeQuery();
             return handler.handle(stmt.getResultSet());
-        } catch (SQLException e) {
-            throw e;
         }
     }
 

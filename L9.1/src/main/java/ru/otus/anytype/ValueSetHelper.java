@@ -16,9 +16,9 @@ public class ValueSetHelper {
      * @param valueSetter                   объект, задающий значение
      * @param value                         задаваемое значение
      * @throws UnsupportedTypeException     если класс заданного значения не поддерживается
-     * @throws Exception                    если в переданном объекте возникает исключение
+     * @throws ValueException               если в переданном объекте возникает исключение
      */
-    public void accept(ValueSetter valueSetter, Object value) throws UnsupportedTypeException, Exception {
+    public void accept(ValueSetter valueSetter, Object value) throws UnsupportedTypeException, ValueException {
         Objects.requireNonNull(value);
 
         if ((valueSetter instanceof GeneralValueSetter) && acceptGeneral((GeneralValueSetter) valueSetter, value)) return;
@@ -32,9 +32,9 @@ public class ValueSetHelper {
      * @param value                         задаваемое значение
      * @return                              признак, указывающий найден ли подходящий метод для задания значения
      * @throws UnsupportedTypeException     если класс заданного значения не поддерживается
-     * @throws Exception                    если в переданном объекте возникает исключение
+     * @throws ValueException               если в переданном объекте возникает исключение
      */
-    private boolean acceptGeneral(GeneralValueSetter valueSetter, Object value) throws UnsupportedTypeException, Exception {
+    private boolean acceptGeneral(GeneralValueSetter valueSetter, Object value) throws UnsupportedTypeException, ValueException {
         Class<?> clazz = value.getClass();
 
         if (int.class == clazz || Integer.class == clazz) valueSetter.setInt((int)value); else
@@ -57,10 +57,10 @@ public class ValueSetHelper {
      * @param value                         задаваемое значение
      * @return                              признак, указывающий найден ли подходящий метод для задания значения
      * @throws UnsupportedTypeException     если класс заданного значения не поддерживается
-     * @throws Exception                    если в переданном объекте возникает исключение
+     * @throws ValueException               если в переданном объекте возникает исключение
      */
     @SuppressWarnings({"WeakerAccess", "SameReturnValue", "unused"})
-    protected boolean acceptCustom(ValueSetter valueSetter, Object value) throws UnsupportedTypeException, Exception {
+    protected boolean acceptCustom(ValueSetter valueSetter, Object value) throws UnsupportedTypeException, ValueException {
         return false;
     }
 }

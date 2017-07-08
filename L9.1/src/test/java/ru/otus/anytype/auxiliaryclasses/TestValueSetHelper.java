@@ -1,5 +1,7 @@
 package ru.otus.anytype.auxiliaryclasses;
 
+import ru.otus.anytype.UnsupportedTypeException;
+import ru.otus.anytype.ValueException;
 import ru.otus.anytype.ValueSetHelper;
 
 /**
@@ -13,7 +15,7 @@ public class TestValueSetHelper extends ValueSetHelper {
         this.valueSetter = valueSetter;
     }
 
-    public String showValue(Object value) throws Exception {
+    public String showValue(Object value) throws UnsupportedTypeException, ValueException {
         accept(valueSetter, value);
         //System.out.println(valueSetter.lastValue);
         return valueSetter.lastValue;

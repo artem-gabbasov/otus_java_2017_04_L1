@@ -17,9 +17,9 @@ public class ValueGetHelper {
      * @param clazz                         класс возвращаемого значения
      * @return                              возвращаемое из объекта значение
      * @throws UnsupportedTypeException     если заданный класс не поддерживается
-     * @throws Exception                    если в переданном объекте возникает исключение
+     * @throws ValueException               если в переданном объекте возникает исключение
      */
-    public Object accept(ValueGetter valueGetter, Class<?> clazz) throws UnsupportedTypeException, Exception {
+    public Object accept(ValueGetter valueGetter, Class<?> clazz) throws UnsupportedTypeException, ValueException {
         if ((valueGetter instanceof GeneralValueGetter) && acceptGeneral((GeneralValueGetter) valueGetter, clazz)) return result;
         if (acceptCustom(valueGetter, clazz)) return result;
         return valueGetter.getObject();
@@ -31,9 +31,9 @@ public class ValueGetHelper {
      * @param clazz                         класс возвращаемого значения
      * @return                              возвращаемое из объекта значение
      * @throws UnsupportedTypeException     если заданный класс не поддерживается
-     * @throws Exception                    если в переданном объекте возникает исключение
+     * @throws ValueException               если в переданном объекте возникает исключение
      */
-    private boolean acceptGeneral(GeneralValueGetter valueGetter, Class<?> clazz) throws UnsupportedTypeException, Exception {
+    private boolean acceptGeneral(GeneralValueGetter valueGetter, Class<?> clazz) throws UnsupportedTypeException, ValueException {
         if (int.class == clazz || Integer.class == clazz) result = valueGetter.getInt(); else
         if (byte.class == clazz || Byte.class == clazz) result = valueGetter.getByte(); else
         if (short.class == clazz || Short.class == clazz) result = valueGetter.getShort(); else
@@ -54,10 +54,10 @@ public class ValueGetHelper {
      * @param clazz                         класс возвращаемого значения
      * @return                              возвращаемое из объекта значение
      * @throws UnsupportedTypeException     если заданный класс не поддерживается
-     * @throws Exception                    если в переданном объекте возникает исключение
+     * @throws ValueException               если в переданном объекте возникает исключение
      */
     @SuppressWarnings({"WeakerAccess", "SameReturnValue", "unused"})
-    protected boolean acceptCustom(ValueGetter valueGetter, Class<?> clazz) throws UnsupportedTypeException, Exception {
+    protected boolean acceptCustom(ValueGetter valueGetter, Class<?> clazz) throws UnsupportedTypeException, ValueException {
         return false;
     }
 }

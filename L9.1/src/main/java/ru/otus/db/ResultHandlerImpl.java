@@ -1,5 +1,7 @@
 package ru.otus.db;
 
+import ru.otus.anytype.UnsupportedTypeException;
+import ru.otus.anytype.ValueException;
 import ru.otus.anytype.ValueGetHelper;
 import ru.otus.anytype.getters.GeneralValueGetter;
 import ru.otus.datasets.DataSet;
@@ -45,12 +47,14 @@ public class ResultHandlerImpl<T extends DataSet> implements ResultHandler<T> {
 
                     JPAReflectionHelper.setFieldValue(field, result, helper.accept(valueGetter, field.getType()));
                 }
-            } catch (IllegalAccessException | NoJPAAnnotationException e) {
+            } catch (IllegalAccessException | NoJPAAnnotationException | UnsupportedTypeException e) {
                 e.printStackTrace();
-            } catch (SQLException e) {
-                throw e;
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (ValueException e) {
+                if (e.getCause() instanceof SQLException) {
+                    throw (SQLException)e.getCause();
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
 

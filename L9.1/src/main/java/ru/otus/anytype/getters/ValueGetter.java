@@ -1,6 +1,7 @@
 package ru.otus.anytype.getters;
 
 import ru.otus.anytype.UnsupportedTypeException;
+import ru.otus.anytype.ValueException;
 
 /**
  * Created by Artem Gabbasov on 22.06.2017.
@@ -9,5 +10,5 @@ import ru.otus.anytype.UnsupportedTypeException;
  */
 @SuppressWarnings("SameReturnValue")
 public interface ValueGetter {
-    Object getObject() throws UnsupportedTypeException, Exception;
+    Object getObject() throws UnsupportedTypeException, ValueException;
 }

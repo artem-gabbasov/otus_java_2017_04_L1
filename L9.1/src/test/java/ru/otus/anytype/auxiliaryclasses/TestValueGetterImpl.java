@@ -1,6 +1,5 @@
 package ru.otus.anytype.auxiliaryclasses;
 
-import ru.otus.anytype.UnsupportedTypeException;
 import ru.otus.anytype.getters.GeneralValueGetter;
 
 /**
@@ -11,61 +10,61 @@ public class TestValueGetterImpl implements GeneralValueGetter {
     public String lastValue = "";
 
     @Override
-    public Object getObject() throws UnsupportedTypeException, Exception {
+    public Object getObject() {
         lastValue = "Object";
         return null;
     }
 
     @Override
-    public int getInt() throws UnsupportedTypeException, Exception {
+    public int getInt() {
         lastValue = "int";
         return 0;
     }
 
     @Override
-    public byte getByte() throws UnsupportedTypeException, Exception {
+    public byte getByte() {
         lastValue = "byte";
         return 0;
     }
 
     @Override
-    public short getShort() throws UnsupportedTypeException, Exception {
+    public short getShort() {
         lastValue = "short";
         return 0;
     }
 
     @Override
-    public long getLong() throws UnsupportedTypeException, Exception {
+    public long getLong() {
         lastValue = "long";
         return 0;
     }
 
     @Override
-    public boolean getBoolean() throws UnsupportedTypeException, Exception {
+    public boolean getBoolean() {
         lastValue = "boolean";
         return false;
     }
 
     @Override
-    public double getDouble() throws UnsupportedTypeException, Exception {
+    public double getDouble() {
         lastValue = "double";
         return 0;
     }
 
     @Override
-    public float getFloat() throws UnsupportedTypeException, Exception {
+    public float getFloat() {
         lastValue = "float";
         return 0;
     }
 
     @Override
-    public char getChar() throws UnsupportedTypeException, Exception {
+    public char getChar() {
         lastValue = "char";
         return 0;
     }
 
     @Override
-    public String getString() throws UnsupportedTypeException, Exception {
+    public String getString() {
         lastValue = "String";
         return null;
     }
