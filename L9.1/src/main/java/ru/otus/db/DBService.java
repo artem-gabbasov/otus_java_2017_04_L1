@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * Интерфейс взаимодействия DataSet'ов с БД (сохранения и загрузки)
  */
 @SuppressWarnings("WeakerAccess")
-public interface DAO {
+public interface DBService {
     /**
      * Сохраняет объект в БД
      * @param dataSet                   объект для сохранения

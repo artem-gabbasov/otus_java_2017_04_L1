@@ -1,47 +1,21 @@
 package ru.otus.db.sql;
 
-import ru.otus.anytype.UnsupportedTypeException;
-import ru.otus.anytype.ValueException;
-import ru.otus.anytype.setters.GeneralValueSetter;
-import ru.otus.anytype.ValueSetHelper;
-import ru.otus.db.PreparedStatementValueSetter;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Artem Gabbasov on 07.06.2017.
+ * Created by Artem Gabbasov on 08.07.2017.
  * <p>
  */
-public class SQLUpdateHelperImpl implements SQLUpdateHelper {
-    @Override
-    public void execUpdate(Connection connection, String tableName, Map<String, Object> fieldMap, String idColumnName) throws SQLException {
-        int arraySize = fieldMap.size();
-
-        String[] columnNames = new String[arraySize];
-        Object[] fieldValues = new Object[arraySize];
-
-        int arrayIndex = 0;
-        for (Map.Entry<String, Object> entry : fieldMap.entrySet()) {
-            columnNames[arrayIndex] = entry.getKey();
-            fieldValues[arrayIndex] = entry.getValue();
-            arrayIndex++;
-        }
-
-        try (PreparedStatement stmt = connection.prepareStatement(getUpdateString(tableName, columnNames, idColumnName))) {
-            prepareUpdate(stmt, fieldValues);
-            stmt.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
+@SuppressWarnings("WeakerAccess")
+public class DAO {
+    public static String getQueryString(String tableName, String idColumnName) {
+        return "SELECT * FROM " + tableName + " WHERE " + SQLCommons.escapeColumnName(idColumnName) + " = ?;";
     }
 
-    public String getUpdateString(String tableName, String[] columnNames, String idColumnName) {
+    public static String getUpdateString(String tableName, String[] columnNames, String idColumnName) {
         return "INSERT INTO " + tableName + " " + getColumnsSequence(columnNames) + " VALUES " + getValuesSequence(columnNames.length) + " ON DUPLICATE KEY UPDATE " + getColumnsSequenceForUpdate(columnNames, idColumnName) + ";";
     }
 
@@ -50,7 +24,7 @@ public class SQLUpdateHelperImpl implements SQLUpdateHelper {
      * @param columnNames   имена столбцов
      * @return              строка с подготовленными для использования в запросе именами столбцов
      */
-    public String getColumnsSequence(String[] columnNames) {
+    public static String getColumnsSequence(String[] columnNames) {
         List<String> escapedList = Arrays.stream(columnNames)
                 .map(SQLCommons::escapeColumnName)
                 .collect(Collectors.toList());
@@ -63,11 +37,11 @@ public class SQLUpdateHelperImpl implements SQLUpdateHelper {
      * @param idColumnName  имя столбца идентификатора (в результирующую строку этот столбец не попадает)
      * @return              строка с подготовленными для использования в части ON DUPLICATE KEY UPDATE именами столбцов
      */
-    public String getColumnsSequenceForUpdate(String[] columnNames, String idColumnName) {
+    public static String getColumnsSequenceForUpdate(String[] columnNames, String idColumnName) {
         List<String> escapedList = Arrays.stream(columnNames)
                 .filter(columnName -> !columnName.equals(idColumnName))
                 .map(SQLCommons::escapeColumnName)
-                .map(this::processColumnForUpdate)
+                .map(DAO::processColumnForUpdate)
                 .collect(Collectors.toList());
         return SQLCommons.ofList(escapedList);
     }
@@ -77,7 +51,7 @@ public class SQLUpdateHelperImpl implements SQLUpdateHelper {
      * @param count количество значений, для которых требуются подстановочные символы
      * @return      строка с необходимым количеством подстановочных символов
      */
-    public String getValuesSequence(int count) {
+    public static String getValuesSequence(int count) {
         return '(' + SQLCommons.ofList(Collections.nCopies(count, "?")) + ')';
     }
 
@@ -86,24 +60,5 @@ public class SQLUpdateHelperImpl implements SQLUpdateHelper {
      * @param columnName    имя столбца
      * @return              строка с подготовленным для использования в части ON DUPLICATE KEY UPDATE именем столбца
      */
-    @SuppressWarnings("WeakerAccess")
-    public String processColumnForUpdate(String columnName) { return columnName + "=VALUES(" + columnName + ")"; }
-
-    /**
-     * Задаёт значения параметров для запроса
-     * @param stmt      объект запроса
-     * @param values    массив параметров, которые следует задать
-     */
-    @SuppressWarnings("WeakerAccess")
-    public void prepareUpdate(PreparedStatement stmt, Object[] values) {
-        GeneralValueSetter valueSetter = new PreparedStatementValueSetter(stmt);
-        ValueSetHelper helper = new ValueSetHelper();
-        try {
-            for(Object value : values) {
-                helper.accept(valueSetter, value);
-            }
-        } catch (ValueException|UnsupportedTypeException e) {
-            e.printStackTrace();
-        }
-    }
+    public static String processColumnForUpdate(String columnName) { return columnName + "=VALUES(" + columnName + ")"; }
 }

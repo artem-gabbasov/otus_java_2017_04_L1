@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * Created by Artem Gabbasov on 06.06.2017.
  * <p>
  */
-public class DAOTest {
+public class DBServiceTest {
     private static Connection connection;
 
     @Before
@@ -25,35 +25,35 @@ public class DAOTest {
 
     @Test
     public void saveAndLoad() throws SQLException, IllegalAccessException, JPAException {
-        DAO dao = new DAOImpl(connection);
+        DBService dbService = new DBServiceImpl(connection);
         DataSet user = new UserDataSet(1, "user1", 99);
 
-        dao.save(user);
-        UserDataSet loadedUser = dao.load(1, UserDataSet.class);
+        dbService.save(user);
+        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
         assert loadedUser.getId() == 1 && loadedUser.getName().equals("user1") && loadedUser.getAge() == 99;
     }
 
     @Test
     public void loadNotFound() throws SQLException, JPAException {
-        assert new DAOImpl(connection).load(-1, UserDataSet.class) == null;
+        assert new DBServiceImpl(connection).load(-1, UserDataSet.class) == null;
         // а вообще - в базе ничего не должно быть записано, так что не помешает проверить и следующее выражение:
-        assert new DAOImpl(connection).load(1, UserDataSet.class) == null;
+        assert new DBServiceImpl(connection).load(1, UserDataSet.class) == null;
     }
 
     @Test
     public void insertAndUpdate() throws SQLException, IllegalAccessException, JPAException {
-        DAO dao = new DAOImpl(connection);
+        DBService dbService = new DBServiceImpl(connection);
         UserDataSet user = new UserDataSet(1, "user2", 990);
 
-        dao.save(user);
-        UserDataSet loadedUser = dao.load(1, UserDataSet.class);
+        dbService.save(user);
+        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
         assert loadedUser.getId() == 1 && loadedUser.getName().equals("user2") && loadedUser.getAge() == 990;
 
         user.setName("user3");
         user.setAge(490);
 
-        dao.save(user);
-        loadedUser = dao.load(1, UserDataSet.class);
+        dbService.save(user);
+        loadedUser = dbService.load(1, UserDataSet.class);
         assert loadedUser.getId() == 1 && loadedUser.getName().equals("user3") && loadedUser.getAge() == 490;
     }
 
