@@ -1,19 +1,22 @@
 package ru.otus.db;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import ru.otus.cache.CacheEngineImpl;
 import ru.otus.jpa.JPAException;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Created by Artem Gabbasov on 06.06.2017.
+ * Created by Artem Gabbasov on 12.07.2017.
  * <p>
  */
-public class DBServiceTest extends DBServiceTestCommon {
+public class DBServiceCachedTest extends DBServiceTestCommon {
     @Override
     public DBService createDBService() {
-        return new DBServiceImpl(connection);
+        return new DBServiceCachedImpl(connection, new CacheEngineImpl(1, 0, 0, true));
     }
 
     @BeforeClass

@@ -15,13 +15,26 @@ import java.sql.SQLException;
 public class DBServiceTestCommon {
     protected static Connection connection;
 
+    public static void createTable() throws SQLException {
+        try (Connection createConnection = ConnectionHelper.getConnection(ConnectionHelperTest.url)) {
+            createConnection.createStatement().execute("CREATE TABLE IF NOT EXISTS db_example.users (id BIGINT(20) NOT NULL AUTO_INCREMENT, name VARCHAR(255), age INT(3) NOT NULL DEFAULT 0, PRIMARY KEY (id));");
+            createConnection.commit();
+        }
+    }
+
+    public DBService createDBService() {
+        return null;
+    }
+
     public void clear() throws SQLException {
         connection = ConnectionHelper.getConnection(ConnectionHelperTest.url);
         connection.createStatement().execute("DELETE FROM users");
         connection.commit();
     }
 
-    public void saveAndLoad(DBService dbService) throws SQLException, IllegalAccessException, JPAException {
+    public void saveAndLoad() throws SQLException, IllegalAccessException, JPAException {
+        DBService dbService = createDBService();
+
         DataSet user = new UserDataSet(1, "user1", 99);
 
         dbService.save(user);
@@ -29,13 +42,17 @@ public class DBServiceTestCommon {
         assert loadedUser.getId() == 1 && loadedUser.getName().equals("user1") && loadedUser.getAge() == 99;
     }
 
-    public void loadNotFound(DBService dbService) throws SQLException, JPAException {
+    public void loadNotFound() throws SQLException, JPAException {
+        DBService dbService = createDBService();
+
         assert dbService.load(-1, UserDataSet.class) == null;
         // а вообще - в базе ничего не должно быть записано, так что не помешает проверить и следующее выражение:
         assert dbService.load(1, UserDataSet.class) == null;
     }
 
-    public void insertAndUpdate(DBService dbService) throws SQLException, IllegalAccessException, JPAException {
+    public void insertAndUpdate() throws SQLException, IllegalAccessException, JPAException {
+        DBService dbService = createDBService();
+
         UserDataSet user = new UserDataSet(1, "user2", 990);
 
         dbService.save(user);

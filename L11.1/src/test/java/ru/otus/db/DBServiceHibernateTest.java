@@ -17,6 +17,11 @@ import java.util.List;
  * <p>
  */
 public class DBServiceHibernateTest extends DBServiceTestCommon {
+    @Override
+    public DBService createDBService() {
+        return new DBServiceHibernateImpl();
+    }
+
     @Before
     public void clear() throws SQLException {
         super.clear();
@@ -24,22 +29,22 @@ public class DBServiceHibernateTest extends DBServiceTestCommon {
 
     @Test
     public void saveAndLoad() throws SQLException, IllegalAccessException, JPAException {
-        super.saveAndLoad(new DBServiceHibernateImpl());
+        super.saveAndLoad();
     }
 
     @Test
     public void loadNotFound() throws SQLException, JPAException {
-        super.loadNotFound(new DBServiceHibernateImpl());
+        super.loadNotFound();
     }
 
     @Test
     public void insertAndUpdate() throws SQLException, IllegalAccessException, JPAException {
-        super.insertAndUpdate(new DBServiceHibernateImpl());
+        super.insertAndUpdate();
     }
 
     @Test
     public void linkedDataSets() throws IllegalAccessException, SQLException, JPAException {
-        DBService dbService = new DBServiceHibernateImpl();
+        DBService dbService = createDBService();
 
         UserDataSet user1 = new UserDataSet(1, "user1", 10);
         UserDataSet user2 = new UserDataSet(2, "user2", 20);
