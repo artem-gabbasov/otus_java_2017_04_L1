@@ -30,23 +30,26 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         this.isEternal = lifeTimeMs == 0 && idleTimeMs == 0 || isEternal;
     }
 
-    public void put(MyElement<K, V> element) {
-        if (elements.size() == maxElements) {
-            K firstKey = elements.keySet().iterator().next();
-            elements.remove(firstKey);
-        }
-
-        K key = element.getKey();
-        elements.put(key, element);
-
-        if (!isEternal) {
-            if (lifeTimeMs != 0) {
-                TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
-                timer.schedule(lifeTimerTask, lifeTimeMs);
+    public void put(K key, V value) {
+        if (elements.containsKey(key)) {
+            elements.get(key).setAccessed();
+        } else {
+            if (elements.size() == maxElements) {
+                K firstKey = elements.keySet().iterator().next();
+                elements.remove(firstKey);
             }
-            if (idleTimeMs != 0) {
-                TimerTask idleTimerTask = getTimerTask(key, idleElement -> idleElement.getCreationTime() + idleTimeMs);
-                timer.schedule(idleTimerTask, idleTimeMs);
+
+            elements.put(key, new MyElement<K, V>(key, value));
+
+            if (!isEternal) {
+                if (lifeTimeMs != 0) {
+                    TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
+                    timer.schedule(lifeTimerTask, lifeTimeMs);
+                }
+                if (idleTimeMs != 0) {
+                    TimerTask idleTimerTask = getTimerTask(key, idleElement -> idleElement.getCreationTime() + idleTimeMs);
+                    timer.schedule(idleTimerTask, idleTimeMs);
+                }
             }
         }
     }

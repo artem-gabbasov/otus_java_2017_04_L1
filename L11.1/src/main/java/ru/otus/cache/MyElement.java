@@ -9,7 +9,6 @@ public class MyElement<K, V> {
     private final long creationTime;
     private long lastAccessTime;
 
-
     public MyElement(K key, V value) {
         this.key = key;
         this.value = value;
