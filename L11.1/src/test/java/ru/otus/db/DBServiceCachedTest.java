@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.otus.cache.CacheEngine;
 import ru.otus.cache.CacheEngineImpl;
 import ru.otus.jpa.JPAException;
 
@@ -14,9 +15,12 @@ import java.sql.SQLException;
  * <p>
  */
 public class DBServiceCachedTest extends DBServiceTestCommon {
+    private CacheEngine cacheEngine;
+
     @Override
     public DBService createDBService() {
-        return new DBServiceCachedImpl(connection, new CacheEngineImpl(1, 0, 0, true));
+        cacheEngine = new CacheEngineImpl(1, 0, 0, true);
+        return new DBServiceCachedImpl(connection, cacheEngine);
     }
 
     @BeforeClass
@@ -27,6 +31,7 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
     @Before
     public void clear() throws SQLException {
         super.clear();
+        cacheEngine = null;
     }
 
     @Test
@@ -44,8 +49,16 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
         super.insertAndUpdate();
     }
 
+    @Test
+    public void cache() {
+        assert false;
+    }
+
     @After
     public void rollback() throws SQLException {
         super.rollback();
+        if (cacheEngine != null) {
+            cacheEngine.dispose();
+        }
     }
 }
