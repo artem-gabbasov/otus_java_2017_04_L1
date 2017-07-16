@@ -16,4 +16,6 @@ public interface CacheEngine<K, V> {
     int getMissCount();
 
     void dispose();
+
+    void clear();
 }
