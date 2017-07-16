@@ -2,6 +2,8 @@ package ru.otus.db;
 
 import ru.otus.datasets.DataSet;
 
+import java.util.Objects;
+
 /**
  * Created by Artem Gabbasov on 15.07.2017.
  * <p>
@@ -29,5 +31,22 @@ public class DBServiceCacheKey {
 
     public void setClazz(Class<? extends DataSet> clazz) {
         this.clazz = clazz;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, clazz);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null) return false;
+
+        if (getClass() != obj.getClass()) return false;
+
+        DBServiceCacheKey other = (DBServiceCacheKey)obj;
+        return other.id == getId() && other.clazz.equals(getClazz());
     }
 }
