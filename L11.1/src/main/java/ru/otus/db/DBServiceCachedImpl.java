@@ -22,9 +22,8 @@ public class DBServiceCachedImpl extends DBServiceImpl {
 
     @Override
     public <T extends DataSet> void save(T dataSet) throws SQLException, IllegalAccessException, JPAException {
-        // идентифицировать, наверное, уместнее всего по паре "класс датасета - ид датасета"
-        // учесть ещё, что иды генерятся автоматически и не всегда известны в этот момент
-        //cacheEngine.put();
+        // TODO: учесть ещё, что иды генерятся автоматически и не всегда известны в этот момент
+        cacheEngine.put(new DBServiceCacheKey(dataSet.getId(), dataSet.getClass()), dataSet);
         super.save(dataSet);
     }
 

@@ -6,6 +6,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.otus.cache.CacheEngine;
 import ru.otus.cache.CacheEngineImpl;
+import ru.otus.datasets.DataSet;
+import ru.otus.datasets.UserDataSet;
 import ru.otus.jpa.JPAException;
 
 import java.sql.SQLException;
@@ -50,8 +52,23 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
     }
 
     @Test
-    public void cache() {
-        assert false;
+    public void cache() throws IllegalAccessException, SQLException, JPAException {
+        DBService dbService = createDBService();
+
+        DataSet user = new UserDataSet(1, "user1", 99);
+
+        dbService.save(user);
+        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
+
+        // при сохранении объект должен был попасть в кеш
+        assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 0;
+
+        cacheEngine.clear();
+
+        loadedUser = dbService.load(1, UserDataSet.class);
+
+        // после очистки кеша тот же самый объект должен был загрузиться уже из базы
+        assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 1;
     }
 
     @After
