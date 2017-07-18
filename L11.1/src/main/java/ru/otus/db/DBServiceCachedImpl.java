@@ -22,9 +22,10 @@ public class DBServiceCachedImpl extends DBServiceImpl {
 
     @Override
     public <T extends DataSet> void save(T dataSet) throws SQLException, IllegalAccessException, JPAException {
+        super.save(dataSet);
+
         // TODO: учесть ещё, что иды генерятся автоматически и не всегда известны в этот момент
         cacheEngine.put(new DBServiceCacheKey(dataSet.getId(), dataSet.getClass()), dataSet);
-        super.save(dataSet);
     }
 
     @Override
@@ -42,7 +43,9 @@ public class DBServiceCachedImpl extends DBServiceImpl {
                 throw e2;
             }
         } else {
-            return super.load(id, clazz);
+            T result = super.load(id, clazz);
+            cacheEngine.put(new DBServiceCacheKey(id, clazz), result);
+            return result;
         }
     }
 }

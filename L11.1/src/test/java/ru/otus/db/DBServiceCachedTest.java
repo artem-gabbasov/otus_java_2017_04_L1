@@ -68,17 +68,21 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
         DataSet user = new UserDataSet(1, "user1", 99);
 
         dbService.save(user);
-        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
+        dbService.load(1, UserDataSet.class);
 
         // при сохранении объект должен был попасть в кеш
         assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 0;
 
         cacheEngine.clear();
-
-        loadedUser = dbService.load(1, UserDataSet.class);
+        dbService.load(1, UserDataSet.class);
 
         // после очистки кеша тот же самый объект должен был загрузиться уже из базы
         assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 1;
+
+        dbService.load(1, UserDataSet.class);
+
+        // после повторной загрузки объект должен снова попасть в кеш
+        assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 1;
     }
 
     @Test
@@ -89,17 +93,14 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
         DataSet user = new UserDataSet(1, "user1", 99);
 
         dbService.save(user);
-
         Thread.sleep(100);
-
-        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
+        dbService.load(1, UserDataSet.class);
 
         // lifeTime ещё не истёк
         assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 0;
 
         Thread.sleep(500);
-
-        loadedUser = dbService.load(1, UserDataSet.class);
+        dbService.load(1, UserDataSet.class);
 
         // lifeTime уже должен был истечь
         assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 1;
@@ -115,22 +116,19 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
         dbService.save(user);
 
         Thread.sleep(300);
-
-        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
+        dbService.load(1, UserDataSet.class);
 
         // idleTime ещё не истёк
         assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 0;
 
         Thread.sleep(300);
-
-        loadedUser = dbService.load(1, UserDataSet.class);
+        dbService.load(1, UserDataSet.class);
 
         // idleTime снова ещё не истёк, т.к. к нему обращались
         assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 0;
 
         Thread.sleep(600);
-
-        loadedUser = dbService.load(1, UserDataSet.class);
+        dbService.load(1, UserDataSet.class);
 
         // idleTime уже должен был истечь
         assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 1;
