@@ -1,9 +1,7 @@
 package ru.otus.cache;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.lang.ref.SoftReference;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -19,7 +17,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private final long idleTimeMs;
     private final boolean isEternal;
 
-    private final Map<K, MyElement<K, V>> elements = new LinkedHashMap<>();
+    private final Map<K, SoftReference<MyElement<K, V>>> elements = new LinkedHashMap<>();
     private final Timer timer = new Timer();
 
     private int hit = 0;
@@ -53,11 +51,17 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
             }
         }
 
-        elements.put(key, new MyElement<K, V>(key, value, idleManager));
+        elements.put(key, new SoftReference<>(new MyElement<K, V>(key, value, idleManager)));
+    }
+
+    private MyElement<K, V> getFromMap(K key) {
+        SoftReference<MyElement<K, V>> ref = elements.get(key);
+        if (ref != null) return ref.get();
+        return null;
     }
 
     public MyElement<K, V> get(K key) {
-        MyElement<K, V> element = elements.get(key);
+        MyElement<K, V> element = getFromMap(key);
         if (element != null) {
             hit++;
             element.setAccessed();
@@ -90,7 +94,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         return new TimerTask() {
             @Override
             public void run() {
-                MyElement<K, V> checkedElement = elements.get(key);
+                MyElement<K, V> checkedElement = getFromMap(key);
                 if (checkedElement == null ||
                         isT1BeforeT2(timeFunction.apply(checkedElement), System.currentTimeMillis())) {
                     elements.remove(key);
