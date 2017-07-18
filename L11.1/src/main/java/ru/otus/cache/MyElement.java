@@ -1,11 +1,9 @@
 package ru.otus.cache;
 
-import java.util.TimerTask;
-import java.util.function.Supplier;
-
 /**
  * Created by tully.
  */
+@SuppressWarnings("unused")
 public class MyElement<K, V> {
     private final K key;
     private final V value;
@@ -23,6 +21,7 @@ public class MyElement<K, V> {
         idleManager.refresh();
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected long getCurrentTime() {
         return System.currentTimeMillis();
     }

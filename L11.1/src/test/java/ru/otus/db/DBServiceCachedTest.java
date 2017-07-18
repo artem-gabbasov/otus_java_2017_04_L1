@@ -16,22 +16,23 @@ import java.sql.SQLException;
  * Created by Artem Gabbasov on 12.07.2017.
  * <p>
  */
+@SuppressWarnings({"EmptyMethod", "SameParameterValue"})
 public class DBServiceCachedTest extends DBServiceTestCommon {
-    private CacheEngine cacheEngine;
+    private CacheEngine<DBServiceCacheKey, DataSet> cacheEngine;
 
     @Override
     public DBService createDBService() {
-        cacheEngine = new CacheEngineImpl(1, 0, 0, true);
+        cacheEngine = new CacheEngineImpl<>(1, 0, 0, true);
         return new DBServiceCachedImpl(connection, cacheEngine);
     }
 
     private DBService createDBServiceLifeTime(long lifeTimeMs) {
-        cacheEngine = new CacheEngineImpl(1, lifeTimeMs, 0, false);
+        cacheEngine = new CacheEngineImpl<>(1, lifeTimeMs, 0, false);
         return new DBServiceCachedImpl(connection, cacheEngine);
     }
 
     private DBService createDBServiceIdleTime(long idleTimeMs) {
-        cacheEngine = new CacheEngineImpl(1, 0, idleTimeMs, false);
+        cacheEngine = new CacheEngineImpl<>(1, 0, idleTimeMs, false);
         return new DBServiceCachedImpl(connection, cacheEngine);
     }
 

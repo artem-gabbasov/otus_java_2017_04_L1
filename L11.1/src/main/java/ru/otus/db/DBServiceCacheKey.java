@@ -8,7 +8,8 @@ import java.util.Objects;
  * Created by Artem Gabbasov on 15.07.2017.
  * <p>
  */
-public class DBServiceCacheKey {
+@SuppressWarnings({"unused", "WeakerAccess"})
+class DBServiceCacheKey {
     private long id;
     private Class<? extends DataSet> clazz;
 

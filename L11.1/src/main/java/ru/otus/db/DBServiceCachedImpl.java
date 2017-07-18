@@ -13,9 +13,9 @@ import java.sql.SQLException;
  * <p>
  */
 public class DBServiceCachedImpl extends DBServiceImpl {
-    private final CacheEngine cacheEngine;
+    private final CacheEngine<DBServiceCacheKey, DataSet> cacheEngine;
 
-    public DBServiceCachedImpl(Connection connection, CacheEngine cacheEngine) {
+    public DBServiceCachedImpl(Connection connection, CacheEngine<DBServiceCacheKey, DataSet> cacheEngine) {
         super(connection);
         this.cacheEngine = cacheEngine;
     }
@@ -35,6 +35,7 @@ public class DBServiceCachedImpl extends DBServiceImpl {
         if (element != null) {
             DataSet result = element.getValue();
             try {
+                //noinspection unchecked
                 return (T) result;
             } catch (ClassCastException e) {
                 // здесь DataSet должен быть именно класса T, т.к. мы этот класс передаём для поиска в get

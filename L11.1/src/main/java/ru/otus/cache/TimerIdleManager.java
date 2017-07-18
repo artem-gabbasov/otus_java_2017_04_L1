@@ -1,6 +1,5 @@
 package ru.otus.cache;
 
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 import java.util.function.Supplier;

@@ -2,9 +2,7 @@ package ru.otus.cache;
 
 import java.lang.ref.SoftReference;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Created by tully.
@@ -51,7 +49,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
             }
         }
 
-        elements.put(key, new SoftReference<>(new MyElement<K, V>(key, value, idleManager)));
+        elements.put(key, new SoftReference<>(new MyElement<>(key, value, idleManager)));
     }
 
     private MyElement<K, V> getFromMap(K key) {
