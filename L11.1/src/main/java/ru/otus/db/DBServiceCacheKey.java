@@ -7,6 +7,7 @@ import java.util.Objects;
 /**
  * Created by Artem Gabbasov on 15.07.2017.
  * <p>
+ * Класс, используемый в качестве ключа кеша для нашей задачи с хранением DataSet'ов
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 class DBServiceCacheKey {

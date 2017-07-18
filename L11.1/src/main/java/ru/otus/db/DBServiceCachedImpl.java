@@ -11,6 +11,7 @@ import java.sql.SQLException;
 /**
  * Created by Artem Gabbasov on 12.07.2017.
  * <p>
+ * Класс, реализующий хранение DataSet'ов в БД с использованием кеша
  */
 public class DBServiceCachedImpl extends DBServiceImpl {
     private final CacheEngine<DBServiceCacheKey, DataSet> cacheEngine;
@@ -33,6 +34,7 @@ public class DBServiceCachedImpl extends DBServiceImpl {
         MyElement<DBServiceCacheKey, DataSet> element = cacheEngine.get(new DBServiceCacheKey(id, clazz));
 
         if (element != null) {
+            // возвращаем элемент, полученный из кеша
             DataSet result = element.getValue();
             try {
                 //noinspection unchecked
@@ -44,6 +46,7 @@ public class DBServiceCachedImpl extends DBServiceImpl {
                 throw e2;
             }
         } else {
+            // не нашли ничего в кеше - идём в базу
             T result = super.load(id, clazz);
             cacheEngine.put(new DBServiceCacheKey(id, clazz), result);
             return result;
