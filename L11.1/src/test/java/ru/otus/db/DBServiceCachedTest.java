@@ -86,6 +86,30 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
     }
 
     @Test
+    public void cacheMaxElements() throws IllegalAccessException, SQLException, JPAException {
+        DBService dbService = createDBService();
+
+        DataSet user = new UserDataSet(1, "user1", 99);
+
+        dbService.save(user);
+        dbService.load(1, UserDataSet.class);
+
+        assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 0;
+
+        DataSet user2 = new UserDataSet(2, "user2", 9);
+
+        dbService.save(user2);
+        dbService.load(2, UserDataSet.class);
+
+        assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 0;
+
+        dbService.load(1, UserDataSet.class);
+
+        // первый юзер должен был уже "вытолкнуться" из кеша
+        assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 1;
+    }
+
+    @Test
     // этот тест не совсем стабилен - он может иногда не выполниться, но для теста не совсем критично, можно перезапустить
     public void cacheLifeTime() throws IllegalAccessException, SQLException, JPAException, InterruptedException {
         DBService dbService = createDBServiceLifeTime(500);
