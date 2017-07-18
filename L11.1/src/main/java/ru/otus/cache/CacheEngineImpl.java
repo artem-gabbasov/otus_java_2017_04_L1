@@ -4,7 +4,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Created by tully.
@@ -31,27 +33,27 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     }
 
     public void put(K key, V value) {
-        if (elements.containsKey(key)) {
-            elements.get(key).setAccessed();
-        } else {
-            if (elements.size() == maxElements) {
-                K firstKey = elements.keySet().iterator().next();
-                elements.remove(firstKey);
+        if (elements.size() == maxElements) {
+            K firstKey = elements.keySet().iterator().next();
+            elements.remove(firstKey);
+        }
+
+        IdleManager idleManager = new EmptyIdleManager();
+
+        if (!isEternal) {
+            if (lifeTimeMs != 0) {
+                TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
+                timer.schedule(lifeTimerTask, lifeTimeMs);
             }
-
-            elements.put(key, new MyElement<K, V>(key, value));
-
-            if (!isEternal) {
-                if (lifeTimeMs != 0) {
-                    TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
-                    timer.schedule(lifeTimerTask, lifeTimeMs);
-                }
-                if (idleTimeMs != 0) {
-                    TimerTask idleTimerTask = getTimerTask(key, idleElement -> idleElement.getCreationTime() + idleTimeMs);
-                    timer.schedule(idleTimerTask, idleTimeMs);
-                }
+            if (idleTimeMs != 0) {
+                idleManager = new TimerIdleManager(
+                        timerTask -> timer.schedule(timerTask, idleTimeMs),
+                        () -> getTimerTask(key, idleElement -> idleElement.getCreationTime() + idleTimeMs)
+                );
             }
         }
+
+        elements.put(key, new MyElement<K, V>(key, value, idleManager));
     }
 
     public MyElement<K, V> get(K key) {

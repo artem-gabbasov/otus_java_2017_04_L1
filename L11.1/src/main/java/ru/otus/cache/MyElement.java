@@ -1,5 +1,8 @@
 package ru.otus.cache;
 
+import java.util.TimerTask;
+import java.util.function.Supplier;
+
 /**
  * Created by tully.
  */
@@ -8,12 +11,16 @@ public class MyElement<K, V> {
     private final V value;
     private final long creationTime;
     private long lastAccessTime;
+    private final IdleManager idleManager;
 
-    public MyElement(K key, V value) {
+    public MyElement(K key, V value, IdleManager idleManager) {
         this.key = key;
         this.value = value;
-        this.creationTime = getCurrentTime();
-        this.lastAccessTime = getCurrentTime();
+        long currentTime = getCurrentTime();
+        this.creationTime = currentTime;
+        this.lastAccessTime = currentTime;
+        this.idleManager = idleManager;
+        idleManager.refresh();
     }
 
     protected long getCurrentTime() {
@@ -38,5 +45,6 @@ public class MyElement<K, V> {
 
     public void setAccessed() {
         lastAccessTime = getCurrentTime();
+        idleManager.refresh();
     }
 }

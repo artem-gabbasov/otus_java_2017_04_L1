@@ -2,6 +2,7 @@ package ru.otus.db;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.otus.datasets.AddressDataSet;
 import ru.otus.datasets.PhoneDataSet;
@@ -16,6 +17,7 @@ import java.util.List;
  * Created by Artem Gabbasov on 10.07.2017.
  * <p>
  */
+@Ignore
 public class DBServiceHibernateTest extends DBServiceTestCommon {
     @Override
     public DBService createDBService() {

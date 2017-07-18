@@ -25,6 +25,16 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
         return new DBServiceCachedImpl(connection, cacheEngine);
     }
 
+    private DBService createDBServiceLifeTime(long lifeTimeMs) {
+        cacheEngine = new CacheEngineImpl(1, lifeTimeMs, 0, false);
+        return new DBServiceCachedImpl(connection, cacheEngine);
+    }
+
+    private DBService createDBServiceIdleTime(long idleTimeMs) {
+        cacheEngine = new CacheEngineImpl(1, 0, idleTimeMs, false);
+        return new DBServiceCachedImpl(connection, cacheEngine);
+    }
+
     @BeforeClass
     public static void createTable() throws SQLException {
         DBServiceTestCommon.createTable();
@@ -69,6 +79,61 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
 
         // после очистки кеша тот же самый объект должен был загрузиться уже из базы
         assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 1;
+    }
+
+    @Test
+    // этот тест не совсем стабилен - он может иногда не выполниться, но для теста не совсем критично, можно перезапустить
+    public void cacheLifeTime() throws IllegalAccessException, SQLException, JPAException, InterruptedException {
+        DBService dbService = createDBServiceLifeTime(500);
+
+        DataSet user = new UserDataSet(1, "user1", 99);
+
+        dbService.save(user);
+
+        Thread.sleep(100);
+
+        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
+
+        // lifeTime ещё не истёк
+        assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 0;
+
+        Thread.sleep(500);
+
+        loadedUser = dbService.load(1, UserDataSet.class);
+
+        // lifeTime уже должен был истечь
+        assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 1;
+    }
+
+    @Test
+    // этот тест не совсем стабилен - он может иногда не выполниться, но для теста не совсем критично, можно перезапустить
+    public void cacheIdleTime() throws IllegalAccessException, SQLException, JPAException, InterruptedException {
+        DBService dbService = createDBServiceIdleTime(500);
+
+        DataSet user = new UserDataSet(1, "user1", 99);
+
+        dbService.save(user);
+
+        Thread.sleep(300);
+
+        UserDataSet loadedUser = dbService.load(1, UserDataSet.class);
+
+        // idleTime ещё не истёк
+        assert cacheEngine.getHitCount() == 1 && cacheEngine.getMissCount() == 0;
+
+        Thread.sleep(300);
+
+        loadedUser = dbService.load(1, UserDataSet.class);
+
+        // idleTime снова ещё не истёк, т.к. к нему обращались
+        assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 0;
+
+        Thread.sleep(600);
+
+        loadedUser = dbService.load(1, UserDataSet.class);
+
+        // idleTime уже должен был истечь
+        assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 1;
     }
 
     @After
