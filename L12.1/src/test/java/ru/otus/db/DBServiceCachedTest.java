@@ -18,21 +18,26 @@ import java.sql.SQLException;
  */
 @SuppressWarnings({"EmptyMethod", "SameParameterValue"})
 public class DBServiceCachedTest extends DBServiceTestCommon {
-    private CacheEngine<DBServiceCacheKey, DataSet> cacheEngine;
+    private DBServiceCacheEngine cacheEngine;
 
     @Override
     public DBService createDBService() {
-        cacheEngine = new CacheEngineImpl<>(1, 0, 0, true);
+        cacheEngine = new DBServiceCacheEngineImpl(1, 0, 0, true);
+        return new DBServiceCachedImpl(connection, cacheEngine);
+    }
+
+    public DBService createDBServiceMaxElements(int maxElements) {
+        cacheEngine = new DBServiceCacheEngineImpl(maxElements, 0, 0, true);
         return new DBServiceCachedImpl(connection, cacheEngine);
     }
 
     private DBService createDBServiceLifeTime(long lifeTimeMs) {
-        cacheEngine = new CacheEngineImpl<>(1, lifeTimeMs, 0, false);
+        cacheEngine = new DBServiceCacheEngineImpl(1, lifeTimeMs, 0, false);
         return new DBServiceCachedImpl(connection, cacheEngine);
     }
 
     private DBService createDBServiceIdleTime(long idleTimeMs) {
-        cacheEngine = new CacheEngineImpl<>(1, 0, idleTimeMs, false);
+        cacheEngine = new DBServiceCacheEngineImpl(1, 0, idleTimeMs, false);
         return new DBServiceCachedImpl(connection, cacheEngine);
     }
 
@@ -108,6 +113,25 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
 
         // первый юзер должен был уже "вытолкнуться" из кеша
         assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 1;
+    }
+
+    @Test
+    public void cacheElementsCount() throws IllegalAccessException, SQLException, JPAException {
+        DBService dbService = createDBServiceMaxElements(2);
+
+        DataSet user = new UserDataSet(1, "user1", 99);
+        dbService.save(user);
+
+        assert cacheEngine.getElementsCount() == 1;
+
+        DataSet user2 = new UserDataSet(2, "user2", 9);
+        dbService.save(user2);
+
+        assert cacheEngine.getElementsCount() == 2;
+
+        cacheEngine.clear();
+
+        assert cacheEngine.getElementsCount() == 0;
     }
 
     @Test

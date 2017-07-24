@@ -105,4 +105,31 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private boolean isT1BeforeT2(long t1, long t2) {
         return t1 < t2 + TIME_THRESHOLD_MS;
     }
+
+    @Override
+    public int getMaxElements() {
+        return maxElements;
+    }
+
+    @Override
+    public int getElementsCount() {
+        return (int)elements.values().stream()
+                .filter(myElementSoftReference -> myElementSoftReference.get() != null)
+                .count();
+    }
+
+    @Override
+    public long getLifeTimeMs() {
+        return lifeTimeMs;
+    }
+
+    @Override
+    public long getIdleTimeMs() {
+        return idleTimeMs;
+    }
+
+    @Override
+    public boolean isEternal() {
+        return isEternal;
+    }
 }

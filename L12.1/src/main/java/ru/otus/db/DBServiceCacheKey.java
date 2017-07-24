@@ -10,7 +10,7 @@ import java.util.Objects;
  * Класс, используемый в качестве ключа кеша для нашей задачи с хранением DataSet'ов
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-class DBServiceCacheKey {
+public class DBServiceCacheKey {
     private long id;
     private Class<? extends DataSet> clazz;
 

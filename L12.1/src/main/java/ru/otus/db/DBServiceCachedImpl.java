@@ -13,10 +13,10 @@ import java.sql.SQLException;
  * <p>
  * Класс, реализующий хранение DataSet'ов в БД с использованием кеша
  */
-public class DBServiceCachedImpl extends DBServiceImpl {
-    private final CacheEngine<DBServiceCacheKey, DataSet> cacheEngine;
+public class DBServiceCachedImpl extends DBServiceImpl implements DBServiceCached {
+    private final DBServiceCacheEngine cacheEngine;
 
-    public DBServiceCachedImpl(Connection connection, CacheEngine<DBServiceCacheKey, DataSet> cacheEngine) {
+    public DBServiceCachedImpl(Connection connection, DBServiceCacheEngine cacheEngine) {
         super(connection);
         this.cacheEngine = cacheEngine;
     }
@@ -51,5 +51,10 @@ public class DBServiceCachedImpl extends DBServiceImpl {
             cacheEngine.put(new DBServiceCacheKey(id, clazz), result);
             return result;
         }
+    }
+
+    @Override
+    public DBServiceCacheEngine getCacheEngine() {
+        return cacheEngine;
     }
 }

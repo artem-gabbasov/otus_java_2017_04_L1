@@ -9,6 +9,16 @@ public interface CacheEngine<K, V> {
 
     MyElement<K, V> get(K key);
 
+    int getMaxElements();
+
+    int getElementsCount();
+
+    long getLifeTimeMs();
+
+    long getIdleTimeMs();
+
+    boolean isEternal();
+
     int getHitCount();
 
     int getMissCount();
