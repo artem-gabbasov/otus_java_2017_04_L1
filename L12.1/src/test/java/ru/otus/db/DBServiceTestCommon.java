@@ -16,7 +16,7 @@ public class DBServiceTestCommon {
     protected static Connection connection;
 
     public static void createTable() throws SQLException {
-        try (Connection createConnection = ConnectionHelper.getConnection(ConnectionHelperTest.url)) {
+        try (Connection createConnection = ConnectionHelper.getDefaultConnection()) {
             createConnection.createStatement().execute("CREATE TABLE IF NOT EXISTS db_example.users (id BIGINT(20) NOT NULL AUTO_INCREMENT, name VARCHAR(255), age INT(3) NOT NULL DEFAULT 0, PRIMARY KEY (id));");
             createConnection.commit();
         }
@@ -27,7 +27,7 @@ public class DBServiceTestCommon {
     }
 
     public void clear() throws SQLException {
-        connection = ConnectionHelper.getConnection(ConnectionHelperTest.url);
+        connection = ConnectionHelper.getDefaultConnection();
         connection.createStatement().execute("DELETE FROM users");
         connection.commit();
     }

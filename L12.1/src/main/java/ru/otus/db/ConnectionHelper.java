@@ -9,7 +9,16 @@ import java.sql.SQLException;
  * <p>
  * Класс для установления соединения с БД
  */
-class ConnectionHelper {
+public class ConnectionHelper {
+    private final static String defaultUrl =
+            "jdbc:mysql://" +       //db type
+                    "localhost:" +               //host name
+                    "3306/" +                    //port
+                    "db_example?" +              //db name
+                    "useSSL=false&" +            //do not use ssl
+                    "user=tully&" +              //login
+                    "password=tully";            //password
+
     public static Connection getConnection(@SuppressWarnings("SameParameterValue") String url) {
         try {
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
@@ -21,5 +30,9 @@ class ConnectionHelper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Connection getDefaultConnection() {
+        return getConnection(defaultUrl);
     }
 }
