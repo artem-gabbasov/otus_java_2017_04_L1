@@ -1,6 +1,5 @@
 package ru.otus.db;
 
-import ru.otus.cache.CacheEngine;
 import ru.otus.cache.MyElement;
 import ru.otus.datasets.DataSet;
 import ru.otus.jpa.JPAException;

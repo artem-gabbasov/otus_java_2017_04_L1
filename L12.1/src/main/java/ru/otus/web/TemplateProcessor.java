@@ -13,9 +13,10 @@ import java.util.Map;
 /**
  * @author v.chibrikov
  */
+@SuppressWarnings("SameParameterValue")
 class TemplateProcessor {
     private static final String HTML_DIR = "tml";
-    private static TemplateProcessor instance = new TemplateProcessor();
+    private static final TemplateProcessor instance = new TemplateProcessor();
 
     private final Configuration configuration;
 

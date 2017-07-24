@@ -3,6 +3,7 @@ package ru.otus.cache;
 /**
  * Created by tully.
  */
+@SuppressWarnings("unused")
 public interface CacheEngine<K, V> {
 
     void put(K key, V value);

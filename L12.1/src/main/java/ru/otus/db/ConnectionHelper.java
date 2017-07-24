@@ -19,6 +19,7 @@ public class ConnectionHelper {
                     "user=tully&" +              //login
                     "password=tully";            //password
 
+    @SuppressWarnings("WeakerAccess")
     public static Connection getConnection(@SuppressWarnings("SameParameterValue") String url) {
         try {
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());

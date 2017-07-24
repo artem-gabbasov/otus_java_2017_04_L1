@@ -1,6 +1,5 @@
 package ru.otus.web;
 
-import ru.otus.cache.CacheEngine;
 import ru.otus.datasets.UserDataSet;
 import ru.otus.db.DBServiceCacheEngine;
 import ru.otus.db.DBServiceCached;
@@ -29,11 +28,14 @@ public class AdminServlet extends HttpServlet {
     private static final String ACTION_CACHE_CLEAR = "clear";
     private static final String PARAMETER_USER_ID = "userID";
 
-    private final String resourceBase;
     private final Supplier<DBServiceCached> dbServiceSupplier;
 
-    public AdminServlet(String resourceBase, Supplier<DBServiceCached> dbServiceSupplier) {
-        this.resourceBase = resourceBase;
+    /**
+     * @param dbServiceSupplier объект, который поставляет DBService, по которому требуется информация.
+     *                          Использовал Supplier, а не просто ссылку на DBService, т.к. нам не важно,
+     *                          за одним ли мы объектом следим или за разными - в общем случае мы можем их переключать
+     */
+    public AdminServlet(Supplier<DBServiceCached> dbServiceSupplier) {
         this.dbServiceSupplier = dbServiceSupplier;
     }
 
@@ -88,6 +90,14 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Обрабатывает действия, приходящие с админской странички
+     * @param dbService                 объект, за которым мы наблюдаем
+     * @param parameterMap              параметры запроса, пришедшие с html-формы
+     * @throws IllegalAccessException   при проблемах в DBService
+     * @throws SQLException             при проблемах в DBService
+     * @throws JPAException             при проблемах в DBService
+     */
     private void dispatchParameters(DBServiceCached dbService, Map<String, String[]> parameterMap) throws IllegalAccessException, SQLException, JPAException {
         if (parameterMap.containsKey(ACTION_USER_SAVE)) {
             Long id = getUserID(parameterMap);
@@ -111,18 +121,43 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Сохраняет в БД фиктивного пользователя с указанным идентификатором
+     * @param dbService                 объект, через который происходит сохранение
+     * @param id                        идентификатор сохраняемого пользователя
+     * @throws IllegalAccessException   при проблемах в DBService
+     * @throws SQLException             при проблемах в DBService
+     * @throws JPAException             при проблемах в DBService
+     */
     private void saveUser(DBServiceCached dbService, long id) throws IllegalAccessException, SQLException, JPAException {
         dbService.save(new UserDataSet(id, "user_test", (int)(id % 100)));
     }
 
+    /**
+     * Загружает из БД пользователя с указанным идентификатором
+     * @param dbService         объект, через который происходит загрузка
+     * @param id                идентификатор загружаемого пользователя
+     * @throws JPAException     при проблемах в DBService
+     * @throws SQLException     при проблемах в DBService
+     */
     private void loadUser(DBServiceCached dbService, long id) throws JPAException, SQLException {
         dbService.load(id, UserDataSet.class);
     }
 
+    /**
+     * Очищает кеш
+     * @param cacheEngine   объект кеша, который нужно очистить
+     */
     private void clearCache(DBServiceCacheEngine cacheEngine) {
         cacheEngine.clear();
     }
 
+    /**
+     * Извлекает из запроса идентификатор пользователя (если он там имеется) для действий над DBService
+     * @param parameterMap  параметры запроса, пришедшие с html-формы
+     * @return              Идентификатор пользователя, если найден соответствующий ключ и по нему лежит корректное число.
+     *                      Иначе, null
+     */
     private Long getUserID(Map<String, String[]> parameterMap) {
         String[] values = parameterMap.get(PARAMETER_USER_ID);
         if (values.length == 1) { // у нас подразумевается единственное значение идентификатора
@@ -135,6 +170,13 @@ public class AdminServlet extends HttpServlet {
         return null;
     }
 
+    /**
+     * Проверяет, определён ли переданный объект. Если получен null, перенаправляет на страницу с соответствующим оповещением
+     * @param obj           объект, передаваемый для проверки
+     * @param resp          html-response для перенаправления
+     * @return              True, если переданный объект не null. Иначе, false
+     * @throws IOException  в случае проблемы при перенаправлении
+     */
     private boolean checkObject(Object obj, HttpServletResponse resp) throws IOException {
         if (obj == null) {
             resp.sendRedirect(UNDEFINED_PAGE_TEMPLATE);

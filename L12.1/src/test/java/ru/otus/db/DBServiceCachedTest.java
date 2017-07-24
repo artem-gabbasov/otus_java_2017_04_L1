@@ -4,8 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.otus.cache.CacheEngine;
-import ru.otus.cache.CacheEngineImpl;
 import ru.otus.datasets.DataSet;
 import ru.otus.datasets.UserDataSet;
 import ru.otus.jpa.JPAException;
@@ -16,7 +14,7 @@ import java.sql.SQLException;
  * Created by Artem Gabbasov on 12.07.2017.
  * <p>
  */
-@SuppressWarnings({"EmptyMethod", "SameParameterValue"})
+@SuppressWarnings({"EmptyMethod", "SameParameterValue", "WeakerAccess"})
 public class DBServiceCachedTest extends DBServiceTestCommon {
     private DBServiceCacheEngine cacheEngine;
 
