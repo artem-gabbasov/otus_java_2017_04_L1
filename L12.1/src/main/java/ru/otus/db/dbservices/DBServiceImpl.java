@@ -1,7 +1,8 @@
-package ru.otus.db;
+package ru.otus.db.dbservices;
 
 import com.sun.istack.internal.Nullable;
 import ru.otus.datasets.DataSet;
+import ru.otus.db.ResultHandlerImpl;
 import ru.otus.db.sql.ExecutorImpl;
 import ru.otus.jpa.JPAException;
 import ru.otus.jpa.JPAReflectionHelper;
@@ -15,7 +16,8 @@ import java.util.Map;
  * <p>
  */
 public class DBServiceImpl implements DBService {
-    private final Connection connection;
+    @SuppressWarnings("WeakerAccess")
+    protected final Connection connection;
 
     public DBServiceImpl(Connection connection) {
         this.connection = connection;

@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("WeakerAccess")
 public class DAO {
-    public static String getQueryString(String tableName, String idColumnName) {
-        return "SELECT * FROM " + tableName + " WHERE " + SQLCommons.escapeColumnName(idColumnName) + " = ?;";
+    public static String getQueryString(String tableName, String whereColumnName) {
+        return "SELECT * FROM " + tableName + " WHERE " + SQLCommons.escapeColumnName(whereColumnName) + " = ?;";
     }
 
     public static String getUpdateString(String tableName, String[] columnNames, String idColumnName) {

@@ -1,8 +1,9 @@
 package ru.otus.web;
 
+import org.eclipse.jetty.server.handler.ContextHandler;
 import ru.otus.datasets.UserDataSet;
-import ru.otus.db.DBServiceCacheEngine;
-import ru.otus.db.DBServiceCached;
+import ru.otus.db.dbservices.DBServiceCacheEngine;
+import ru.otus.db.dbservices.DBServiceCached;
 import ru.otus.jpa.JPAException;
 
 import javax.servlet.ServletException;
@@ -21,8 +22,10 @@ import java.util.function.Supplier;
  */
 public class AdminServlet extends HttpServlet {
     private static final String ADMIN_PAGE_TEMPLATE = "admin.html";
-    private static final String UNDEFINED_PAGE_TEMPLATE = "undefined.html";
 
+    private static final String UNDEFINED_MESSAGE = "DBService or CacheEngine is undefined.";
+
+    private static final String ACTION_LOGOUT = "logout";
     private static final String ACTION_USER_SAVE = "save";
     private static final String ACTION_USER_LOAD = "load";
     private static final String ACTION_CACHE_CLEAR = "clear";
@@ -39,13 +42,49 @@ public class AdminServlet extends HttpServlet {
         this.dbServiceSupplier = dbServiceSupplier;
     }
 
+    /**
+     * Проверяет, авторизован ли пользователь. Если не авторизован, выкидывает его на домашнюю страницу
+     * @param resp          http-ответ для перенаправления
+     * @return              True, если пользователь авторизован. Иначе, false
+     * @throws IOException  в случае проблемы при перенаправлении
+     */
+    private boolean checkAuthorization(HttpServletResponse resp) throws IOException {
+        if (ContextHandler.getCurrentContext().getAttribute(ServerManager.AUTHORIZED_FLAG) != null) {
+            return true;
+        } else {
+            ContextHandler.getCurrentContext().setAttribute(ServerManager.REDIRECT_PAGE, "admin");
+            resp.sendRedirect(ServerManager.LOGIN_PAGE);
+            return false;
+        }
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getParameter(ACTION_LOGOUT) != null) {
+            logout(resp);
+        } else {
+            if (checkAuthorization(resp)) {
+                showPage(resp);
+            }
+        }
+    }
+
+    private void logout(HttpServletResponse resp) throws IOException {
+        ContextHandler.getCurrentContext().removeAttribute(ServerManager.AUTHORIZED_FLAG);
+        resp.sendRedirect(ServerManager.INDEX_PAGE);
+    }
+
+    /**
+     * Отображает страницу с параметрами кеша и с управлением dbService'ом
+     * @param resp              http-ответ (метод GET)
+     * @throws IOException
+     */
+    private void showPage(HttpServletResponse resp) throws IOException {
         DBServiceCached dbService = dbServiceSupplier.get();
         if (checkObject(dbService, resp)) {
             DBServiceCacheEngine cacheEngine = dbService.getCacheEngine();
             if (checkObject(cacheEngine, resp)) {
-                Map<String, Object> pageVariables = createPageVariablesMap(req, cacheEngine);
+                Map<String, Object> pageVariables = createPageVariablesMap(cacheEngine);
 
                 resp.getWriter().println(TemplateProcessor.instance().getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
 
@@ -55,17 +94,13 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
-    private Map<String, Object> createPageVariablesMap(HttpServletRequest request, DBServiceCacheEngine cacheEngine) {
+    /**
+     * Заполняет значения переменных для Template'а
+     * @param cacheEngine   объект, информация по которому выводится на странице
+     * @return              Map со значениями переменных для вывода на админскую страничку
+     */
+    private Map<String, Object> createPageVariablesMap(DBServiceCacheEngine cacheEngine) {
         Map<String, Object> pageVariables = new HashMap<>();
-        /*pageVariables.put("method", request.getMethod());
-        pageVariables.put("URL", request.getRequestURL().toString());
-        pageVariables.put("locale", request.getLocale());
-        pageVariables.put("sessionId", request.getSession().getId());
-        pageVariables.put("parameters", request.getParameterMap().toString());
-
-        //let's get login from session
-        String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
-        pageVariables.put("login", login != null ? login : DEFAULT_USER_NAME);*/
 
         pageVariables.put("maxElements", cacheEngine.getMaxElements());
         pageVariables.put("elementsCount", cacheEngine.getElementsCount());
@@ -79,14 +114,16 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DBServiceCached dbService = dbServiceSupplier.get();
-        if (checkObject(dbService, resp)) {
-            try {
-                dispatchParameters(dbService, req.getParameterMap());
-            } catch (IllegalAccessException | SQLException | JPAException e) {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
+        if (checkAuthorization(resp)) {
+            DBServiceCached dbService = dbServiceSupplier.get();
+            if (checkObject(dbService, resp)) {
+                try {
+                    dispatchParameters(dbService, req.getParameterMap());
+                } catch (IllegalAccessException | SQLException | JPAException e) {
+                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
+                }
+                doGet(req, resp);
             }
-            doGet(req, resp);
         }
     }
 
@@ -179,7 +216,7 @@ public class AdminServlet extends HttpServlet {
      */
     private boolean checkObject(Object obj, HttpServletResponse resp) throws IOException {
         if (obj == null) {
-            resp.sendRedirect(UNDEFINED_PAGE_TEMPLATE);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, UNDEFINED_MESSAGE);
             return false;
         } else {
             return true;

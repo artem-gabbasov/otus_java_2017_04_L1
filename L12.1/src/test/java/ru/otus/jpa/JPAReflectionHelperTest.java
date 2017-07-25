@@ -83,4 +83,9 @@ public class JPAReflectionHelperTest {
     public void getIdColumnNameMultiple() throws JPAException {
         JPAReflectionHelper.getIdColumnName(TestDataSet5.class);
     }
+
+    @Test
+    public void getNameColumnName() throws JPAException {
+        assert JPAReflectionHelper.getNameColumnName(LoginDataSet.class).equals("username");
+    }
 }

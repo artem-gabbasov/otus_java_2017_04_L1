@@ -1,4 +1,4 @@
-package ru.otus.db;
+package ru.otus.db.dbservices;
 
 import com.sun.istack.internal.Nullable;
 import ru.otus.datasets.DataSet;

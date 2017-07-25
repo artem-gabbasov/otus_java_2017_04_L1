@@ -1,4 +1,4 @@
-package ru.otus.db;
+package ru.otus.db.dbservices;
 
 import org.junit.After;
 import org.junit.Before;

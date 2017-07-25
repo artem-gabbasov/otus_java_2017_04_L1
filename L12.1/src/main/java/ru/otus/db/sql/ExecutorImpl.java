@@ -5,6 +5,7 @@ import ru.otus.anytype.ValueException;
 import ru.otus.anytype.ValueSetHelper;
 import ru.otus.anytype.setters.GeneralValueSetter;
 import ru.otus.datasets.DataSet;
+import ru.otus.datasets.NamedDataSet;
 import ru.otus.db.PreparedStatementValueSetter;
 import ru.otus.db.ResultHandler;
 
@@ -19,9 +20,18 @@ import java.util.Map;
  */
 public class ExecutorImpl implements Executor {
     @Override
-    public <T extends DataSet> T execQuery(Connection connection, String tableName, String idColumnName, long id, ResultHandler<T> handler) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(DAO.getQueryString(tableName, idColumnName))) {
+    public <T extends DataSet> T execQuery(Connection connection, String tableName, String whereColumnName, long id, ResultHandler<T> handler) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(DAO.getQueryString(tableName, whereColumnName))) {
             stmt.setLong(1, id);
+            stmt.executeQuery();
+            return handler.handle(stmt.getResultSet());
+        }
+    }
+
+    @Override
+    public <T extends NamedDataSet> T execQueryNamed(Connection connection, String tableName, String whereColumnName, String name, ResultHandler<T> handler) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(DAO.getQueryString(tableName, whereColumnName))) {
+            stmt.setString(1, name);
             stmt.executeQuery();
             return handler.handle(stmt.getResultSet());
         }

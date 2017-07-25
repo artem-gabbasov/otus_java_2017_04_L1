@@ -1,6 +1,7 @@
 package ru.otus.jpa;
 
 import ru.otus.datasets.DataSet;
+import ru.otus.datasets.NamedDataSet;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -84,6 +85,29 @@ public class JPAReflectionHelper {
         }
 
         return idFields.get(0).getName();
+    }
+
+    /**
+     * Возвращает имя столбца, задающего имя записи
+     * @param clazz                         класс, для которого определяется имя столбца
+     * @return                              имя столбца, задающего имя записи
+     * @throws NoJPAAnnotationException     если ни одно поле не размечено аннотацией @NameColumn
+     * @throws IllegalJPAStateException     если несколько полей размечены аннотацией @NameColumn
+     */
+    public static String getNameColumnName(Class<? extends NamedDataSet> clazz) throws NoJPAAnnotationException, IllegalJPAStateException {
+        List<Field> nameFields = Arrays.stream(clazz.getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(NameColumn.class))
+                .collect(Collectors.toList());
+
+        if (nameFields.size() == 0) {
+            throw new NoJPAAnnotationException(NameColumn.class, clazz);
+        }
+
+        if (nameFields.size() > 1) {
+            throw new IllegalJPAStateException("Multiple @NameColumn columns");
+        }
+
+        return nameFields.get(0).getName();
     }
 
     /**

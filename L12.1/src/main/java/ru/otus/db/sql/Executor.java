@@ -1,6 +1,7 @@
 package ru.otus.db.sql;
 
 import ru.otus.datasets.DataSet;
+import ru.otus.datasets.NamedDataSet;
 import ru.otus.db.ResultHandler;
 
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.util.Map;
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public interface Executor {
-    <T extends DataSet> T execQuery(Connection connection, String tableName, String idColumnName, long id, ResultHandler<T> handler) throws SQLException;
+    <T extends DataSet> T execQuery(Connection connection, String tableName, String whereColumnName, long id, ResultHandler<T> handler) throws SQLException;
+    <T extends NamedDataSet> T execQueryNamed(Connection connection, String tableName, String whereColumnName, String name, ResultHandler<T> handler) throws SQLException;
     void execUpdate(Connection connection, String tableName, Map<String, Object> fieldMap, String idColumnName) throws SQLException;
 }
