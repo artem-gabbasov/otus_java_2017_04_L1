@@ -22,6 +22,7 @@ class TemplateProcessor {
 
     private TemplateProcessor() {
         configuration = new Configuration();
+        configuration.setClassForTemplateLoading(this.getClass(), File.separator + HTML_DIR + File.separator);
     }
 
     static TemplateProcessor instance() {
@@ -30,7 +31,7 @@ class TemplateProcessor {
 
     String getPage(String filename, Map<String, Object> data) throws IOException {
         try (Writer stream = new StringWriter()) {
-            Template template = configuration.getTemplate(HTML_DIR + File.separator + filename);
+            Template template = configuration.getTemplate(filename);
             template.process(data, stream);
             return stream.toString();
         } catch (TemplateException e) {
