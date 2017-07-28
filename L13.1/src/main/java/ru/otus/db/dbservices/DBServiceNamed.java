@@ -1,6 +1,5 @@
 package ru.otus.db.dbservices;
 
-import com.sun.istack.internal.Nullable;
 import ru.otus.datasets.NamedDataSet;
 import ru.otus.jpa.JPAException;
 
@@ -19,6 +18,5 @@ public interface DBServiceNamed extends DBService {
      * @throws SQLException             если возникают проблемы с БД
      * @throws JPAException             если класс объекта некорректно размечен аннотациями JPA
      */
-    @Nullable
     <T extends NamedDataSet> T loadByName(String name, Class<T> clazz) throws SQLException, JPAException;
 }

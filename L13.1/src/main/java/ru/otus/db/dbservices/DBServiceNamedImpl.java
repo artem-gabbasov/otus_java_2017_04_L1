@@ -1,6 +1,5 @@
 package ru.otus.db.dbservices;
 
-import com.sun.istack.internal.Nullable;
 import ru.otus.datasets.NamedDataSet;
 import ru.otus.db.ResultHandlerImpl;
 import ru.otus.db.sql.ExecutorImpl;
@@ -20,7 +19,6 @@ public class DBServiceNamedImpl extends DBServiceImpl implements DBServiceNamed 
     }
 
     @Override
-    @Nullable
     public <T extends NamedDataSet> T loadByName(String name, Class<T> clazz) throws SQLException, JPAException {
         String tableName = JPAReflectionHelper.getTableName(clazz);
         String nameColumnName = JPAReflectionHelper.getNameColumnName(clazz);

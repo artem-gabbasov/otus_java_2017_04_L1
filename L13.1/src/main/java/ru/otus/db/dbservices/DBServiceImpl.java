@@ -1,6 +1,5 @@
 package ru.otus.db.dbservices;
 
-import com.sun.istack.internal.Nullable;
 import ru.otus.datasets.DataSet;
 import ru.otus.db.ResultHandlerImpl;
 import ru.otus.db.sql.ExecutorImpl;
@@ -32,7 +31,7 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    @Nullable public <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException, JPAException {
+    public <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException, JPAException {
         String tableName = JPAReflectionHelper.getTableName(clazz);
         String idColumnName = JPAReflectionHelper.getIdColumnName(clazz);
         return new ExecutorImpl().execQuery(connection, tableName, idColumnName, id, new ResultHandlerImpl<>(clazz));
