@@ -1,9 +1,6 @@
 package ru.otus.db.dbservices;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import ru.otus.datasets.DataSet;
 import ru.otus.datasets.UserDataSet;
 import ru.otus.jpa.JPAException;
@@ -15,6 +12,7 @@ import java.sql.SQLException;
  * <p>
  */
 @SuppressWarnings({"EmptyMethod", "SameParameterValue", "WeakerAccess"})
+@Ignore
 public class DBServiceCachedTest extends DBServiceTestCommon {
     private DBServiceCacheEngine cacheEngine;
 
