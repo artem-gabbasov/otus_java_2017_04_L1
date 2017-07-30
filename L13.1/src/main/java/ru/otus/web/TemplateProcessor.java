@@ -16,17 +16,12 @@ import java.util.Map;
 @SuppressWarnings("SameParameterValue")
 class TemplateProcessor {
     private static final String HTML_DIR = "tml";
-    private static final TemplateProcessor instance = new TemplateProcessor();
 
     private final Configuration configuration;
 
-    private TemplateProcessor() {
+    public TemplateProcessor() {
         configuration = new Configuration();
         configuration.setClassForTemplateLoading(this.getClass(), File.separator + HTML_DIR + File.separator);
-    }
-
-    static TemplateProcessor instance() {
-        return instance;
     }
 
     String getPage(String filename, Map<String, Object> data) throws IOException {

@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("isLastLoginIncorrect", isLastLoginIncorrect);
 
-        resp.getWriter().println(TemplateProcessor.instance().getPage(LOGIN_PAGE_TEMPLATE, pageVariables));
+        resp.getWriter().println(ServerContext.getSpringBean("templateProcessor", TemplateProcessor.class).getPage(LOGIN_PAGE_TEMPLATE, pageVariables));
 
         isLastLoginIncorrect = false;
 

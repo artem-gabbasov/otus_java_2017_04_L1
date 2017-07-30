@@ -20,4 +20,6 @@
     <bean id="dbServiceNamed" class="ru.otus.db.dbservices.DBServiceNamedImpl">
         <constructor-arg name="connectionSupplier"  ref="connectionSupplier" />
     </bean>
+
+    <bean id="templateProcessor" class="ru.otus.web.TemplateProcessor"></bean>
 </beans>

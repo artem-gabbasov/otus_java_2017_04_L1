@@ -89,7 +89,7 @@ public class AdminServlet extends HttpServlet {
             if (checkObject(cacheEngine, resp)) {
                 Map<String, Object> pageVariables = createPageVariablesMap(cacheEngine);
 
-                resp.getWriter().println(TemplateProcessor.instance().getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
+                resp.getWriter().println(ServerContext.getSpringBean("templateProcessor", TemplateProcessor.class).getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
 
                 resp.setContentType("text/html;charset=utf-8");
                 resp.setStatus(HttpServletResponse.SC_OK);
