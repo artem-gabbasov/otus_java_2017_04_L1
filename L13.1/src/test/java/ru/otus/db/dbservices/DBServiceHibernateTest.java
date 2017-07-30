@@ -18,7 +18,7 @@ import java.util.List;
  * <p>
  */
 @SuppressWarnings("EmptyMethod")
-@Ignore
+//@Ignore
 public class DBServiceHibernateTest extends DBServiceTestCommon {
     @Override
     public DBService createDBService() {

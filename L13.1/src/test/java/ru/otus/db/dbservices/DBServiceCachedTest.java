@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * <p>
  */
 @SuppressWarnings({"EmptyMethod", "SameParameterValue", "WeakerAccess"})
-@Ignore
+//@Ignore
 public class DBServiceCachedTest extends DBServiceTestCommon {
     private DBServiceCacheEngine cacheEngine;
 
