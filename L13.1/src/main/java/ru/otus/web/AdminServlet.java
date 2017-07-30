@@ -1,6 +1,5 @@
 package ru.otus.web;
 
-import org.eclipse.jetty.server.handler.ContextHandler;
 import ru.otus.datasets.UserDataSet;
 import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
@@ -43,7 +42,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     public AdminServlet() {
-       this(null);
+        this(null);
     }
 
     /**
@@ -53,11 +52,11 @@ public class AdminServlet extends HttpServlet {
      * @throws IOException  в случае проблемы при перенаправлении
      */
     private boolean checkAuthorization(HttpServletResponse resp) throws IOException {
-        if (ContextHandler.getCurrentContext().getAttribute(ServerConsts.AUTHORIZED_FLAG) != null) {
+        if (ServerContext.isAuthorized()) {
             return true;
         } else {
-            ContextHandler.getCurrentContext().setAttribute(ServerConsts.REDIRECT_PAGE, "admin");
-            resp.sendRedirect(ServerConsts.LOGIN_PAGE);
+            ServerContext.setRedirectPage("admin");
+            resp.sendRedirect(ServerContext.LOGIN_PAGE);
             return false;
         }
     }
@@ -74,8 +73,8 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void logout(HttpServletResponse resp) throws IOException {
-        ContextHandler.getCurrentContext().removeAttribute(ServerConsts.AUTHORIZED_FLAG);
-        resp.sendRedirect(ServerConsts.INDEX_PAGE);
+        ServerContext.setAuthorized(false);
+        resp.sendRedirect(ServerContext.INDEX_PAGE);
     }
 
     /**

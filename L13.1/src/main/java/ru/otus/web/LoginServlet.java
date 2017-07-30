@@ -1,6 +1,5 @@
 package ru.otus.web;
 
-import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.util.security.Credential;
 import ru.otus.datasets.LoginDataSet;
 import ru.otus.db.dbservices.DBServiceNamed;
@@ -113,17 +112,8 @@ public class LoginServlet extends HttpServlet {
     private void processLoginData(String username, String passwordMD5, HttpServletResponse resp) throws JPAException, SQLException, IOException, ServletException {
         LoginDataSet loginDataSet = dbService.loadByName(username, LoginDataSet.class);
         if (loginDataSet != null && loginDataSet.getPasswordMD5().equals(passwordMD5)) {
-            ContextHandler.getCurrentContext().setAttribute(ServerConsts.AUTHORIZED_FLAG, "true");
-
-            String redirectPage;
-            Object redirectPageObj = ContextHandler.getCurrentContext().getAttribute(ServerConsts.REDIRECT_PAGE);
-            if (redirectPageObj != null) {
-                redirectPage = redirectPageObj.toString();
-            } else {
-                redirectPage = ServerConsts.INDEX_PAGE;
-            }
-
-            resp.sendRedirect(redirectPage);
+            ServerContext.setAuthorized(true);
+            resp.sendRedirect(ServerContext.getRedirectPage());
         } else {
             isLastLoginIncorrect = true;
             doGet(null, resp);
