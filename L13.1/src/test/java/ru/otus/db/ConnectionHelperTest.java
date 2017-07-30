@@ -1,6 +1,7 @@
 package ru.otus.db;
 
 import org.junit.Test;
+import ru.otus.db.connections.ConnectionHelper;
 
 import java.sql.SQLException;
 

@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.otus.datasets.NamedDataSet;
 import ru.otus.datasets.NamedTestDataSet;
-import ru.otus.db.ConnectionHelper;
+import ru.otus.db.connections.ConnectionHelper;
 import ru.otus.jpa.JPAException;
 
 import java.sql.Connection;

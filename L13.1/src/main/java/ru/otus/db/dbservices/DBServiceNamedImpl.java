@@ -8,6 +8,7 @@ import ru.otus.jpa.JPAReflectionHelper;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.function.Supplier;
 
 /**
  * Created by Artem Gabbasov on 25.07.2017.
@@ -16,6 +17,10 @@ import java.sql.SQLException;
 public class DBServiceNamedImpl extends DBServiceImpl implements DBServiceNamed {
     public DBServiceNamedImpl(Connection connection) {
         super(connection);
+    }
+
+    public DBServiceNamedImpl(Supplier<Connection> connectionSupplier) {
+        this(connectionSupplier.get());
     }
 
     @Override

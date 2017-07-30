@@ -2,8 +2,7 @@ package ru.otus.db.dbservices;
 
 import ru.otus.datasets.DataSet;
 import ru.otus.datasets.UserDataSet;
-import ru.otus.db.ConnectionHelper;
-import ru.otus.db.dbservices.DBService;
+import ru.otus.db.connections.ConnectionHelper;
 import ru.otus.jpa.JPAException;
 
 import java.sql.Connection;

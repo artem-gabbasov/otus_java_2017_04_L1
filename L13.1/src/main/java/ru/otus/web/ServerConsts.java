@@ -13,7 +13,7 @@ import java.sql.Connection;
 /**
  * Created by Artem Gabbasov on 22.07.2017.
  * <p>
- * Верхнеуровневый класс, содержащий в себе работу с сервером
+ * Константы для работы сервлетов
  */
 public class ServerConsts {
     static final String INDEX_PAGE = "index.html";
@@ -24,18 +24,4 @@ public class ServerConsts {
      */
     final static String AUTHORIZED_FLAG = "authorized";
     final static String REDIRECT_PAGE = "redirectPage";
-
-        /*try (Connection connection = ConnectionHelper.getDefaultConnection()) {
-            DBServiceCacheEngine cacheEngine = new DBServiceCacheEngineImpl(2, 0, 0, true);
-            DBServiceCached dbServiceCached = new DBServiceCachedImpl(connection, cacheEngine);
-
-            DBServiceNamed dbServiceNamed = new DBServiceNamedImpl(connection);
-
-            ResourceHandler resourceHandler = new ResourceHandler();
-            resourceHandler.setResourceBase(PUBLIC_HTML);
-
-            ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-
-            context.addServlet(new ServletHolder(new LoginServlet(dbServiceNamed)), "/login");
-            context.addServlet(new ServletHolder(new AdminServlet(() -> dbServiceCached)), "/admin");*/
 }

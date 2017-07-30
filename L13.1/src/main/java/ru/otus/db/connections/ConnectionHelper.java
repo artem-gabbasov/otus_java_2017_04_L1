@@ -1,4 +1,4 @@
-package ru.otus.db;
+package ru.otus.db.connections;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

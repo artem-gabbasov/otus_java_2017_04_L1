@@ -6,6 +6,7 @@ import ru.otus.jpa.JPAException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.function.Supplier;
 
 /**
  * Created by Artem Gabbasov on 12.07.2017.
@@ -18,6 +19,10 @@ public class DBServiceCachedImpl extends DBServiceImpl implements DBServiceCache
     public DBServiceCachedImpl(Connection connection, DBServiceCacheEngine cacheEngine) {
         super(connection);
         this.cacheEngine = cacheEngine;
+    }
+
+    public DBServiceCachedImpl(Supplier<Connection> connectionSupplier, DBServiceCacheEngine cacheEngine) {
+        this(connectionSupplier.get(), cacheEngine);
     }
 
     @Override
