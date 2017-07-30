@@ -28,4 +28,8 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:SpringBeans.xml</param-value>
+    </context-param>
 </web-app>

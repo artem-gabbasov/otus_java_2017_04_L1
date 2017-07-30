@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     public LoginServlet() {
-        this(null);
+        this(ServerContext.getSpringBean("dbServiceNamed", DBServiceNamed.class));
     }
 
     @Override

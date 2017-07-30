@@ -42,7 +42,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     public AdminServlet() {
-        this(null);
+        this(() -> ServerContext.getSpringBean("dbServiceCached", DBServiceCached.class));
     }
 
     /**
