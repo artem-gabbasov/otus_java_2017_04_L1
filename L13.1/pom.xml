@@ -87,7 +87,10 @@
                     <webXml>src/main/resources/WEB-INF/web.xml</webXml>
                     <webResources>
                         <resource>
-                            <directory>public_html</directory>
+                            <directory>src/main/resources/public_html</directory>
+                        </resource>
+                        <resource>
+                            <directory>src/main/resources/tml</directory>
                         </resource>
                     </webResources>
                 </configuration>
