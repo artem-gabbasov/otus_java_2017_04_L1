@@ -42,6 +42,10 @@ public class LoginServlet extends HttpServlet {
         isLastLoginIncorrect = false;
     }
 
+    public LoginServlet() {
+        this(null);
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> pageVariables = new HashMap<>();
@@ -109,14 +113,14 @@ public class LoginServlet extends HttpServlet {
     private void processLoginData(String username, String passwordMD5, HttpServletResponse resp) throws JPAException, SQLException, IOException, ServletException {
         LoginDataSet loginDataSet = dbService.loadByName(username, LoginDataSet.class);
         if (loginDataSet != null && loginDataSet.getPasswordMD5().equals(passwordMD5)) {
-            ContextHandler.getCurrentContext().setAttribute(ServerManager.AUTHORIZED_FLAG, "true");
+            ContextHandler.getCurrentContext().setAttribute(ServerConsts.AUTHORIZED_FLAG, "true");
 
             String redirectPage;
-            Object redirectPageObj = ContextHandler.getCurrentContext().getAttribute(ServerManager.REDIRECT_PAGE);
+            Object redirectPageObj = ContextHandler.getCurrentContext().getAttribute(ServerConsts.REDIRECT_PAGE);
             if (redirectPageObj != null) {
                 redirectPage = redirectPageObj.toString();
             } else {
-                redirectPage = ServerManager.INDEX_PAGE;
+                redirectPage = ServerConsts.INDEX_PAGE;
             }
 
             resp.sendRedirect(redirectPage);

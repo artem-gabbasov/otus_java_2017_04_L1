@@ -15,10 +15,7 @@ import java.sql.Connection;
  * <p>
  * Верхнеуровневый класс, содержащий в себе работу с сервером
  */
-public class ServerManager {
-    private final static int PORT = 8090;
-    private final static String PUBLIC_HTML = "public_html";
-
+public class ServerConsts {
     static final String INDEX_PAGE = "index.html";
     static final String LOGIN_PAGE = "login";
 
@@ -28,8 +25,7 @@ public class ServerManager {
     final static String AUTHORIZED_FLAG = "authorized";
     final static String REDIRECT_PAGE = "redirectPage";
 
-    public ServerManager() throws Exception {
-        try (Connection connection = ConnectionHelper.getDefaultConnection()) {
+        /*try (Connection connection = ConnectionHelper.getDefaultConnection()) {
             DBServiceCacheEngine cacheEngine = new DBServiceCacheEngineImpl(2, 0, 0, true);
             DBServiceCached dbServiceCached = new DBServiceCachedImpl(connection, cacheEngine);
 
@@ -41,13 +37,5 @@ public class ServerManager {
             ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
             context.addServlet(new ServletHolder(new LoginServlet(dbServiceNamed)), "/login");
-            context.addServlet(new ServletHolder(new AdminServlet(() -> dbServiceCached)), "/admin");
-
-            Server server = new Server(PORT);
-            server.setHandler(new HandlerList(resourceHandler, context));
-
-            server.start();
-            server.join();
-        }
-    }
+            context.addServlet(new ServletHolder(new AdminServlet(() -> dbServiceCached)), "/admin");*/
 }

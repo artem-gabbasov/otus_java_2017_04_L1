@@ -42,6 +42,10 @@ public class AdminServlet extends HttpServlet {
         this.dbServiceSupplier = dbServiceSupplier;
     }
 
+    public AdminServlet() {
+       this(null);
+    }
+
     /**
      * Проверяет, авторизован ли пользователь. Если не авторизован, выкидывает его на домашнюю страницу
      * @param resp          http-ответ для перенаправления
@@ -49,11 +53,11 @@ public class AdminServlet extends HttpServlet {
      * @throws IOException  в случае проблемы при перенаправлении
      */
     private boolean checkAuthorization(HttpServletResponse resp) throws IOException {
-        if (ContextHandler.getCurrentContext().getAttribute(ServerManager.AUTHORIZED_FLAG) != null) {
+        if (ContextHandler.getCurrentContext().getAttribute(ServerConsts.AUTHORIZED_FLAG) != null) {
             return true;
         } else {
-            ContextHandler.getCurrentContext().setAttribute(ServerManager.REDIRECT_PAGE, "admin");
-            resp.sendRedirect(ServerManager.LOGIN_PAGE);
+            ContextHandler.getCurrentContext().setAttribute(ServerConsts.REDIRECT_PAGE, "admin");
+            resp.sendRedirect(ServerConsts.LOGIN_PAGE);
             return false;
         }
     }
@@ -70,8 +74,8 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void logout(HttpServletResponse resp) throws IOException {
-        ContextHandler.getCurrentContext().removeAttribute(ServerManager.AUTHORIZED_FLAG);
-        resp.sendRedirect(ServerManager.INDEX_PAGE);
+        ContextHandler.getCurrentContext().removeAttribute(ServerConsts.AUTHORIZED_FLAG);
+        resp.sendRedirect(ServerConsts.INDEX_PAGE);
     }
 
     /**
