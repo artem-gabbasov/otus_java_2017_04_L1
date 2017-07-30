@@ -8,14 +8,15 @@ import org.springframework.context.support.GenericApplicationContext;
  * <p>
  * Класс для связи сервлетов
  */
-public class ServerContext {
+@SuppressWarnings("SameParameterValue")
+class ServerContext {
     static final String INDEX_PAGE = "index.html";
     static final String LOGIN_PAGE = "login";
 
-    static final String SPRING_BEANS_SPECIFICATION = "SpringBeans.xml";
+    private static final String SPRING_BEANS_SPECIFICATION = "SpringBeans.xml";
 
-    static boolean authorized = false;
-    static String redirectPage = "";
+    private static boolean authorized = false;
+    private static String redirectPage = "";
 
     /**
      * Возвращает bean, инициализированный через Spring

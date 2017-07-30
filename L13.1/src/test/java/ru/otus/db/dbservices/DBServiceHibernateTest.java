@@ -2,7 +2,6 @@ package ru.otus.db.dbservices;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import ru.otus.datasets.AddressDataSet;
 import ru.otus.datasets.PhoneDataSet;
