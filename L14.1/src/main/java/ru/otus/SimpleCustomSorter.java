@@ -10,10 +10,11 @@ import java.util.logging.Logger;
  * Created by Artem Gabbasov on 02.08.2017.
  * Класс, сортирующий части массива в одном потоке
  */
-public class SerialCustomSorter<T extends Comparable<T>> extends CustomSorter<T> {
+public class SimpleCustomSorter<T extends Comparable<T>> extends CustomSorter<T> {
     @Override
-    protected void sortPart(SortingArguments<T> args, Consumer<SortingArguments<T>> sortingFunction) {
+    protected void sortParts(SortingTask<T>.TasksPair pair) {
         Logger.getLogger(LOGGER_NAME).info("s");
-        sortingFunction.accept(args);
+        pair.getLeft().perform();
+        pair.getRight().perform();
     }
 }
