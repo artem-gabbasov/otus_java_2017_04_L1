@@ -27,7 +27,18 @@ public class SPCounterHandler extends Handler {
 
     @Override
     public void close() throws SecurityException {
+    }
+
+    public void printStatistics() {
         System.out.println("Serial calls: " + serialsCount);
         System.out.println("Parallel calls: " + parallelsCount);
+    }
+
+    public int getSerialsCount() {
+        return serialsCount;
+    }
+
+    public int getParallelsCount() {
+        return parallelsCount;
     }
 }

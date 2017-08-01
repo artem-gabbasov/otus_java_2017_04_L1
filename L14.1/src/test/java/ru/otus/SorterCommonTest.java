@@ -15,6 +15,10 @@ import java.util.logging.Logger;
 public abstract class SorterCommonTest {
     abstract Sorter<Integer> createSorter();
 
+    protected SPCounterHandler getLogHandler() {
+        return (SPCounterHandler) Logger.getLogger(Sorter.LOGGER_NAME).getHandlers()[0];
+    }
+
     @Before
     public void initLogger() {
         Logger logger = Logger.getLogger(Sorter.LOGGER_NAME);
@@ -35,7 +39,7 @@ public abstract class SorterCommonTest {
         Integer[] array = new Integer[0];
         createSorter().sort(array);
 
-        assert array.length == 0;
+        assert array.length == 0 && getLogHandler().getSerialsCount() == 0 && getLogHandler().getParallelsCount() == 0;
     }
 
     @Test
@@ -71,8 +75,8 @@ public abstract class SorterCommonTest {
         assert Arrays.equals(array, new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
     }
 
-    @After
+    /*@After
     public void showStatistics() {
-        Logger.getLogger(Sorter.LOGGER_NAME).getHandlers()[0].close();
-    }
+        getLogHandler().printStatistics();
+    }*/
 }
