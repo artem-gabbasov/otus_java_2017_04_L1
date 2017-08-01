@@ -52,7 +52,7 @@ public abstract class CustomSorter<T extends Comparable<T>> implements Sorter<T>
         if (array.length > 1) {
             ArraysPair pair = divide(array);
 
-            sortParts(pair.getLeft(), pair.getRight(), level + 1, (arr, lev) -> {doSort(arr, lev); return null;});
+            sortParts(pair.getLeft(), pair.getRight(), level + 1);
 
             T[] result = merge(pair.getLeft(), pair.getRight());
             System.arraycopy(result, 0, array, 0, result.length);
@@ -65,7 +65,19 @@ public abstract class CustomSorter<T extends Comparable<T>> implements Sorter<T>
      * @param right правая часть массива
      * @param level уровень вложенности вызова (двоичный логарифм текущего количества разбиений исходного массива)
      */
-    protected abstract void sortParts(T[] left, T[] right, int level, BiFunction<T[], Integer, Void> sortingFunction);
+    protected void sortParts(T[] left, T[] right, int level) {
+        BiFunction<T[], Integer, Void> sortingFunction = (arr, lev) -> {doSort(arr, lev); return null;};
+        sortPart(left, level, sortingFunction);
+        sortPart(right, level, sortingFunction);
+    }
+
+    /**
+     * Функция, сортирующая одну часть массива
+     * @param part              часть массива для сортировки
+     * @param level             уровень вложенности вызова (двоичный логарифм текущего количества разбиений исходного массива)
+     * @param sortingFunction   функция, непосредственно выполняющая сортировку
+     */
+    protected abstract void sortPart(T[] part, int level, BiFunction<T[], Integer, Void> sortingFunction);
 
     /**
      * Объединяет два отсортированных массива в единый отсортированный массив.

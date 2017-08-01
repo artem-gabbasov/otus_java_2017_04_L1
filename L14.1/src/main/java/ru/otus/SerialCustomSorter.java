@@ -8,8 +8,7 @@ import java.util.function.BiFunction;
  */
 public class SerialCustomSorter<T extends Comparable<T>> extends CustomSorter<T> {
     @Override
-    protected void sortParts(T[] left, T[] right, int level, BiFunction<T[], Integer, Void> sortingFunction) {
-        sortingFunction.apply(left, level);
-        sortingFunction.apply(right, level);
+    protected void sortPart(T[] part, int level, BiFunction<T[], Integer, Void> sortingFunction) {
+        sortingFunction.apply(part, level);
     }
 }
