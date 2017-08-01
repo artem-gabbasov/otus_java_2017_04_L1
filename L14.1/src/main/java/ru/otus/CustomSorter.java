@@ -1,7 +1,6 @@
 package ru.otus;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
@@ -9,7 +8,7 @@ import java.util.function.BiFunction;
  * Created by Artem Gabbasov on 01.08.2017.
  * Класс, выполняющий сортировку (mergesort) с использованием TemplateMethod (sortParts)
  */
-public abstract class CustomThreadSorter<T extends Comparable<T>> implements ThreadSorter<T> {
+public abstract class CustomSorter<T extends Comparable<T>> implements Sorter<T> {
     @Override
     public void sort(T[] array) {
         doSort(array, 0);
