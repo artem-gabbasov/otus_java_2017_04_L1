@@ -18,12 +18,16 @@ public abstract class ParallelCustomSorter<T extends Comparable<T>> extends Seri
 
     @Override
     protected void sortPart(SortingArguments<T> args, Consumer<SortingArguments<T>> sortingFunction) {
-        if (args.getArray().length <= PARALLEL_THRESHOLD) {
+        if (isSerialPreferable(args)) {
             super.sortPart(args, sortingFunction);
         } else {
             Logger.getLogger(LOGGER_NAME).info("p");
             sortPartParallel(args, sortingFunction);
         }
+    }
+
+    protected boolean isSerialPreferable(SortingArguments<T> args) {
+        return args.getArray().length <= PARALLEL_THRESHOLD;
     }
 
     protected abstract void sortPartParallel(SortingArguments<T> args, Consumer<SortingArguments<T>> sortingFunction);
