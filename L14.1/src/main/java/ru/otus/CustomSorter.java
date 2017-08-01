@@ -3,6 +3,8 @@ package ru.otus;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 /**
  * Created by Artem Gabbasov on 01.08.2017.
@@ -45,8 +47,8 @@ public abstract class CustomSorter<T extends Comparable<T>> implements Sorter<T>
 
     /**
      * Функция, выполняющая непосредственно сортировку массива
-     * @param array массив для сортировки
-     * @param level уровень вложенности вызова (двоичный логарифм текущего количества разбиений исходного массива)
+     * @param array     массив для сортировки
+     * @param level     уровень вложенности вызова (двоичный логарифм текущего количества разбиений исходного массива)
      */
     private void doSort(T[] array, int level) {
         if (array.length > 1) {
@@ -61,23 +63,22 @@ public abstract class CustomSorter<T extends Comparable<T>> implements Sorter<T>
 
     /**
      * Функция, сортирующая части массива по отдельности
-     * @param left  левая часть массива
-     * @param right правая часть массива
-     * @param level уровень вложенности вызова (двоичный логарифм текущего количества разбиений исходного массива)
+     * @param left      левая часть массива
+     * @param right     правая часть массива
+     * @param level     уровень вложенности вызова (двоичный логарифм текущего количества разбиений исходного массива)
      */
     protected void sortParts(T[] left, T[] right, int level) {
-        BiFunction<T[], Integer, Void> sortingFunction = (arr, lev) -> {doSort(arr, lev); return null;};
-        sortPart(left, level, sortingFunction);
-        sortPart(right, level, sortingFunction);
+        Consumer<SortingArguments<T>> sortingFunction = (args) -> doSort(args.getArray(), args.getLevel());
+        sortPart(new SortingArguments<T>(left, level), sortingFunction);
+        sortPart(new SortingArguments<T>(right, level), sortingFunction);
     }
 
     /**
      * Функция, сортирующая одну часть массива
-     * @param part              часть массива для сортировки
-     * @param level             уровень вложенности вызова (двоичный логарифм текущего количества разбиений исходного массива)
+     * @param args              аргументы для сортировки
      * @param sortingFunction   функция, непосредственно выполняющая сортировку
      */
-    protected abstract void sortPart(T[] part, int level, BiFunction<T[], Integer, Void> sortingFunction);
+    protected abstract void sortPart(SortingArguments<T> args, Consumer<SortingArguments<T>> sortingFunction);
 
     /**
      * Объединяет два отсортированных массива в единый отсортированный массив.

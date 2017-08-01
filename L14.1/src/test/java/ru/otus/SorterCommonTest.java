@@ -1,9 +1,12 @@
 package ru.otus;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * Created by Artem Gabbasov on 31.07.2017.
@@ -11,6 +14,16 @@ import java.util.Arrays;
  */
 public abstract class SorterCommonTest {
     abstract Sorter<Integer> createSorter();
+
+    @Before
+    public void initLogger() {
+        Logger logger = Logger.getLogger(Sorter.LOGGER_NAME);
+        logger.setUseParentHandlers(false);
+        while (logger.getHandlers().length > 0) {
+            logger.removeHandler(logger.getHandlers()[0]);
+        }
+        logger.addHandler(new SPCounterHandler());
+    }
 
     @Test(expected = NullPointerException.class)
     public void sortNull() {
@@ -56,5 +69,10 @@ public abstract class SorterCommonTest {
         createSorter().sort(array);
 
         assert Arrays.equals(array, new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+    }
+
+    @After
+    public void showStatistics() {
+        Logger.getLogger(Sorter.LOGGER_NAME).getHandlers()[0].close();
     }
 }
