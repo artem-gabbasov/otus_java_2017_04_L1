@@ -6,9 +6,12 @@ import org.junit.Test;
  * Created by Artem Gabbasov on 02.08.2017.
  */
 public class LogarithmicCustomSorterTest extends SorterCommonTest {
+    final static int PARALLEL_THRESHOLD = 4;
+    final static int MAX_LEVEL = 2;
+
     @Override
     Sorter<Integer> createSorter() {
-        return new LogarithmicCustomSorter<Integer>();
+        return new LogarithmicCustomSorter<Integer>(PARALLEL_THRESHOLD, MAX_LEVEL);
     }
 
     @Override

@@ -10,7 +10,11 @@ public abstract class ParallelCustomSorter<T extends Comparable<T>> extends Simp
     /**
      * Пороговое значение количества элементов, меньше которого не имеет смысла делить на потоки (всё выполняется в едином потоке)
      */
-    final static int PARALLEL_THRESHOLD = 4;
+    protected final int parallelThreshold;
+
+    public ParallelCustomSorter(int parallelThreshold) {
+        this.parallelThreshold = parallelThreshold;
+    }
 
     @Override
     protected void sortParts(SortingTask<T>.TasksPair pair) {
@@ -45,7 +49,7 @@ public abstract class ParallelCustomSorter<T extends Comparable<T>> extends Simp
     }
 
     protected boolean isSerialPreferable(SortingTask<T> part) {
-        return part.getArray().length <= PARALLEL_THRESHOLD;
+        return part.getArray().length <= parallelThreshold;
     }
 
     protected abstract Thread sortPartParallel(SortingTask<T> part);
