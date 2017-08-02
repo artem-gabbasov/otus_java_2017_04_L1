@@ -28,9 +28,11 @@ public class SortingHelper {
     /**
      * Делит массив на две равные части (в случае чётного количества элементов).
      * Если массив содержит нечётное количество элементов, то больше элементов попадает в правую часть
-     * @return      пара массивов - левая и правая части исходного массива
+     * @param array     исходный массив
+     * @param <T>           тип элемента сортируемого массива
+     * @return          пара массивов - левая и правая части исходного массива
      */
-    public static <T extends Comparable<T>> ArraysPair<T> divide(T[] array) {
+    private static <T extends Comparable<T>> ArraysPair<T> divide(T[] array) {
         int rightStart = array.length / 2;
         return new ArraysPair<>(
                 Arrays.copyOfRange(array, 0, rightStart),
@@ -43,10 +45,13 @@ public class SortingHelper {
      * Не содержит проверку того, что входные массивы отсортированы
      * @param left  один из массивов для объединения (должен быть отсортирован)
      * @param right один из массивов для объединения (должен быть отсортирован)
+     * @param <T>           тип элемента сортируемого массива
      * @return      объединённый отсортированный массив
      */
-    public static <T extends Comparable<T>> T[] merge(T[] left, T[] right) {
+    private static <T extends Comparable<T>> T[] merge(T[] left, T[] right) {
         int resultLength = left.length + right.length;
+
+        @SuppressWarnings("unchecked")
         T[] result = (T[]) Array.newInstance(left.getClass().getComponentType(), resultLength);
 
         int leftIndex = 0;
@@ -65,7 +70,10 @@ public class SortingHelper {
     }
 
     /**
-     * Функция, выполняющая непосредственно сортировку массива
+     * Функция, оборачивающая непосредственно сортировку массива
+     * @param array         массив для сортировки
+     * @param sortingStep   функция самой сортировки (одного шага сортировки, т.е. сортировки пары массивов)
+     * @param <T>           тип элемента сортируемого массива
      */
     public static <T extends Comparable<T>> void performSorting(T[] array, Consumer<ArraysPair<T>> sortingStep) {
         if (array.length > 1) {

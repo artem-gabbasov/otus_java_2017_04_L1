@@ -2,9 +2,6 @@ package ru.otus.customsorter;
 
 import ru.otus.SortingHelper;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -63,6 +60,7 @@ public class SortingTask<T extends Comparable<T>> {
      */
     public void perform() {
         SortingHelper.performSorting(array, (arraysPair) -> {
+            @SuppressWarnings("Convert2Diamond")
             TasksPair pair = new TasksPair(
                     new SortingTask<T>(arraysPair.getLeft(), level + 1, sortParts),
                     new SortingTask<T>(arraysPair.getRight(), level + 1, sortParts)

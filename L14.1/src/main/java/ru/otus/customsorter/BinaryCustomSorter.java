@@ -11,6 +11,7 @@ public class BinaryCustomSorter<T extends Comparable<T>> extends ParallelCustomS
      */
     private final int maxLevel;
 
+    @SuppressWarnings("SameParameterValue")
     public BinaryCustomSorter(int parallelThreshold, int maxLevel) {
         super(parallelThreshold);
         this.maxLevel = maxLevel;
@@ -24,7 +25,7 @@ public class BinaryCustomSorter<T extends Comparable<T>> extends ParallelCustomS
 
     @Override
     protected Thread sortPartParallel(SortingTask<T> part) {
-        Thread thread = new Thread(() -> part.perform());
+        Thread thread = new Thread(part::perform);
         thread.start();
         return thread;
     }

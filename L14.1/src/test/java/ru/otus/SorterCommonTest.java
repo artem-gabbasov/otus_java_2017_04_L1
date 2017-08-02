@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * <p>
  */
 public abstract class SorterCommonTest {
-    public abstract Sorter<Integer> createSorter();
+    protected abstract Sorter<Integer> createSorter();
 
     protected SPCounterHandler getLogHandler() {
         return (SPCounterHandler) Logger.getLogger(Sorter.LOGGER_NAME).getHandlers()[0];

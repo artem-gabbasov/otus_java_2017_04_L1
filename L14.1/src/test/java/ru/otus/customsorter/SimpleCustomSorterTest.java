@@ -10,8 +10,8 @@ import ru.otus.customsorter.SimpleCustomSorter;
  */
 public class SimpleCustomSorterTest extends SorterCommonTest {
     @Override
-    public Sorter<Integer> createSorter() {
-        return new SimpleCustomSorter<Integer>();
+    protected Sorter<Integer> createSorter() {
+        return new SimpleCustomSorter<>();
     }
 
     @Override

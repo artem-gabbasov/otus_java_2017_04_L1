@@ -8,12 +8,12 @@ import ru.otus.customsorter.BinaryCustomSorter;
  * Created by Artem Gabbasov on 02.08.2017.
  */
 public class BinaryCustomSorterTest extends SorterCommonTest {
-    final static int PARALLEL_THRESHOLD = 4;
-    final static int MAX_LEVEL = 2;
+    private final static int PARALLEL_THRESHOLD = 4;
+    private final static int MAX_LEVEL = 2;
 
     @Override
-    public Sorter<Integer> createSorter() {
-        return new BinaryCustomSorter<Integer>(PARALLEL_THRESHOLD, MAX_LEVEL);
+    protected Sorter<Integer> createSorter() {
+        return new BinaryCustomSorter<>(PARALLEL_THRESHOLD, MAX_LEVEL);
     }
 
     @Override

@@ -9,12 +9,12 @@ import ru.otus.Sorter;
 public abstract class CustomSorter<T extends Comparable<T>> implements Sorter<T> {
     @Override
     public void sort(T[] array) {
-        new SortingTask<>(array, 0, (pair) -> sortParts(pair)).perform();
+        new SortingTask<>(array, 0, this::sortParts).perform();
     }
 
     /**
      * Функция, сортирующая части массива по отдельности
-     * @param pair      задачи для осртировки левой и правой частей массива
+     * @param pair      задачи для сортировки левой и правой частей массива
      */
     protected abstract void sortParts(SortingTask<T>.TasksPair pair);
 }

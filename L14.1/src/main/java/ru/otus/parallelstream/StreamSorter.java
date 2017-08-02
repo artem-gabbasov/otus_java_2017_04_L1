@@ -3,7 +3,6 @@ package ru.otus.parallelstream;
 import ru.otus.Sorter;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 /**
  * Created by Artem Gabbasov on 31.07.2017.

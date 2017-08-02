@@ -5,6 +5,7 @@ import java.util.logging.LogRecord;
 
 /**
  * Created by Artem Gabbasov on 02.08.2017.
+ * Счётчик параллельных и последовательных сортировок подмассивов
  */
 public class SPCounterHandler extends Handler {
     private int serialsCount;
@@ -29,6 +30,7 @@ public class SPCounterHandler extends Handler {
     public void close() throws SecurityException {
     }
 
+    @SuppressWarnings("unused")
     public void printStatistics() {
         System.out.println("Serial calls: " + serialsCount);
         System.out.println("Parallel calls: " + parallelsCount);

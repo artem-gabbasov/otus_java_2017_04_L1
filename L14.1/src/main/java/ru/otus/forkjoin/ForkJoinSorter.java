@@ -16,6 +16,6 @@ public class ForkJoinSorter<T extends Comparable<T>> implements Sorter<T> {
 
     @Override
     public void sort(T[] array) {
-        new ForkJoinPool(threadsNumber).invoke(new SortAction(array));
+        new ForkJoinPool(threadsNumber).invoke(new SortAction<>(array));
     }
 }
