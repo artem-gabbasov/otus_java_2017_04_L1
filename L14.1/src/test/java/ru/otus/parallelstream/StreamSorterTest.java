@@ -10,7 +10,7 @@ import ru.otus.parallelstream.StreamSorter;
  */
 public class StreamSorterTest extends SorterCommonTest {
     @Override
-    Sorter<Integer> createSorter() {
+    public Sorter<Integer> createSorter() {
         return new StreamSorter<Integer>();
     }
 }

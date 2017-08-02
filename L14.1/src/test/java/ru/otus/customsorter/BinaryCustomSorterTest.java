@@ -12,7 +12,7 @@ public class BinaryCustomSorterTest extends SorterCommonTest {
     final static int MAX_LEVEL = 2;
 
     @Override
-    Sorter<Integer> createSorter() {
+    public Sorter<Integer> createSorter() {
         return new BinaryCustomSorter<Integer>(PARALLEL_THRESHOLD, MAX_LEVEL);
     }
 
