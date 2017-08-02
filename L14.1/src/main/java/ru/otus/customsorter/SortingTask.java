@@ -62,18 +62,13 @@ public class SortingTask<T extends Comparable<T>> {
      * Функция, выполняющая непосредственно сортировку массива
      */
     public void perform() {
-        if (array.length > 1) {
-            SortingHelper.ArraysPair<T> arraysPair = SortingHelper.divide(array);
-
+        SortingHelper.performSorting(array, (arraysPair) -> {
             TasksPair pair = new TasksPair(
-                        new SortingTask<T>(arraysPair.getLeft(), level + 1, sortParts),
-                        new SortingTask<T>(arraysPair.getRight(), level + 1, sortParts)
+                    new SortingTask<T>(arraysPair.getLeft(), level + 1, sortParts),
+                    new SortingTask<T>(arraysPair.getRight(), level + 1, sortParts)
             );
 
             sortParts.accept(pair);
-
-            T[] result = SortingHelper.merge(pair.getLeft().getArray(), pair.getRight().getArray());
-            System.arraycopy(result, 0, array, 0, result.length);
-        }
+        });
     }
 }

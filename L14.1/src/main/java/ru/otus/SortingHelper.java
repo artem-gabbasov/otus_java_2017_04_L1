@@ -2,6 +2,7 @@ package ru.otus;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 /**
  * Created by Artem Gabbasov on 02.08.2017.
@@ -61,5 +62,19 @@ public class SortingHelper {
             }
         }
         return result;
+    }
+
+    /**
+     * Функция, выполняющая непосредственно сортировку массива
+     */
+    public static <T extends Comparable<T>> void performSorting(T[] array, Consumer<ArraysPair<T>> sortingStep) {
+        if (array.length > 1) {
+            ArraysPair<T> arraysPair = divide(array);
+
+            sortingStep.accept(arraysPair);
+
+            T[] result = merge(arraysPair.getLeft(), arraysPair.getRight());
+            System.arraycopy(result, 0, array, 0, result.length);
+        }
     }
 }
