@@ -1,4 +1,6 @@
-package ru.otus;
+package ru.otus.parallelstream;
+
+import ru.otus.Sorter;
 
 import java.util.Arrays;
 import java.util.logging.Logger;

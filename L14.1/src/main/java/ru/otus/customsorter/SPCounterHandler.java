@@ -1,4 +1,4 @@
-package ru.otus;
+package ru.otus.customsorter;
 
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;

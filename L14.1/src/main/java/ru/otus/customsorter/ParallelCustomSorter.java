@@ -1,4 +1,6 @@
-package ru.otus;
+package ru.otus.customsorter;
+
+import ru.otus.Sorter;
 
 import java.util.logging.Logger;
 
@@ -40,10 +42,10 @@ public abstract class ParallelCustomSorter<T extends Comparable<T>> extends Simp
 
     protected Thread startThread(SortingTask<T> part) {
         if (isSerialPreferable(part)) {
-            Logger.getLogger(LOGGER_NAME).info("s");
+            Logger.getLogger(Sorter.LOGGER_NAME).info("s");
             return null;
         } else {
-            Logger.getLogger(LOGGER_NAME).info("p");
+            Logger.getLogger(Sorter.LOGGER_NAME).info("p");
             return sortPartParallel(part);
         }
     }

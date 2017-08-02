@@ -1,4 +1,4 @@
-package ru.otus;
+package ru.otus.customsorter;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;

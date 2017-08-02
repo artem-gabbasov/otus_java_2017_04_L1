@@ -1,10 +1,6 @@
-package ru.otus;
+package ru.otus.customsorter;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.logging.Logger;
+import ru.otus.Sorter;
 
 /**
  * Created by Artem Gabbasov on 01.08.2017.

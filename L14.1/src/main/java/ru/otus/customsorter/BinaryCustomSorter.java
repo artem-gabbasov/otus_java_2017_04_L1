@@ -1,4 +1,4 @@
-package ru.otus;
+package ru.otus.customsorter;
 
 /**
  * Created by Artem Gabbasov on 02.08.2017.

@@ -1,10 +1,9 @@
 package ru.otus;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.otus.customsorter.SPCounterHandler;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Logger;
 

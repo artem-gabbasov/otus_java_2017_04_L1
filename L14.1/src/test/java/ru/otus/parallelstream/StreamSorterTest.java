@@ -1,6 +1,8 @@
-package ru.otus;
+package ru.otus.parallelstream;
 
-import org.junit.Test;
+import ru.otus.Sorter;
+import ru.otus.SorterCommonTest;
+import ru.otus.parallelstream.StreamSorter;
 
 /**
  * Created by Artem Gabbasov on 31.07.2017.

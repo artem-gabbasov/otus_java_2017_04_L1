@@ -1,4 +1,8 @@
-package ru.otus;
+package ru.otus.customsorter;
+
+import ru.otus.Sorter;
+import ru.otus.SorterCommonTest;
+import ru.otus.customsorter.SimpleCustomSorter;
 
 /**
  * Created by Artem Gabbasov on 01.08.2017.

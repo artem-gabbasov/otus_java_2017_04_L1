@@ -1,9 +1,7 @@
-package ru.otus;
+package ru.otus.customsorter;
 
-import sun.rmi.runtime.Log;
+import ru.otus.Sorter;
 
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /**
@@ -13,10 +11,10 @@ import java.util.logging.Logger;
 public class SimpleCustomSorter<T extends Comparable<T>> extends CustomSorter<T> {
     @Override
     protected void sortParts(SortingTask<T>.TasksPair pair) {
-        Logger.getLogger(LOGGER_NAME).info("s");
+        Logger.getLogger(Sorter.LOGGER_NAME).info("s");
         pair.getLeft().perform();
 
-        Logger.getLogger(LOGGER_NAME).info("s");
+        Logger.getLogger(Sorter.LOGGER_NAME).info("s");
         pair.getRight().perform();
     }
 }
