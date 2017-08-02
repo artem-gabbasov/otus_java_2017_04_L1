@@ -13,24 +13,24 @@ public class SimpleCustomSorterTest extends SorterCommonTest {
     @Override
     public void sortTwoElements() {
         super.sortTwoElements();
-        assert getLogHandler().getSerialsCount() == 1 && getLogHandler().getParallelsCount() == 0;
+        assert getLogHandler().getSerialsCount() == 2 && getLogHandler().getParallelsCount() == 0;
     }
 
     @Override
     public void sort() {
         super.sort();
-        assert getLogHandler().getSerialsCount() == 19 && getLogHandler().getParallelsCount() == 0;
+        assert getLogHandler().getSerialsCount() == 38 && getLogHandler().getParallelsCount() == 0;
     }
 
     @Override
     public void sortRepetitions() {
         super.sortRepetitions();
-        assert getLogHandler().getSerialsCount() == 19 && getLogHandler().getParallelsCount() == 0;
+        assert getLogHandler().getSerialsCount() == 38 && getLogHandler().getParallelsCount() == 0;
     }
 
     @Override
     public void sortUnEven() {
         super.sortUnEven();
-        assert getLogHandler().getSerialsCount() == 16 && getLogHandler().getParallelsCount() == 0;
+        assert getLogHandler().getSerialsCount() == 32 && getLogHandler().getParallelsCount() == 0;
     }
 }

@@ -15,6 +15,8 @@ public class SimpleCustomSorter<T extends Comparable<T>> extends CustomSorter<T>
     protected void sortParts(SortingTask<T>.TasksPair pair) {
         Logger.getLogger(LOGGER_NAME).info("s");
         pair.getLeft().perform();
+
+        Logger.getLogger(LOGGER_NAME).info("s");
         pair.getRight().perform();
     }
 }
