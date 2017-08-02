@@ -1,7 +1,10 @@
 package ru.otus.customsorter;
 
+import ru.otus.SortingHelper;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -60,50 +63,17 @@ public class SortingTask<T extends Comparable<T>> {
      */
     public void perform() {
         if (array.length > 1) {
-            TasksPair pair = divide();
+            SortingHelper.ArraysPair<T> arraysPair = SortingHelper.divide(array);
+
+            TasksPair pair = new TasksPair(
+                        new SortingTask<T>(arraysPair.getLeft(), level + 1, sortParts),
+                        new SortingTask<T>(arraysPair.getRight(), level + 1, sortParts)
+            );
 
             sortParts.accept(pair);
 
-            T[] result = merge(pair.getLeft().getArray(), pair.getRight().getArray());
+            T[] result = SortingHelper.merge(pair.getLeft().getArray(), pair.getRight().getArray());
             System.arraycopy(result, 0, array, 0, result.length);
         }
-    }
-
-    /**
-     * Делит массив на две равные части (в случае чётного количества элементов).
-     * Если массив содержит нечётное количество элементов, то больше элементов попадает в правую часть
-     * @return      пара задач для сортировки - для левой и правой частей массива
-     */
-    private TasksPair divide() {
-        int rightStart = array.length / 2;
-        return new TasksPair(
-                new SortingTask<T>(Arrays.copyOfRange(array, 0, rightStart), level + 1, sortParts),
-                new SortingTask<T>(Arrays.copyOfRange(array, rightStart, array.length), level + 1, sortParts));
-    }
-
-    /**
-     * Объединяет два отсортированных массива в единый отсортированный массив.
-     * Не содержит проверку того, что входные массивы отсортированы
-     * @param left  один из массивов для объединения (должен быть отсортирован)
-     * @param right один из массивов для объединения (должен быть отсортирован)
-     * @return      объединённый отсортированный массив
-     */
-    private T[] merge(T[] left, T[] right) {
-        int resultLength = left.length + right.length;
-        T[] result = (T[]) Array.newInstance(left.getClass().getComponentType(), resultLength);
-
-        int leftIndex = 0;
-        int rightIndex = 0;
-        for (int i = 0; i < resultLength; i++) {
-            if (leftIndex >= left.length) {
-                result[i] = right[rightIndex++];
-            } else
-            if (rightIndex >= right.length) {
-                result[i] = left[leftIndex++];
-            } else {
-                result[i] = left[leftIndex].compareTo(right[rightIndex]) < 0 ? left[leftIndex++] : right[rightIndex++];
-            }
-        }
-        return result;
     }
 }
