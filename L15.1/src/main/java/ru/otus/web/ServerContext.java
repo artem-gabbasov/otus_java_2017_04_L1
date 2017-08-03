@@ -18,6 +18,14 @@ class ServerContext {
     private static boolean authorized = false;
     private static String redirectPage = "";
 
+    private final static GenericApplicationContext context;
+
+    static {
+        context = new GenericApplicationContext();
+        new XmlBeanDefinitionReader(context).loadBeanDefinitions(SPRING_BEANS_SPECIFICATION);
+        context.refresh();
+    }
+
     /**
      * Возвращает bean, инициализированный через Spring
      * @param beanClassName имя класса, объект которого следует инициализировать
@@ -26,10 +34,6 @@ class ServerContext {
      * @return              инициализированный через Spring объект, который можно передавать в сервлет
      */
     public static <T> T getSpringBean(String beanClassName, Class<T> beanClass) {
-        GenericApplicationContext context = new GenericApplicationContext();
-        new XmlBeanDefinitionReader(context).loadBeanDefinitions(SPRING_BEANS_SPECIFICATION);
-        context.refresh();
-
         return context.getBeanFactory().getBean(beanClassName, beanClass);
     }
 
