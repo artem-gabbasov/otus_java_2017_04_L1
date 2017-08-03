@@ -1,7 +1,7 @@
 package ru.otus.db.dbservices;
 
 import ru.otus.cache.CacheEngine;
-import ru.otus.datasets.DataSet;
+import ru.otus.orm.datasets.DataSet;
 
 /**
  * Created by Artem Gabbasov on 24.07.2017.

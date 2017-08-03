@@ -4,10 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import ru.otus.datasets.AddressDataSet;
-import ru.otus.datasets.PhoneDataSet;
-import ru.otus.datasets.UserDataSet;
-import ru.otus.jpa.JPAException;
+import ru.otus.orm.datasets.instances.AddressDataSet;
+import ru.otus.orm.datasets.instances.PhoneDataSet;
+import ru.otus.orm.datasets.instances.UserDataSet;
+import ru.otus.db.dbservices.impl.DBServiceHibernateImpl;
+import ru.otus.orm.jpa.JPAException;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.List;
  * <p>
  */
 @SuppressWarnings("EmptyMethod")
-@Ignore
+//@Ignore
 public class DBServiceHibernateTest extends DBServiceTestCommon {
     @Override
     public DBService createDBService() {

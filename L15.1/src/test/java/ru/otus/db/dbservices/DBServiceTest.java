@@ -1,7 +1,8 @@
 package ru.otus.db.dbservices;
 
 import org.junit.*;
-import ru.otus.jpa.JPAException;
+import ru.otus.db.dbservices.impl.DBServiceImpl;
+import ru.otus.orm.jpa.JPAException;
 
 import java.sql.SQLException;
 

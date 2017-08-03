@@ -5,19 +5,19 @@
 
     <bean id="connectionSupplier" class="ru.otus.db.connections.DefaultDBConnectionSupplier"></bean>
 
-    <bean id="cacheEngine" class="ru.otus.db.dbservices.DBServiceCacheEngineImpl">
+    <bean id="cacheEngine" class="ru.otus.db.dbservices.impl.DBServiceCacheEngineImpl">
         <constructor-arg name="maxElements" value="2"/>
         <constructor-arg name="lifeTimeMs"  value="0"/>
         <constructor-arg name="idleTimeMs"  value="0"/>
         <constructor-arg name="isEternal"   value="true"/>
     </bean>
 
-    <bean id="dbServiceCached" class="ru.otus.db.dbservices.DBServiceCachedImpl">
+    <bean id="dbServiceCached" class="ru.otus.db.dbservices.impl.DBServiceCachedImpl">
         <constructor-arg name="connectionSupplier"  ref="connectionSupplier" />
         <constructor-arg name="cacheEngine"         ref="cacheEngine" />
     </bean>
 
-    <bean id="dbServiceNamed" class="ru.otus.db.dbservices.DBServiceNamedImpl">
+    <bean id="dbServiceNamed" class="ru.otus.db.dbservices.impl.DBServiceNamedImpl">
         <constructor-arg name="connectionSupplier"  ref="connectionSupplier" />
     </bean>
 

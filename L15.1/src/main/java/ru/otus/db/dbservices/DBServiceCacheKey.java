@@ -1,6 +1,6 @@
 package ru.otus.db.dbservices;
 
-import ru.otus.datasets.DataSet;
+import ru.otus.orm.datasets.DataSet;
 
 import java.util.Objects;
 

@@ -4,8 +4,8 @@ import ru.otus.anytype.UnsupportedTypeException;
 import ru.otus.anytype.ValueException;
 import ru.otus.anytype.ValueSetHelper;
 import ru.otus.anytype.setters.GeneralValueSetter;
-import ru.otus.datasets.DataSet;
-import ru.otus.datasets.NamedDataSet;
+import ru.otus.orm.datasets.DataSet;
+import ru.otus.orm.datasets.NamedDataSet;
 import ru.otus.db.PreparedStatementValueSetter;
 import ru.otus.db.ResultHandler;
 

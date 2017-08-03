@@ -4,10 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.otus.datasets.NamedDataSet;
-import ru.otus.datasets.NamedTestDataSet;
+import ru.otus.orm.datasets.NamedDataSet;
+import ru.otus.orm.datasets.NamedTestDataSet;
 import ru.otus.db.connections.ConnectionHelper;
-import ru.otus.jpa.JPAException;
+import ru.otus.db.dbservices.impl.DBServiceNamedImpl;
+import ru.otus.orm.jpa.JPAException;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -4,9 +4,9 @@ import ru.otus.anytype.UnsupportedTypeException;
 import ru.otus.anytype.ValueException;
 import ru.otus.anytype.ValueGetHelper;
 import ru.otus.anytype.getters.GeneralValueGetter;
-import ru.otus.datasets.DataSet;
-import ru.otus.jpa.JPAReflectionHelper;
-import ru.otus.jpa.NoJPAAnnotationException;
+import ru.otus.orm.datasets.DataSet;
+import ru.otus.orm.jpa.JPAReflectionHelper;
+import ru.otus.orm.jpa.NoJPAAnnotationException;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;

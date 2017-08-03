@@ -1,7 +1,7 @@
 package ru.otus.db.sql;
 
-import ru.otus.datasets.DataSet;
-import ru.otus.datasets.NamedDataSet;
+import ru.otus.orm.datasets.DataSet;
+import ru.otus.orm.datasets.NamedDataSet;
 import ru.otus.db.ResultHandler;
 
 import java.sql.Connection;

@@ -1,9 +1,9 @@
 package ru.otus.web;
 
-import ru.otus.datasets.UserDataSet;
+import ru.otus.orm.datasets.instances.UserDataSet;
 import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
-import ru.otus.jpa.JPAException;
+import ru.otus.orm.jpa.JPAException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

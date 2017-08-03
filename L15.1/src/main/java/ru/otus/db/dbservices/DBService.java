@@ -1,7 +1,7 @@
 package ru.otus.db.dbservices;
 
-import ru.otus.datasets.DataSet;
-import ru.otus.jpa.JPAException;
+import ru.otus.orm.datasets.DataSet;
+import ru.otus.orm.jpa.JPAException;
 
 import java.sql.SQLException;
 

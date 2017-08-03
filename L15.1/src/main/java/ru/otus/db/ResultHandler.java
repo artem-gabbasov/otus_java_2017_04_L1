@@ -1,6 +1,6 @@
 package ru.otus.db;
 
-import ru.otus.datasets.DataSet;
+import ru.otus.orm.datasets.DataSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,9 +1,9 @@
 package ru.otus.web;
 
 import org.eclipse.jetty.util.security.Credential;
-import ru.otus.datasets.LoginDataSet;
+import ru.otus.orm.datasets.instances.LoginDataSet;
 import ru.otus.db.dbservices.DBServiceNamed;
-import ru.otus.jpa.JPAException;
+import ru.otus.orm.jpa.JPAException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
