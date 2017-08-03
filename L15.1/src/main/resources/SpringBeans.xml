@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="connectionSupplier" class="ru.otus.db.connections.DefaultDBConnectionSupplier"></bean>
+
+    <bean id="cacheEngine" class="ru.otus.db.dbservices.DBServiceCacheEngineImpl">
+        <constructor-arg name="maxElements" value="2"/>
+        <constructor-arg name="lifeTimeMs"  value="0"/>
+        <constructor-arg name="idleTimeMs"  value="0"/>
+        <constructor-arg name="isEternal"   value="true"/>
+    </bean>
+
+    <bean id="dbServiceCached" class="ru.otus.db.dbservices.DBServiceCachedImpl">
+        <constructor-arg name="connectionSupplier"  ref="connectionSupplier" />
+        <constructor-arg name="cacheEngine"         ref="cacheEngine" />
+    </bean>
+
+    <bean id="dbServiceNamed" class="ru.otus.db.dbservices.DBServiceNamedImpl">
+        <constructor-arg name="connectionSupplier"  ref="connectionSupplier" />
+    </bean>
+
+    <bean id="templateProcessor" class="ru.otus.web.TemplateProcessor"></bean>
+</beans>

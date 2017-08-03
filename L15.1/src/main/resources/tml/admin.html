@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Admin</title>
+</head>
+<body>
+  <p><a href="index.html">Home</a></p>
+
+  <form method="get">
+    <input type="submit" name="logout" value="Logout">
+  </form>
+
+  <p>maxElements:   ${maxElements}</p>
+  <p>elementsCount: ${elementsCount}</p>
+  <p>lifeTime:      ${lifeTime}</p>
+  <p>idleTime:      ${idleTime}</p>
+  <p>hitCount:      ${hitCount}</p>
+  <p>missCount:     ${missCount}</p>
+
+  <hr>
+
+  <form method="post">
+    <p>
+      User ID: <input type="number" name="userID" value="1">
+    </p>
+
+    <input type="submit" name="save" value="Save User">
+    <input type="submit" name="load" value="Load User">
+  </form>
+
+  <hr>
+
+  <form method="post">
+    <input type="submit" name="clear" value="Clear Cache">
+  </form>
+</body>
+</html>
