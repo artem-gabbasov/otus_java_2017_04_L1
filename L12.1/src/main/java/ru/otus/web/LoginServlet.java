@@ -10,10 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Artem Gabbasov on 25.07.2017.
@@ -61,7 +64,7 @@ public class LoginServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, UNDEFINED_MESSAGE);
         } else {
             try {
-                processRequest(req.getParameterMap(), resp);
+                processRequest(req.getParameterMap(), req.getSession(), resp);
             } catch (SQLException | JPAException e) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
             }
@@ -71,13 +74,14 @@ public class LoginServlet extends HttpServlet {
     /**
      * Обрабатывает http-запрос на авторизацию
      * @param parameterMap              параметры http-запроса
+     * @param session                   сессия для авторизации
      * @param resp                      http-ответ для реакции на запрос
      * @throws SQLException
      * @throws JPAException
      * @throws IOException
      * @throws ServletException
      */
-    private void processRequest(Map<String, String[]> parameterMap, HttpServletResponse resp) throws SQLException, JPAException, IOException, ServletException {
+    private void processRequest(Map<String, String[]> parameterMap, HttpSession session, HttpServletResponse resp) throws SQLException, JPAException, IOException, ServletException {
         String[] values = parameterMap.get(PARAMETER_USERNAME);
         if (values.length == 1) { // у нас подразумевается единственное значение имени пользователя
             String username = values[0];
@@ -87,7 +91,7 @@ public class LoginServlet extends HttpServlet {
 
                 passwordMD5 = passwordMD5.startsWith("MD5:")?passwordMD5.substring("MD5:".length()):passwordMD5;
 
-                processLoginData(username, passwordMD5, resp);
+                processLoginData(username, passwordMD5, session, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, MULTIPLE_PASSWORDS_MESSAGE);
             }
@@ -100,16 +104,25 @@ public class LoginServlet extends HttpServlet {
      * Обрабатывает учётные данные, пришедшие в запросе
      * @param username              имя пользователя
      * @param passwordMD5           MD5-хеш пароля
+     * @param session               сессия для авторизации
      * @param resp                  http-ответ для реакции на запрос
      * @throws JPAException
      * @throws SQLException
      * @throws IOException
      * @throws ServletException
      */
-    private void processLoginData(String username, String passwordMD5, HttpServletResponse resp) throws JPAException, SQLException, IOException, ServletException {
+    private void processLoginData(String username, String passwordMD5, HttpSession session, HttpServletResponse resp) throws JPAException, SQLException, IOException, ServletException {
         LoginDataSet loginDataSet = dbService.loadByName(username, LoginDataSet.class);
         if (loginDataSet != null && loginDataSet.getPasswordMD5().equals(passwordMD5)) {
-            ContextHandler.getCurrentContext().setAttribute(ServerManager.AUTHORIZED_FLAG, "true");
+            Object authorizedSessions = ContextHandler.getCurrentContext().getAttribute(ServerManager.AUTHORIZED_SESSIONS);
+            Set<HttpSession> authorizedSessionsSet;
+            if (authorizedSessions == null) {
+                authorizedSessionsSet = new HashSet<>();
+            } else {
+                authorizedSessionsSet = (Set<HttpSession>) authorizedSessions;
+            }
+            authorizedSessionsSet.add(session);
+            ContextHandler.getCurrentContext().setAttribute(ServerManager.AUTHORIZED_SESSIONS, authorizedSessionsSet);
 
             String redirectPage;
             Object redirectPageObj = ContextHandler.getCurrentContext().getAttribute(ServerManager.REDIRECT_PAGE);

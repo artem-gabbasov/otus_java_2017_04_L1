@@ -25,7 +25,7 @@ public class ServerManager {
     /**
      * Используются для общения между сервлетами
      */
-    final static String AUTHORIZED_FLAG = "authorized";
+    final static String AUTHORIZED_SESSIONS = "authorizedSessions";
     final static String REDIRECT_PAGE = "redirectPage";
 
     public ServerManager() throws Exception {
