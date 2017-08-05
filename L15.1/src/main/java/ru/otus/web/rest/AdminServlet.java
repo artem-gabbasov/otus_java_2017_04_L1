@@ -1,6 +1,5 @@
 package ru.otus.web.rest;
 
-import ru.otus.orm.datasets.instances.UserDataSet;
 import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
 import ru.otus.orm.jpa.JPAException;
@@ -10,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -44,12 +44,13 @@ public class AdminServlet extends HttpServlet {
 
     /**
      * Проверяет, авторизован ли пользователь. Если не авторизован, выкидывает его на домашнюю страницу
+     * @param session       сессия для проверки авторизации
      * @param resp          http-ответ для перенаправления
      * @return              True, если пользователь авторизован. Иначе, false
      * @throws IOException  в случае проблемы при перенаправлении
      */
-    private boolean checkAuthorization(HttpServletResponse resp) throws IOException {
-        if (ServerContext.isAuthorized()) {
+    private boolean checkAuthorization(HttpSession session, HttpServletResponse resp) throws IOException {
+        if (ServerContext.isAuthorized(session)) {
             return true;
         } else {
             ServerContext.setRedirectPage("admin");
@@ -61,16 +62,16 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter(ACTION_LOGOUT) != null) {
-            logout(resp);
+            logout(req.getSession(), resp);
         } else {
-            if (checkAuthorization(resp)) {
+            if (checkAuthorization(req.getSession(), resp)) {
                 showPage(resp);
             }
         }
     }
 
-    private void logout(HttpServletResponse resp) throws IOException {
-        ServerContext.setAuthorized(false);
+    private void logout(HttpSession session, HttpServletResponse resp) throws IOException {
+        ServerContext.setAuthorized(session, false);
         resp.sendRedirect(ServerContext.INDEX_PAGE);
     }
 
@@ -114,7 +115,7 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (checkAuthorization(resp)) {
+        if (checkAuthorization(req.getSession(), resp)) {
             DBServiceCached dbService = dbServiceSupplier.get();
             if (checkObject(dbService, resp)) {
                 try {

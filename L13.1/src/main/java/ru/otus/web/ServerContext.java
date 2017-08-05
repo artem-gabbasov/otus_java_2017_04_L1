@@ -3,6 +3,10 @@ package ru.otus.web;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Artem Gabbasov on 22.07.2017.
  * <p>
@@ -15,7 +19,7 @@ class ServerContext {
 
     private static final String SPRING_BEANS_SPECIFICATION = "SpringBeans.xml";
 
-    private static boolean authorized = false;
+    private static final Set<HttpSession> authorizedSessions = new HashSet<>();
     private static String redirectPage = "";
 
     private final static GenericApplicationContext context;
@@ -37,12 +41,16 @@ class ServerContext {
         return context.getBeanFactory().getBean(beanClassName, beanClass);
     }
 
-    public static boolean isAuthorized() {
-        return authorized;
+    public static boolean isAuthorized(HttpSession session) {
+        return authorizedSessions.contains(session);
     }
 
-    public static void setAuthorized(boolean authorized) {
-        ServerContext.authorized = authorized;
+    public static void setAuthorized(HttpSession session, boolean authorized) {
+        if (authorized) {
+            authorizedSessions.add(session);
+        } else {
+            authorizedSessions.remove(session);
+        }
     }
 
     public static String getRedirectPage() {
