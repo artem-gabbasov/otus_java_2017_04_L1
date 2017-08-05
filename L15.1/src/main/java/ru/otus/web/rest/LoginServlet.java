@@ -1,4 +1,4 @@
-package ru.otus.web;
+package ru.otus.web.rest;
 
 import org.eclipse.jetty.util.security.Credential;
 import ru.otus.orm.datasets.instances.LoginDataSet;

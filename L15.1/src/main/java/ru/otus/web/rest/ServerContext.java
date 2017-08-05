@@ -1,4 +1,4 @@
-package ru.otus.web;
+package ru.otus.web.rest;
 
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;

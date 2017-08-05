@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>loginServlet</servlet-name>
-        <servlet-class>ru.otus.web.LoginServlet</servlet-class>
+        <servlet-class>ru.otus.web.rest.LoginServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -16,7 +16,7 @@
 
     <servlet>
         <servlet-name>adminServlet</servlet-name>
-        <servlet-class>ru.otus.web.AdminServlet</servlet-class>
+        <servlet-class>ru.otus.web.rest.AdminServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

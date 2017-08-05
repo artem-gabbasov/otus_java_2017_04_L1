@@ -1,9 +1,10 @@
-package ru.otus.web;
+package ru.otus.web.rest;
 
 import ru.otus.orm.datasets.instances.UserDataSet;
 import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
 import ru.otus.orm.jpa.JPAException;
+import ru.otus.web.CommunicationHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,10 +26,6 @@ public class AdminServlet extends HttpServlet {
     private static final String UNDEFINED_MESSAGE = "DBService or CacheEngine is undefined.";
 
     private static final String ACTION_LOGOUT = "logout";
-    private static final String ACTION_USER_SAVE = "save";
-    private static final String ACTION_USER_LOAD = "load";
-    private static final String ACTION_CACHE_CLEAR = "clear";
-    private static final String PARAMETER_USER_ID = "userID";
 
     private final Supplier<DBServiceCached> dbServiceSupplier;
 
@@ -121,93 +118,13 @@ public class AdminServlet extends HttpServlet {
             DBServiceCached dbService = dbServiceSupplier.get();
             if (checkObject(dbService, resp)) {
                 try {
-                    dispatchParameters(dbService, req.getParameterMap());
+                    CommunicationHelper.dispatchParameters(dbService, req.getParameterMap());
                 } catch (IllegalAccessException | SQLException | JPAException e) {
                     resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
                 }
                 doGet(req, resp);
             }
         }
-    }
-
-    /**
-     * Обрабатывает действия, приходящие с админской странички
-     * @param dbService                 объект, за которым мы наблюдаем
-     * @param parameterMap              параметры запроса, пришедшие с html-формы
-     * @throws IllegalAccessException   при проблемах в DBService
-     * @throws SQLException             при проблемах в DBService
-     * @throws JPAException             при проблемах в DBService
-     */
-    private void dispatchParameters(DBServiceCached dbService, Map<String, String[]> parameterMap) throws IllegalAccessException, SQLException, JPAException {
-        if (parameterMap.containsKey(ACTION_USER_SAVE)) {
-            Long id = getUserID(parameterMap);
-            if (id != null) {
-                saveUser(dbService, id);
-            }
-        }
-
-        if (parameterMap.containsKey(ACTION_USER_LOAD)) {
-            Long id = getUserID(parameterMap);
-            if (id != null) {
-                loadUser(dbService, id);
-            }
-        }
-
-        if (parameterMap.containsKey(ACTION_CACHE_CLEAR)) {
-            DBServiceCacheEngine cacheEngine = dbService.getCacheEngine();
-            if (cacheEngine != null) {
-                clearCache(cacheEngine);
-            }
-        }
-    }
-
-    /**
-     * Сохраняет в БД фиктивного пользователя с указанным идентификатором
-     * @param dbService                 объект, через который происходит сохранение
-     * @param id                        идентификатор сохраняемого пользователя
-     * @throws IllegalAccessException   при проблемах в DBService
-     * @throws SQLException             при проблемах в DBService
-     * @throws JPAException             при проблемах в DBService
-     */
-    private void saveUser(DBServiceCached dbService, long id) throws IllegalAccessException, SQLException, JPAException {
-        dbService.save(new UserDataSet(id, "user_test", (int)(id % 100)));
-    }
-
-    /**
-     * Загружает из БД пользователя с указанным идентификатором
-     * @param dbService         объект, через который происходит загрузка
-     * @param id                идентификатор загружаемого пользователя
-     * @throws JPAException     при проблемах в DBService
-     * @throws SQLException     при проблемах в DBService
-     */
-    private void loadUser(DBServiceCached dbService, long id) throws JPAException, SQLException {
-        dbService.load(id, UserDataSet.class);
-    }
-
-    /**
-     * Очищает кеш
-     * @param cacheEngine   объект кеша, который нужно очистить
-     */
-    private void clearCache(DBServiceCacheEngine cacheEngine) {
-        cacheEngine.clear();
-    }
-
-    /**
-     * Извлекает из запроса идентификатор пользователя (если он там имеется) для действий над DBService
-     * @param parameterMap  параметры запроса, пришедшие с html-формы
-     * @return              Идентификатор пользователя, если найден соответствующий ключ и по нему лежит корректное число.
-     *                      Иначе, null
-     */
-    private Long getUserID(Map<String, String[]> parameterMap) {
-        String[] values = parameterMap.get(PARAMETER_USER_ID);
-        if (values.length == 1) { // у нас подразумевается единственное значение идентификатора
-            try {
-                return Long.parseLong(values[0]);
-            } catch (NumberFormatException e) {
-                // в этом случае мы просто ничего не делаем, а потом возвращаем null
-            }
-        }
-        return null;
     }
 
     /**
