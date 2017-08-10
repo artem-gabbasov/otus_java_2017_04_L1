@@ -3,6 +3,9 @@ package ru.otus.cache.impl;
 import ru.otus.cache.CacheEngine;
 import ru.otus.cache.IdleManager;
 import ru.otus.cache.MyElement;
+import ru.otus.observable.ObservableVariable;
+import ru.otus.observable.ObserverManager;
+import ru.otus.observable.ObserverManagerImpl;
 
 import java.lang.ref.SoftReference;
 import java.util.*;
@@ -14,27 +17,37 @@ import java.util.function.Function;
 public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private static final int TIME_THRESHOLD_MS = 5;
 
-    private final int maxElements;
-    private final long lifeTimeMs;
-    private final long idleTimeMs;
+    private final ObservableVariable<Long> maxElements;
+    private final ObservableVariable<Long> lifeTimeMs;
+    private final ObservableVariable<Long> idleTimeMs;
     private final boolean isEternal;
 
     private final Map<K, SoftReference<MyElement<K, V>>> elements = new LinkedHashMap<>();
     private final Timer timer = new Timer();
 
-    private int hit = 0;
-    private int miss = 0;
+    private final ObservableVariable<Long> hit;
+    private final ObservableVariable<Long> miss;
+
+    private final ObservableVariable<Long> elementsCountSnapshot;
+
+    private final ObserverManager<Long> observerManager;
 
     @SuppressWarnings("WeakerAccess")
     public CacheEngineImpl(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal) {
-        this.maxElements = maxElements;
-        this.lifeTimeMs = lifeTimeMs > 0 ? lifeTimeMs : 0;
-        this.idleTimeMs = idleTimeMs > 0 ? idleTimeMs : 0;
+        observerManager = new ObserverManagerImpl<>();
+
+        this.maxElements = observerManager.createNewObservableVariable("maxElements", (long)maxElements);
+        this.lifeTimeMs = observerManager.createNewObservableVariable("lifeTime", lifeTimeMs > 0 ? lifeTimeMs : 0);
+        this.idleTimeMs = observerManager.createNewObservableVariable("idleTime", idleTimeMs > 0 ? idleTimeMs : 0);
         this.isEternal = lifeTimeMs == 0 && idleTimeMs == 0 || isEternal;
+
+        hit = observerManager.createNewObservableVariable("hitCount", 0L);
+        miss = observerManager.createNewObservableVariable("missCount", 0L);
+        elementsCountSnapshot = observerManager.createNewObservableVariable("elementsCountSnapshot", 0L);
     }
 
     public void put(K key, V value) {
-        if (elements.size() == maxElements) {
+        if (elements.size() == maxElements.getValue()) {
             K firstKey = elements.keySet().iterator().next();
             elements.remove(firstKey);
         }
@@ -42,14 +55,16 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         IdleManager idleManager = new EmptyIdleManager();
 
         if (!isEternal) {
-            if (lifeTimeMs != 0) {
-                TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
-                timer.schedule(lifeTimerTask, lifeTimeMs);
+            long lifeTimeMsVal = lifeTimeMs.getValue();
+            if (lifeTimeMsVal != 0) {
+                TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMsVal);
+                timer.schedule(lifeTimerTask, lifeTimeMsVal);
             }
-            if (idleTimeMs != 0) {
+            long idleTimeMsVal = idleTimeMs.getValue();
+            if (idleTimeMsVal != 0) {
                 idleManager = new TimerIdleManager(
-                        timerTask -> timer.schedule(timerTask, idleTimeMs),
-                        () -> getTimerTask(key, idleElement -> idleElement.getCreationTime() + idleTimeMs)
+                        timerTask -> timer.schedule(timerTask, idleTimeMsVal),
+                        () -> getTimerTask(key, idleElement -> idleElement.getCreationTime() + idleTimeMsVal)
                 );
             }
         }
@@ -66,20 +81,20 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     public MyElement<K, V> get(K key) {
         MyElement<K, V> element = getFromMap(key);
         if (element != null) {
-            hit++;
+            hit.setValue(hit.getValue() + 1);
             element.setAccessed();
         } else {
-            miss++;
+            miss.setValue(miss.getValue() + 1);
         }
         return element;
     }
 
     public int getHitCount() {
-        return hit;
+        return (int)(long)hit.getValue();
     }
 
     public int getMissCount() {
-        return miss;
+        return (int)(long)miss.getValue();
     }
 
     @Override
@@ -113,24 +128,27 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
 
     @Override
     public int getMaxElements() {
-        return maxElements;
+        return (int)(long)maxElements.getValue();
     }
 
     @Override
     public int getElementsCount() {
-        return (int)elements.values().stream()
-                .filter(myElementSoftReference -> myElementSoftReference.get() != null)
-                .count();
+        elementsCountSnapshot.setValue(
+            elements.values().stream()
+                    .filter(myElementSoftReference -> myElementSoftReference.get() != null)
+                    .count()
+        );
+        return (int)(long) elementsCountSnapshot.getValue();
     }
 
     @Override
     public long getLifeTimeMs() {
-        return lifeTimeMs;
+        return lifeTimeMs.getValue();
     }
 
     @Override
     public long getIdleTimeMs() {
-        return idleTimeMs;
+        return idleTimeMs.getValue();
     }
 
     @Override
