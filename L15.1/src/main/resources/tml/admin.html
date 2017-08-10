@@ -3,36 +3,52 @@
 <head>
   <meta charset="UTF-8"/>
   <title>Admin</title>
+  <style type="text/css">
+    .fading{
+      background: #fff;
+      transition: background .25s ease-in-out;
+      -moz-transition: background .25s ease-in-out;
+      -webkit-transition: background .25s ease-in-out;
+    }
+  </style>
+  <script type="text/javascript">
+    highlight = function(id) {
+      $elem = document.getElementById(id);
+      $elem.style.background = "#ddd";
+      setTimeout('$elem.style.background = "#fff"', 750);
+    };
+  </script>
+  <script src="js/ws.js" type="text/javascript"></script>
 </head>
-<body>
+<body onload="init();">
   <p><a href="index.html">Home</a></p>
 
   <form method="get">
     <input type="submit" name="logout" value="Logout">
   </form>
 
-  <p>maxElements:   ${maxElements}</p>
-  <p>elementsCount: ${elementsCount}</p>
-  <p>lifeTime:      ${lifeTime}</p>
-  <p>idleTime:      ${idleTime}</p>
-  <p>hitCount:      ${hitCount}</p>
-  <p>missCount:     ${missCount}</p>
+  <p id="maxElements"   class="fading">maxElements:   ${maxElements}</p>
+  <p id="elementsCount" class="fading">elementsCount: ${elementsCount}</p>
+  <p id="lifeTime"      class="fading">lifeTime:      ${lifeTime}</p>
+  <p id="idleTime"      class="fading">idleTime:      ${idleTime}</p>
+  <p id="hitCount"      class="fading">hitCount:      ${hitCount}</p>
+  <p id="missCount"     class="fading">missCount:     ${missCount}</p>
 
   <hr>
 
-  <form method="post">
+  <form>
     <p>
-      User ID: <input type="number" name="userID" value="1">
+      User ID: <input type="number" name="userID" id="userID" value="1">
     </p>
 
-    <input type="submit" name="save" value="Save User">
-    <input type="submit" name="load" value="Load User">
+    <input type="button" name="save" value="Save User" onclick="saveUser();">
+    <input type="button" name="load" value="Load User" onclick="loadUser();">
   </form>
 
   <hr>
 
-  <form method="post">
-    <input type="submit" name="clear" value="Clear Cache">
+  <form>
+    <input type="button" name="clear" value="Clear Cache" onclick="clearCache();">
   </form>
 </body>
 </html>
