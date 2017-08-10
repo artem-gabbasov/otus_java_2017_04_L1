@@ -26,19 +26,28 @@ init = function () {
 };
 
 saveUser = function () {
-    sendMessage("saveUser", {
-        "userId": getUserID()
+    sendMessage("dbService", {
+        "action": "saveUser",
+        "params": {
+            "userId": getUserID()
+        }
     });
 };
 
 loadUser = function () {
-    sendMessage("loadUser", {
-        "userId": getUserID()
+    sendMessage("dbService", {
+        "action": "loadUser",
+        "params": {
+            "userId": getUserID()
+        }
     });
 };
 
 clearCache = function () {
-    sendMessage("clearCache", {});
+    sendMessage("dbService", {
+        "action": "clearCache",
+        "params": {}
+    });
 };
 
 function getUserID () {
