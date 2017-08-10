@@ -4,8 +4,10 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Artem Gabbasov on 22.07.2017.
@@ -19,7 +21,7 @@ class ServerContext {
 
     private static final String SPRING_BEANS_SPECIFICATION = "SpringBeans.xml";
 
-    private static final Set<HttpSession> authorizedSessions = new HashSet<>();
+    private static final Set<HttpSession> authorizedSessions = Collections.newSetFromMap(new ConcurrentHashMap<HttpSession, Boolean>());
 
     private final static GenericApplicationContext context;
 
