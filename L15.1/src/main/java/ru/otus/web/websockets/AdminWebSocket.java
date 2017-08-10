@@ -75,7 +75,7 @@ public class AdminWebSocket {
         }
     }
 
-    public void sendMessage(String json) throws IOException {
+    public void sendMessage(String json) {
         if (ServerContext.isAuthorized(httpSession)) {
             try {
                 logger.fine("Sending message: " + json);
@@ -85,7 +85,12 @@ public class AdminWebSocket {
             }
         } else {
             reportForbiddenMessage();
-            wsSession.disconnect();
+
+            try {
+                wsSession.disconnect();
+            } catch (IOException e) {
+                logger.severe(e.toString());
+            }
         }
     }
 

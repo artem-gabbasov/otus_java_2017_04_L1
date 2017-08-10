@@ -1,6 +1,7 @@
 package ru.otus.web.websockets;
 
 import ru.otus.db.dbservices.DBServiceCached;
+import ru.otus.observable.Listener;
 import ru.otus.orm.jpa.JPAException;
 import ru.otus.web.CommunicationHelper;
 import ru.otus.web.websockets.exceptions.AdminWebSocketClientException;
@@ -15,10 +16,11 @@ import java.sql.SQLException;
 /**
  * Created by Artem Gabbasov on 06.08.2017.
  */
-public class AdminWebSocketHandler {
+public class AdminWebSocketHandler implements Listener<Long> {
     private static final String JSON_MESSAGETYPE = "messageType";
     private static final String JSON_MESSAGETYPE_CLIENT_DBSERVICE = "dbService";
     private static final String JSON_MESSAGETYPE_CLIENT_ERROR = "error";
+    private static final String JSON_MESSAGETYPE_SERVER_GETPARAMS = "getParams";
 
     private static final String JSON_DETAILS = "details";
     private static final String JSON_DETAILS_CLIENT_DBSERVICE_ACTION = "action";
@@ -28,6 +30,9 @@ public class AdminWebSocketHandler {
     private static final String JSON_DETAILS_CLIENT_DBSERVICE_PARAMS = "params";
     private static final String JSON_DETAILS_CLIENT_DBSERVICE_PARAMS_USERID = "userId";
     private static final String JSON_DETAILS_CLIENT_ERROR_ERRORMESSAGE = "errorMessage";
+    private static final String JSON_DETAILS_SERVER_GETPARAMS_DATA = "data";
+    private static final String JSON_DETAILS_SERVER_GETPARAMS_DATA_NAME = "name";
+    private static final String JSON_DETAILS_SERVER_GETPARAMS_DATA_VALUE = "value";
 
     private final AdminWebSocket adminWebSocket;
     private final DBServiceCached dbServiceCached;
@@ -92,5 +97,20 @@ public class AdminWebSocketHandler {
         }
 
         return stringWriter.toString();
+    }
+
+    @Override
+    public void fireEvent(String variableName, Long value) {
+        adminWebSocket.sendMessage(
+            prepareJson(JSON_MESSAGETYPE_SERVER_GETPARAMS, Json.createObjectBuilder()
+                .add(JSON_DETAILS_SERVER_GETPARAMS_DATA, Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                        .add(JSON_DETAILS_SERVER_GETPARAMS_DATA_NAME, variableName)
+                        .add(JSON_DETAILS_SERVER_GETPARAMS_DATA_VALUE, value)
+                        .build())
+                    .build())
+                .build()
+            )
+        );
     }
 }
