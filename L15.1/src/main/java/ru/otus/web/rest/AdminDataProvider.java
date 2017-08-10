@@ -4,6 +4,7 @@ import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
 import ru.otus.orm.jpa.JPAException;
 import ru.otus.web.CommunicationHelper;
+import ru.otus.web.ServerContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,9 +12,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -75,19 +73,6 @@ public class AdminDataProvider {
         pageVariables.put("missCount", cacheEngine.getMissCount());
 
         return pageVariables;
-    }
-
-    public void processRequest(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        Map<String, String[]> parameterMap = req.getParameterMap();
-
-        DBServiceCached dbService = dbServiceSupplier.get();
-        if (checkObject(dbService, resp)) {
-            try {
-                CommunicationHelper.dispatchParameters(dbService, parameterMap);
-            } catch (IllegalAccessException | SQLException | JPAException e) {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
-            }
-        }
     }
 
     /**

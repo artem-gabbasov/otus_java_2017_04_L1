@@ -1,5 +1,7 @@
 package ru.otus.web.rest;
 
+import ru.otus.web.ServerContext;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

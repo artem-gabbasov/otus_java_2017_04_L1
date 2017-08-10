@@ -34,6 +34,16 @@
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>wsAdminServlet</servlet-name>
+        <servlet-class>ru.otus.web.websockets.AdminWebSocketServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>wsAdminServlet</servlet-name>
+        <url-pattern>/wsadmin</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

@@ -1,4 +1,4 @@
-package ru.otus.web.rest;
+package ru.otus.web;
 
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Класс для связи сервлетов
  */
 @SuppressWarnings("SameParameterValue")
-class ServerContext {
-    static final String INDEX_PAGE = "index.html";
-    static final String LOGIN_PAGE = "login";
+public class ServerContext {
+    public static final String INDEX_PAGE = "index.html";
+    public static final String LOGIN_PAGE = "login";
 
     private static final String SPRING_BEANS_SPECIFICATION = "SpringBeans.xml";
 

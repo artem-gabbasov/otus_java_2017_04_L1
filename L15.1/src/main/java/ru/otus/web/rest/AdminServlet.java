@@ -1,9 +1,6 @@
 package ru.otus.web.rest;
 
-import ru.otus.db.dbservices.DBServiceCacheEngine;
-import ru.otus.db.dbservices.DBServiceCached;
-import ru.otus.orm.jpa.JPAException;
-import ru.otus.web.CommunicationHelper;
+import ru.otus.web.ServerContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,10 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * Created by Artem Gabbasov on 19.07.2017.
