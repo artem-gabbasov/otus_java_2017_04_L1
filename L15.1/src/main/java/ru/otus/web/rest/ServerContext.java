@@ -20,7 +20,6 @@ class ServerContext {
     private static final String SPRING_BEANS_SPECIFICATION = "SpringBeans.xml";
 
     private static final Set<HttpSession> authorizedSessions = new HashSet<>();
-    private static String redirectPage = "";
 
     private final static GenericApplicationContext context;
 
@@ -53,11 +52,13 @@ class ServerContext {
         }
     }
 
-    public static String getRedirectPage() {
-        return redirectPage.equals("") ? INDEX_PAGE : redirectPage;
-    }
-
-    public static void setRedirectPage(String redirectPage) {
-        ServerContext.redirectPage = redirectPage;
+    /**
+     * Убирает <code>urlPattern</code> из строки <code>uri</code>, чтобы получить адрес страницы для перенаправления
+     * @param uri           исходная ссылка, содержащая адрес перенаправления
+     * @param urlPattern    паттерн, задающий сервлет для обработки запроса
+     * @return              адрес страницы для перенаправления
+     */
+    public static String getRedirectPath(String uri, String urlPattern) {
+        return uri.replaceFirst(urlPattern, "");
     }
 }

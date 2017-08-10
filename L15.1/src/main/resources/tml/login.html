@@ -6,13 +6,14 @@
     <title>Login page</title>
 </head>
 <body>
-    <p><a href="index.html">Home</a></p>
+    <p><a href="/index.html">Home</a></p>
     <#if isLastLoginIncorrect><p><font color="red">Incorrect login or password</font></p></#if>
     <form method="post">
         <p>Username: <input name="username"></p>
         <p>Password: <input name="password" type="password"></p>
         <p><input value="Submit" type="submit"></p>
         <p>Hint: username: admin, password: otus (MD5:a16d4c15a479c7826904758ab6e477ce)</p>
+        <input name="redirectPage" value="${redirectPage}" type="hidden">
     </form>
 </body>
 </html>

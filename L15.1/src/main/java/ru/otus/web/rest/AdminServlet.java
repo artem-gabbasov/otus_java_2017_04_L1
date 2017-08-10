@@ -42,30 +42,17 @@ public class AdminServlet extends HttpServlet {
         this(() -> ServerContext.getSpringBean("dbServiceCached", DBServiceCached.class));
     }
 
-    /**
-     * Проверяет, авторизован ли пользователь. Если не авторизован, выкидывает его на домашнюю страницу
-     * @param session       сессия для проверки авторизации
-     * @param resp          http-ответ для перенаправления
-     * @return              True, если пользователь авторизован. Иначе, false
-     * @throws IOException  в случае проблемы при перенаправлении
-     */
-    private boolean checkAuthorization(HttpSession session, HttpServletResponse resp) throws IOException {
-        if (ServerContext.isAuthorized(session)) {
-            return true;
-        } else {
-            ServerContext.setRedirectPage("admin");
-            resp.sendRedirect(ServerContext.LOGIN_PAGE);
-            return false;
-        }
-    }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter(ACTION_LOGOUT) != null) {
             logout(req.getSession(), resp);
         } else {
-            if (checkAuthorization(req.getSession(), resp)) {
+            if (ServerContext.isAuthorized(req.getSession())) {
                 showPage(resp);
+            } else {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
         }
     }
@@ -115,7 +102,7 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (checkAuthorization(req.getSession(), resp)) {
+        if (ServerContext.isAuthorized(req.getSession())) {
             DBServiceCached dbService = dbServiceSupplier.get();
             if (checkObject(dbService, resp)) {
                 try {
@@ -125,6 +112,8 @@ public class AdminServlet extends HttpServlet {
                 }
                 doGet(req, resp);
             }
+        } else {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
     }
 

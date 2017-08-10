@@ -5,13 +5,23 @@
     <description>Otus. ??????? 15</description>
 
     <servlet>
+        <servlet-name>restrictedPageServlet</servlet-name>
+        <servlet-class>ru.otus.web.rest.RestrictedPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>restrictedPageServlet</servlet-name>
+        <url-pattern>/restricted/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>ru.otus.web.rest.LoginServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
+        <url-pattern>/login/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
