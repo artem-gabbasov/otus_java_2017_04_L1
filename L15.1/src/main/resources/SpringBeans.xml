@@ -22,4 +22,6 @@
     </bean>
 
     <bean id="templateProcessor" class="ru.otus.web.rest.TemplateProcessor"></bean>
+
+    <bean id="adminDataProvider" class="ru.otus.web.rest.AdminDataProvider"></bean>
 </beans>
