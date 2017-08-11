@@ -2,22 +2,19 @@ package ru.otus.web.rest;
 
 import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
-import ru.otus.orm.jpa.JPAException;
-import ru.otus.web.CommunicationHelper;
 import ru.otus.web.ServerContext;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 /**
  * Created by Artem Gabbasov on 10.08.2017.
+ * Вспомогательный класс для админской странички, который непосредственно работает с dbService
  */
-public class AdminDataProvider {
+class AdminDataProvider {
     private static final String ADMIN_PAGE_TEMPLATE = "admin.html";
 
     private static final String UNDEFINED_MESSAGE = "DBService or CacheEngine is undefined.";

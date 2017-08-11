@@ -5,7 +5,6 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +22,7 @@ public class ServerContext {
 
     private static final Set<HttpSession> authorizedSessions = Collections.newSetFromMap(new ConcurrentHashMap<HttpSession, Boolean>());
 
-    private final static GenericApplicationContext context;
+    private static final GenericApplicationContext context;
 
     static {
         context = new GenericApplicationContext();

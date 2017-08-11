@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * Created by Artem Gabbasov on 25.07.2017.
- * <p>
+ * Сервлет, обслуживающий страницу авторизации
  */
 @SuppressWarnings("FieldCanBeLocal")
 public class LoginServlet extends HttpServlet {
@@ -83,9 +83,8 @@ public class LoginServlet extends HttpServlet {
      * @throws SQLException
      * @throws JPAException
      * @throws IOException
-     * @throws ServletException
      */
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws SQLException, JPAException, IOException, ServletException {
+    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws SQLException, JPAException, IOException {
         Map<String, String[]> parameterMap = req.getParameterMap();
 
         String[] values = parameterMap.get(PARAMETER_USERNAME);
@@ -122,7 +121,6 @@ public class LoginServlet extends HttpServlet {
      * @throws JPAException
      * @throws SQLException
      * @throws IOException
-     * @throws ServletException
      */
     private void processLoginData(String username, String passwordMD5, String redirectPage, HttpServletRequest req, HttpServletResponse resp) throws JPAException, SQLException, IOException {
         LoginDataSet loginDataSet = dbService.loadByName(username, LoginDataSet.class);

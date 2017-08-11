@@ -1,9 +1,7 @@
 package ru.otus.web.websockets;
 
-import com.sun.scenario.effect.impl.prism.PrFilterContext;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -13,14 +11,13 @@ import ru.otus.web.websockets.exceptions.AdminWebSocketException;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
 /**
  * Created by Artem Gabbasov on 03.08.2017.
  */
 @WebSocket
-public class AdminWebSocket {
+class AdminWebSocket {
     private static final Logger logger = Logger.getLogger(AdminWebSocket.class.getName());
 
     static {
@@ -39,8 +36,14 @@ public class AdminWebSocket {
         }
     }
 
+    /**
+     * Websocket'ная сессия
+     */
     private Session wsSession = null;
 
+    /**
+     * Нужна для проверки, авторизован ли пользователь
+     */
     private final HttpSession httpSession;
 
     private final AdminWebSocketHandler adminWebSocketHandler;
@@ -57,6 +60,7 @@ public class AdminWebSocket {
         }
     }
 
+    @SuppressWarnings("unused")
     @OnWebSocketMessage
     public void onMessage(String data) throws IOException {
         if (ServerContext.isAuthorized(httpSession)) {
@@ -98,25 +102,16 @@ public class AdminWebSocket {
         }
     }
 
+    @SuppressWarnings("unused")
     @OnWebSocketConnect
     public void onOpen(Session wsSession) {
         logger.fine("Websocket opened (http session: " + httpSession.toString() + ")");
-        setWSSession(wsSession);
-    }
-
-    public Session getWSSession() {
-        return wsSession;
-    }
-
-    public void setWSSession(Session wsSession) {
         this.wsSession = wsSession;
     }
 
-    /*
-    @OnWebSocketClose
-    public void onClose(int statusCode, String reason) {
-    }*/
-
+    /**
+     * Сообщает клиенту, что пользователь больше не авторизован
+     */
     private void reportForbiddenMessage() {
         doSendMessage(AdminWebSocketHandler.prepareMessageNotAuthorized());
     }

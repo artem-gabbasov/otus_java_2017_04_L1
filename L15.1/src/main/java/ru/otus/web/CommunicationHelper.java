@@ -6,20 +6,11 @@ import ru.otus.orm.datasets.instances.UserDataSet;
 import ru.otus.orm.jpa.JPAException;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Created by Artem Gabbasov on 04.08.2017.
  */
 public class CommunicationHelper {
-    private static final String DBSERVICE_PAGE_DATA = "db.data";
-    private static final String DBSERVICE_USER_SAVE = "db.save";
-    private static final String DBSERVICE_USER_LOAD = "db.load";
-    private static final String DBSERVICE_CACHE_CLEAR = "db.clear";
-    private static final String DBSERVICE_PARAMETER_USER_ID = "db.param.userID";
-
-    private static final String FRONTEND_REFRESH = "fr.refresh";
-
     /**
      * Сохраняет в БД фиктивного пользователя с указанным идентификатором
      * @param dbService                 объект, через который происходит сохранение

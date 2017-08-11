@@ -5,6 +5,7 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 /**
  * Created by Artem Gabbasov on 03.08.2017.
+ * Сервлет, обслуживающий соединение по Websocket'у
  */
 public class AdminWebSocketServlet extends WebSocketServlet {
     private final static int LOGOUT_TIME = 10 * 60 * 1000;

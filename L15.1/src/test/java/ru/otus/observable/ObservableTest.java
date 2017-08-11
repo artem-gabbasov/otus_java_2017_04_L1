@@ -11,7 +11,7 @@ import java.util.Map;
 public class ObservableTest {
     @Test
     public void test() {
-        Map<String, Object> results1 = new HashMap<String, Object>();
+        Map<String, Object> results1 = new HashMap<>();
 
         ObserverManager<Object> observerManager = new ObserverManagerImpl<>();
         ObservableVariable<Object> o1 = observerManager.createNewObservableVariable("o1", "o1val");
@@ -19,7 +19,7 @@ public class ObservableTest {
 
         o1.setValue("o1value_changed");
 
-        Listener<Object> listener1 = (name, value) -> results1.put(name, value);
+        Listener<Object> listener1 = results1::put;
         observerManager.addListener(listener1);
 
         o2.setValue("o2value_changed");
@@ -27,8 +27,8 @@ public class ObservableTest {
         ObservableVariable<Object> o3 = observerManager.createNewObservableVariable("o3", "o3val");
         o3.setValue("o3value_changed");
 
-        Map<String, Object> results2 = new HashMap<String, Object>();
-        observerManager.addListener((name, value) -> results2.put(name, value));
+        Map<String, Object> results2 = new HashMap<>();
+        observerManager.addListener(results2::put);
 
         ObservableVariable<Object> o4 = observerManager.createNewObservableVariable("o4", "o4val");
         o4.setValue("o4value_changed");

@@ -138,7 +138,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         return (int)(long)maxElements.getValue();
     }
 
-    public void updateElementsCount() {
+    private void updateElementsCount() {
         elementsCountSnapshot.setValue(
                 elements.values().stream()
                         .filter(myElementSoftReference -> myElementSoftReference.get() != null)

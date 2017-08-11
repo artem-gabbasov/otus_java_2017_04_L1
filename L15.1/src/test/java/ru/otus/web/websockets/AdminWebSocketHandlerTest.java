@@ -4,7 +4,6 @@ import org.junit.Test;
 import ru.otus.db.connections.ConnectionHelper;
 import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
-import ru.otus.db.dbservices.DBServiceCachedTest;
 import ru.otus.db.dbservices.impl.DBServiceCacheEngineImpl;
 import ru.otus.db.dbservices.impl.DBServiceCachedImpl;
 import ru.otus.orm.datasets.instances.UserDataSet;
@@ -14,8 +13,6 @@ import ru.otus.web.websockets.exceptions.AdminWebSocketException;
 import javax.json.Json;
 
 import java.sql.SQLException;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Artem Gabbasov on 11.08.2017.

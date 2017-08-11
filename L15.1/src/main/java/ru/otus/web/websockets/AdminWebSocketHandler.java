@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 /**
  * Created by Artem Gabbasov on 06.08.2017.
+ * Класс, отвечающий за подготовку отправляемых и обработку получаемых сообщений по Websocket
  */
 public class AdminWebSocketHandler implements Listener<Long> {
     private static final String JSON_MESSAGETYPE = "messageType";
@@ -42,9 +43,15 @@ public class AdminWebSocketHandler implements Listener<Long> {
         this.adminWebSocket = adminWebSocket;
         this.dbServiceCached = dbServiceCached;
 
+        // Регистрируемся, чтобы следить за параметрами кэша
         dbServiceCached.getCacheEngine().addListener(this);
     }
 
+    /**
+     * Обрабатывает пришедший от клиента json
+     * @param json                      пришедший от клиента json
+     * @throws AdminWebSocketException
+     */
     public void handleJson(String json) throws AdminWebSocketException {
         JsonReader reader = Json.createReader(new StringReader(json));
         JsonObject object = reader.readObject();
@@ -58,6 +65,15 @@ public class AdminWebSocketHandler implements Listener<Long> {
         }
     }
 
+    /**
+     * Обрабатывает детали пришедшего сообщения
+     * @param messageType               тип сообщения
+     * @param details                   json-объект с деталями пришедшего сообщения
+     * @throws AdminWebSocketException
+     * @throws JPAException
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
     private void dispatchMessageType(String messageType, JsonObject details) throws AdminWebSocketException, JPAException, SQLException, IllegalAccessException {
         switch (messageType) {
             case JSON_MESSAGETYPE_CLIENT_DBSERVICE:
@@ -89,6 +105,12 @@ public class AdminWebSocketHandler implements Listener<Long> {
             .getJsonString(JSON_DETAILS_CLIENT_DBSERVICE_PARAMS_USERID).getString());
     }
 
+    /**
+     * Готовит json сообщения для передачи на клиент
+     * @param messageType   тип сообщения
+     * @param details       детали передаваемого сообщения
+     * @return              сформированный json
+     */
     public static String prepareJson(String messageType, JsonObject details) {
         StringWriter stringWriter = new StringWriter();
         try (JsonWriter jsonWriter = Json.createWriter(stringWriter)) {
@@ -102,10 +124,19 @@ public class AdminWebSocketHandler implements Listener<Long> {
         return stringWriter.toString();
     }
 
+    /**
+     * Готовит json сообщения о том, что пользователь не авторизован
+     * @return      сформированный json
+     */
     public static String prepareMessageNotAuthorized() {
         return prepareJson(JSON_MESSAGETYPE_SERVER_NOTAUTHORIZED, Json.createObjectBuilder().build());
     }
 
+    /**
+     * Реакция на событие изменения значения параметра кэша - отправляется сообщение об изменении на клиент
+     * @param variableName  имя изменяемой переменной
+     * @param value         новое значение переменной
+     */
     @Override
     public void fireEvent(String variableName, Long value) {
         adminWebSocket.sendMessage(

@@ -30,7 +30,19 @@ public interface CacheEngine<K, V> {
 
     void clear();
 
+    /**
+     * Добавляет listener, который отслеживает изменения параметров кэша
+     * @param listener  listener, который отслеживает изменения параметров кэша
+     * @return          true, если множество listener'ов было изменено. Иначе, false
+     */
+    @SuppressWarnings("UnusedReturnValue")
     boolean addListener(Listener<Long> listener);
 
+    /**
+     * Удаляет listener, который отслеживает изменения параметров кэша
+     * @param listener  listener, который отслеживает изменения параметров кэша
+     * @return          true, если множество listener'ов было изменено. Иначе, false
+     */
+    @SuppressWarnings("UnusedReturnValue")
     boolean removeListener(Listener<Long> listener);
 }

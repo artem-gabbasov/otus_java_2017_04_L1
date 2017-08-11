@@ -11,7 +11,7 @@ import java.io.*;
 
 /**
  * Created by Artem Gabbasov on 19.07.2017.
- * <p>
+ * Сервлет, обслуживающий админскую страничку
  */
 public class AdminServlet extends HttpServlet {
     private static final String ACTION_LOGOUT = "logout";
