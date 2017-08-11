@@ -29,6 +29,9 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private final ObservableVariable<Long> hit;
     private final ObservableVariable<Long> miss;
 
+    /**
+     * Даёт <b>примерное</b> представление о количестве элементов - актуальность значения не гарантируется
+     */
     private final ObservableVariable<Long> elementsCountSnapshot;
 
     private final ObserverManager<Long> observerManager;
@@ -71,6 +74,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         }
 
         elements.put(key, new SoftReference<>(new MyElement<>(key, value, idleManager)));
+        updateElementsCount();
     }
 
     private MyElement<K, V> getFromMap(K key) {
@@ -100,13 +104,14 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
 
     @Override
     public void dispose() {
-        timer.cancel();
+        clear();
     }
 
     @Override
     public void clear() {
         elements.clear();
-        dispose();
+        elementsCountSnapshot.setValue(0L);
+        timer.cancel();
     }
 
     private TimerTask getTimerTask(final K key, Function<MyElement<K, V>, Long> timeFunction) {
@@ -117,6 +122,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
                 if (checkedElement == null ||
                         isT1BeforeT2(timeFunction.apply(checkedElement), System.currentTimeMillis())) {
                     elements.remove(key);
+                    updateElementsCount();
                 }
             }
         };
@@ -132,13 +138,17 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         return (int)(long)maxElements.getValue();
     }
 
+    public void updateElementsCount() {
+        elementsCountSnapshot.setValue(
+                elements.values().stream()
+                        .filter(myElementSoftReference -> myElementSoftReference.get() != null)
+                        .count()
+        );
+    }
+
     @Override
     public int getElementsCount() {
-        elementsCountSnapshot.setValue(
-            elements.values().stream()
-                    .filter(myElementSoftReference -> myElementSoftReference.get() != null)
-                    .count()
-        );
+        updateElementsCount();
         return (int)(long) elementsCountSnapshot.getValue();
     }
 
