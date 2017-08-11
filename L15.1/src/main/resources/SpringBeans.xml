@@ -7,9 +7,9 @@
 
     <bean id="cacheEngine" class="ru.otus.db.dbservices.impl.DBServiceCacheEngineImpl">
         <constructor-arg name="maxElements" value="2"/>
-        <constructor-arg name="lifeTimeMs"  value="0"/>
+        <constructor-arg name="lifeTimeMs"  value="3000"/>
         <constructor-arg name="idleTimeMs"  value="0"/>
-        <constructor-arg name="isEternal"   value="true"/>
+        <constructor-arg name="isEternal"   value="false"/>
     </bean>
 
     <bean id="dbServiceCached" class="ru.otus.db.dbservices.impl.DBServiceCachedImpl">
