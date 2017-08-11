@@ -55,6 +55,16 @@ public class AdminWebSocketHandlerTest {
     }
 
     @Test
+    public void prepareMessageNotAuthorized() {
+        assert AdminWebSocketHandler.prepareMessageNotAuthorized().equals(
+                "{" +
+                        "\"messageType\":\"notAuthorized\"," +
+                        "\"details\":{}" +
+                "}"
+        );
+    }
+
+    @Test
     public void handleJson() throws AdminWebSocketException, JPAException, SQLException {
         DBServiceCacheEngine cacheEngine = new DBServiceCacheEngineImpl(1, 0, 0, true);
         DBServiceCached dbServiceCached = new DBServiceCachedImpl(ConnectionHelper.getDefaultConnection(), cacheEngine);

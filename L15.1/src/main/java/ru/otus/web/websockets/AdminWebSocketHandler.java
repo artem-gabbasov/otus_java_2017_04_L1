@@ -21,6 +21,7 @@ public class AdminWebSocketHandler implements Listener<Long> {
     private static final String JSON_MESSAGETYPE_CLIENT_DBSERVICE = "dbService";
     private static final String JSON_MESSAGETYPE_CLIENT_ERROR = "error";
     private static final String JSON_MESSAGETYPE_SERVER_GETPARAMS = "getParams";
+    private static final String JSON_MESSAGETYPE_SERVER_NOTAUTHORIZED = "notAuthorized";
 
     private static final String JSON_DETAILS = "details";
     private static final String JSON_DETAILS_CLIENT_DBSERVICE_ACTION = "action";
@@ -99,6 +100,10 @@ public class AdminWebSocketHandler implements Listener<Long> {
         }
 
         return stringWriter.toString();
+    }
+
+    public static String prepareMessageNotAuthorized() {
+        return prepareJson(JSON_MESSAGETYPE_SERVER_NOTAUTHORIZED, Json.createObjectBuilder().build());
     }
 
     @Override

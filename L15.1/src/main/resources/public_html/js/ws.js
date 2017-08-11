@@ -17,6 +17,9 @@ init = function () {
                     document.getElementById(id).innerHTML = data[i].value;
                 }
                 break;
+            case "notAuthorized":
+                window.location = "/restricted/admin";
+                break;
             default:
                 sendMessage("error", {
                     "errorMessage": "Unrecognized message type: " + json.messageType

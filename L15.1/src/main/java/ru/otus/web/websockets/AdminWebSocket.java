@@ -75,14 +75,7 @@ public class AdminWebSocket {
 
     public void sendMessage(String json) {
         if (ServerContext.isAuthorized(httpSession)) {
-            try {
-                logger.fine("Sending message: " + json);
-                if (wsSession.isOpen()) {
-                    wsSession.getRemote().sendString(json);
-                }
-            } catch (IOException e) {
-                logger.severe(e.toString());
-            }
+            doSendMessage(json);
         } else {
             reportForbiddenMessage();
 
@@ -91,6 +84,17 @@ public class AdminWebSocket {
             } catch (IOException e) {
                 logger.severe(e.toString());
             }
+        }
+    }
+
+    private void doSendMessage(String json) {
+        try {
+            logger.fine("Sending message: " + json);
+            if (wsSession.isOpen()) {
+                wsSession.getRemote().sendString(json);
+            }
+        } catch (IOException e) {
+            logger.severe(e.toString());
         }
     }
 
@@ -114,6 +118,6 @@ public class AdminWebSocket {
     }*/
 
     private void reportForbiddenMessage() {
-
+        doSendMessage(AdminWebSocketHandler.prepareMessageNotAuthorized());
     }
 }
