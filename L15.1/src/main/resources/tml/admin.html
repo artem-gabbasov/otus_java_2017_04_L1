@@ -6,6 +6,7 @@
   <style type="text/css">
     .fading{
       background: #fff;
+      padding: 5px 5px;
       transition: background .25s ease-in-out;
       -moz-transition: background .25s ease-in-out;
       -webkit-transition: background .25s ease-in-out;
@@ -27,12 +28,12 @@
     <input type="submit" name="logout" value="Logout">
   </form>
 
-  <p id="maxElements"   class="fading">maxElements:   ${maxElements}</p>
-  <p id="elementsCount" class="fading">elementsCount: ${elementsCount}</p>
-  <p id="lifeTime"      class="fading">lifeTime:      ${lifeTime}</p>
-  <p id="idleTime"      class="fading">idleTime:      ${idleTime}</p>
-  <p id="hitCount"      class="fading">hitCount:      ${hitCount}</p>
-  <p id="missCount"     class="fading">missCount:     ${missCount}</p>
+  <p>maxElements:   <a class="fading" id="maxElements"   >${maxElements}</a></p>
+  <p>elementsCount: <a class="fading" id="elementsCount" >${elementsCount}</a></p>
+  <p>lifeTime:      <a class="fading" id="lifeTime"      >${lifeTime}</a></p>
+  <p>idleTime:      <a class="fading" id="idleTime"      >${idleTime}</a></p>
+  <p>hitCount:      <a class="fading" id="hitCount"      >${hitCount}</a></p>
+  <p>missCount:     <a class="fading" id="missCount"     >${missCount}</a></p>
 
   <hr>
 

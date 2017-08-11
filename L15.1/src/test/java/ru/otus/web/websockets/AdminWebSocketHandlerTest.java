@@ -59,13 +59,18 @@ public class AdminWebSocketHandlerTest {
         DBServiceCacheEngine cacheEngine = new DBServiceCacheEngineImpl(1, 0, 0, true);
         DBServiceCached dbServiceCached = new DBServiceCachedImpl(ConnectionHelper.getDefaultConnection(), cacheEngine);
 
-        new AdminWebSocketHandler(null, dbServiceCached).handleJson(
+        AdminWebSocketHandler handler = new AdminWebSocketHandler(null, dbServiceCached);
+
+        // подписка в этом тесте нам только мешает
+        dbServiceCached.getCacheEngine().removeListener(handler);
+
+        handler.handleJson(
             "{" +
                 "\"messageType\":\"dbService\"," +
                 "\"details\":{" +
                     "\"action\":\"saveUser\"," +
                     "\"params\":{" +
-                        "\"userId\":5" +
+                        "\"userId\":\"5\"" +
                     "}" +
                 "}" +
             "}"

@@ -1,5 +1,7 @@
 package ru.otus.cache;
 
+import ru.otus.observable.Listener;
+
 /**
  * Created by tully.
  */
@@ -27,4 +29,8 @@ public interface CacheEngine<K, V> {
     void dispose();
 
     void clear();
+
+    boolean addListener(Listener<Long> listener);
+
+    boolean removeListener(Listener<Long> listener);
 }

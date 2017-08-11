@@ -1,8 +1,10 @@
 var ws;
+var ready = false;
 
 init = function () {
     ws = new WebSocket("ws://localhost:8080/wsadmin");
     ws.onopen = function (event) {
+        ready = true;
     }
     ws.onmessage = function (event) {
         var json = JSON.parse(event.data);
@@ -11,8 +13,8 @@ init = function () {
                 var data = json.details.data;
                 for(var i in data) {
                     var id = data[i].name;
-                    highlight(name);
-                    document.getElementById(name).value = data[i].value;
+                    highlight(id);
+                    document.getElementById(id).innerHTML = data[i].value;
                 }
                 break;
             default:
@@ -22,6 +24,7 @@ init = function () {
         }
     }
     ws.onclose = function (event) {
+        ready = false;
     }
 };
 
@@ -55,6 +58,10 @@ function getUserID () {
 };
 
 function sendMessage(messageType, details) {
+    if (!ready) {
+        init();
+    }
+
     var json = JSON.stringify({
         "messageType": messageType,
         "details": details

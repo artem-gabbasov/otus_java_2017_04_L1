@@ -42,13 +42,11 @@ public class AdminWebSocket {
     private Session wsSession = null;
 
     private final HttpSession httpSession;
-    private final DBServiceCached dbServiceCached;
 
     private final AdminWebSocketHandler adminWebSocketHandler;
 
     public AdminWebSocket(HttpSession httpSession, DBServiceCached dbServiceCached) {
         this.httpSession = httpSession;
-        this.dbServiceCached = dbServiceCached;
 
         adminWebSocketHandler = new AdminWebSocketHandler(this, dbServiceCached);
 
@@ -79,7 +77,9 @@ public class AdminWebSocket {
         if (ServerContext.isAuthorized(httpSession)) {
             try {
                 logger.fine("Sending message: " + json);
-                wsSession.getRemote().sendString(json);
+                if (wsSession.isOpen()) {
+                    wsSession.getRemote().sendString(json);
+                }
             } catch (IOException e) {
                 logger.severe(e.toString());
             }

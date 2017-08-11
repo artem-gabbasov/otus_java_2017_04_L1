@@ -40,6 +40,8 @@ public class AdminWebSocketHandler implements Listener<Long> {
     public AdminWebSocketHandler(AdminWebSocket adminWebSocket, DBServiceCached dbServiceCached) {
         this.adminWebSocket = adminWebSocket;
         this.dbServiceCached = dbServiceCached;
+
+        dbServiceCached.getCacheEngine().addListener(this);
     }
 
     public void handleJson(String json) throws AdminWebSocketException {
@@ -81,9 +83,9 @@ public class AdminWebSocketHandler implements Listener<Long> {
     }
 
     private Long getUserIdFromJson(JsonObject details) {
-        return details
+        return Long.valueOf(details
             .getJsonObject(JSON_DETAILS_CLIENT_DBSERVICE_PARAMS)
-            .getJsonNumber(JSON_DETAILS_CLIENT_DBSERVICE_PARAMS_USERID).longValue();
+            .getJsonString(JSON_DETAILS_CLIENT_DBSERVICE_PARAMS_USERID).getString());
     }
 
     public static String prepareJson(String messageType, JsonObject details) {

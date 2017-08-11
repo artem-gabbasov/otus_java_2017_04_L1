@@ -3,6 +3,7 @@ package ru.otus.cache.impl;
 import ru.otus.cache.CacheEngine;
 import ru.otus.cache.IdleManager;
 import ru.otus.cache.MyElement;
+import ru.otus.observable.Listener;
 import ru.otus.observable.ObservableVariable;
 import ru.otus.observable.ObserverManager;
 import ru.otus.observable.ObserverManagerImpl;
@@ -43,7 +44,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
 
         hit = observerManager.createNewObservableVariable("hitCount", 0L);
         miss = observerManager.createNewObservableVariable("missCount", 0L);
-        elementsCountSnapshot = observerManager.createNewObservableVariable("elementsCountSnapshot", 0L);
+        elementsCountSnapshot = observerManager.createNewObservableVariable("elementsCount", 0L);
     }
 
     public void put(K key, V value) {
@@ -154,5 +155,15 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     @Override
     public boolean isEternal() {
         return isEternal;
+    }
+
+    @Override
+    public boolean addListener(Listener<Long> listener) {
+        return observerManager.addListener(listener);
+    }
+
+    @Override
+    public boolean removeListener(Listener<Long> listener) {
+        return observerManager.removeListener(listener);
     }
 }
