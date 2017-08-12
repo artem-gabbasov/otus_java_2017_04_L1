@@ -105,13 +105,13 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     @Override
     public void dispose() {
         clear();
+        timer.cancel();
     }
 
     @Override
     public void clear() {
         elements.clear();
         elementsCountSnapshot.setValue(0L);
-        timer.cancel();
     }
 
     private TimerTask getTimerTask(final K key, Function<MyElement<K, V>, Long> timeFunction) {
