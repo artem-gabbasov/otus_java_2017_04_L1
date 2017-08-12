@@ -17,7 +17,7 @@ import java.util.logging.*;
  * Created by Artem Gabbasov on 03.08.2017.
  */
 @WebSocket
-class AdminWebSocket {
+public class AdminWebSocket {
     private static final Logger logger = Logger.getLogger(AdminWebSocket.class.getName());
 
     static {
