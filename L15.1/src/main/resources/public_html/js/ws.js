@@ -31,6 +31,12 @@ init = function () {
     }
 };
 
+highlight = function(id) {
+  $elem = document.getElementById(id);
+  $elem.style.background = "#ddd";
+  setTimeout('$elem.style.background = "#fff"', 750);
+};
+
 saveUser = function () {
     sendMessage("dbService", {
         "action": "saveUser",
