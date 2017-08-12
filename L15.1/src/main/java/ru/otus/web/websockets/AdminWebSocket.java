@@ -27,7 +27,7 @@ public class AdminWebSocket {
             handler.setFormatter(new Formatter() {
                 @Override
                 public String format(LogRecord record) {
-                    return DateFormatUtils.format(record.getMillis(), "dd.MM.yyyy hh:mm:ss") + " " + record.getLevel() + ": " + record.getMessage() + "\n";
+                    return DateFormatUtils.format(record.getMillis(), "dd.MM.yyyy HH:mm:ss") + " " + record.getLevel() + ": " + record.getMessage() + "\n";
                 }
             });
             logger.addHandler(handler);
