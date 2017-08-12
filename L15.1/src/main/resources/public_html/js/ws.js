@@ -1,5 +1,6 @@
 var ws;
 var ready = false;
+var queue = [];
 
 init = function () {
     ws = new WebSocket("ws://localhost:8080/wsadmin");
@@ -34,7 +35,8 @@ init = function () {
 highlight = function(id) {
   $elem = document.getElementById(id);
   $elem.style.background = "#ddd";
-  setTimeout('$elem.style.background = "#fff"', 750);
+  queue.push($elem);
+  setTimeout('queue.shift().style.background = "#fff"', 750);
 };
 
 saveUser = function () {
