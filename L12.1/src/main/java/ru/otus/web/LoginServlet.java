@@ -27,8 +27,6 @@ public class LoginServlet extends HttpServlet {
     private final String LOGIN_PAGE_TEMPLATE = "login.html";
 
     private final String UNDEFINED_MESSAGE = "DBService is undefined";
-    private final String MULTIPLE_USERNAMES_MESSAGE = "Multiple username values found";
-    private final String MULTIPLE_PASSWORDS_MESSAGE = "Multiple password values found";
 
     private final String PARAMETER_USERNAME = "username";
     private final String PARAMETER_PASSWORD = "password";
@@ -64,7 +62,7 @@ public class LoginServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, UNDEFINED_MESSAGE);
         } else {
             try {
-                processRequest(req.getParameterMap(), req.getSession(), resp);
+                processRequest(req.getParameter(PARAMETER_USERNAME), req.getParameter(PARAMETER_PASSWORD), req.getSession(), resp);
             } catch (SQLException | JPAException e) {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
             }
@@ -73,7 +71,8 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Обрабатывает http-запрос на авторизацию
-     * @param parameterMap              параметры http-запроса
+     * @param username                  имя пользователя из http-запроса
+     * @param password                  пароль из http-запроса
      * @param session                   сессия для авторизации
      * @param resp                      http-ответ для реакции на запрос
      * @throws SQLException
@@ -81,23 +80,10 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException
      * @throws ServletException
      */
-    private void processRequest(Map<String, String[]> parameterMap, HttpSession session, HttpServletResponse resp) throws SQLException, JPAException, IOException, ServletException {
-        String[] values = parameterMap.get(PARAMETER_USERNAME);
-        if (values.length == 1) { // у нас подразумевается единственное значение имени пользователя
-            String username = values[0];
-            values = parameterMap.get(PARAMETER_PASSWORD);
-            if (values.length == 1) { // у нас подразумевается единственное значение пароля
-                String passwordMD5 = Credential.MD5.digest(values[0]);
-
-                passwordMD5 = passwordMD5.startsWith("MD5:")?passwordMD5.substring("MD5:".length()):passwordMD5;
-
-                processLoginData(username, passwordMD5, session, resp);
-            } else {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, MULTIPLE_PASSWORDS_MESSAGE);
-            }
-        } else {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, MULTIPLE_USERNAMES_MESSAGE);
-        }
+    private void processRequest(String username, String password, HttpSession session, HttpServletResponse resp) throws SQLException, JPAException, IOException, ServletException {
+        String passwordMD5 = Credential.MD5.digest(password);
+        passwordMD5 = passwordMD5.startsWith("MD5:")?passwordMD5.substring("MD5:".length()):passwordMD5;
+        processLoginData(username, passwordMD5, session, resp);
     }
 
     /**
