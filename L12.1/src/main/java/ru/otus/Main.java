@@ -9,6 +9,9 @@ import ru.otus.web.ServerManager;
 @SuppressWarnings("WeakerAccess")
 public class Main {
     public static void main(String[] args) throws Exception {
-        new ServerManager();
+        try (ServerManager serverManager = new ServerManager()) {
+            serverManager.init();
+            serverManager.start();
+        }
     }
 }

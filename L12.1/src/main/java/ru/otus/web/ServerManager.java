@@ -15,7 +15,7 @@ import java.sql.Connection;
  * <p>
  * Верхнеуровневый класс, содержащий в себе работу с сервером
  */
-public class ServerManager {
+public class ServerManager implements AutoCloseable {
     private final static int PORT = 8090;
     private final static String PUBLIC_HTML = "public_html";
 
@@ -28,26 +28,41 @@ public class ServerManager {
     final static String AUTHORIZED_SESSIONS = "authorizedSessions";
     final static String REDIRECT_PAGE = "redirectPage";
 
-    public ServerManager() throws Exception {
-        try (Connection connection = ConnectionHelper.getDefaultConnection()) {
-            DBServiceCacheEngine cacheEngine = new DBServiceCacheEngineImpl(2, 0, 0, true);
-            DBServiceCached dbServiceCached = new DBServiceCachedImpl(connection, cacheEngine);
+    private final Server server;
+    private Connection connection;
 
-            DBServiceNamed dbServiceNamed = new DBServiceNamedImpl(connection);
+    public ServerManager() {
+        this.server = new Server(PORT);
+    }
 
-            ResourceHandler resourceHandler = new ResourceHandler();
-            resourceHandler.setResourceBase(PUBLIC_HTML);
+    public void init() {
+        connection = ConnectionHelper.getDefaultConnection();
 
-            ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        DBServiceCacheEngine cacheEngine = new DBServiceCacheEngineImpl(2, 0, 0, true);
+        DBServiceCached dbServiceCached = new DBServiceCachedImpl(connection, cacheEngine);
 
-            context.addServlet(new ServletHolder(new LoginServlet(dbServiceNamed)), "/login");
-            context.addServlet(new ServletHolder(new AdminServlet(() -> dbServiceCached)), "/admin");
+        DBServiceNamed dbServiceNamed = new DBServiceNamedImpl(connection);
 
-            Server server = new Server(PORT);
-            server.setHandler(new HandlerList(resourceHandler, context));
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setResourceBase(PUBLIC_HTML);
 
-            server.start();
-            server.join();
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+
+        context.addServlet(new ServletHolder(new LoginServlet(dbServiceNamed)), "/login");
+        context.addServlet(new ServletHolder(new AdminServlet(() -> dbServiceCached)), "/admin");
+
+        server.setHandler(new HandlerList(resourceHandler, context));
+    }
+
+    public void start() throws Exception {
+        server.start();
+        server.join();
+    }
+
+    @Override
+    public void close()throws Exception {
+        if (connection != null) {
+            connection.close();
         }
     }
 }
