@@ -11,6 +11,7 @@ import ru.otus.jpa.JPAException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
 
 /**
  * Created by Artem Gabbasov on 25.07.2017.
@@ -47,6 +48,11 @@ public class DBServiceNamedTest extends DBServiceTestCommon {
         dbService.save(namedDataSet);
         NamedTestDataSet loadedDataSet = dbService.loadByName("user1", NamedTestDataSet.class);
         assert loadedDataSet.getId() == 1 && loadedDataSet.getName().equals("user1") && loadedDataSet.getPasswordMD5().equals("asdasdasd");
+    }
+
+    @Test
+    public void getStatistics() {
+        assert createDBServiceNamed().getStatistics().equals(Collections.emptyMap());
     }
 
     @After

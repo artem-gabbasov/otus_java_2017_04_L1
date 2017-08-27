@@ -2,7 +2,6 @@ package ru.otus.db.dbservices;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import ru.otus.datasets.AddressDataSet;
 import ru.otus.datasets.PhoneDataSet;
@@ -11,6 +10,7 @@ import ru.otus.jpa.JPAException;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ import java.util.List;
  * <p>
  */
 @SuppressWarnings("EmptyMethod")
-@Ignore
+//@Ignore
 public class DBServiceHibernateTest extends DBServiceTestCommon {
     @Override
     public DBService createDBService() {
@@ -80,6 +80,11 @@ public class DBServiceHibernateTest extends DBServiceTestCommon {
         assert loadedPhone2.getCode() == 347 && loadedPhone2.getNumber().equals("1234567");
 
         assert loadedUser2.getPhones().size() == 0;
+    }
+
+    @Test
+    public void getStatistics() {
+        assert createDBService().getStatistics().equals(Collections.emptyMap());
     }
 
     @After

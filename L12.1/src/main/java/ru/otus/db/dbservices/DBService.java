@@ -5,6 +5,8 @@ import ru.otus.datasets.DataSet;
 import ru.otus.jpa.JPAException;
 
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Created by Artem Gabbasov on 06.06.2017.
@@ -32,4 +34,8 @@ public interface DBService {
      */
     @Nullable
     <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException, JPAException;
+
+    default Map<String, Object> getStatistics() {
+        return Collections.emptyMap();
+    }
 }

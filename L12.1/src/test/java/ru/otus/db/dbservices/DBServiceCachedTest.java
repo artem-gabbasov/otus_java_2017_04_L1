@@ -9,6 +9,7 @@ import ru.otus.datasets.UserDataSet;
 import ru.otus.jpa.JPAException;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * Created by Artem Gabbasov on 12.07.2017.
@@ -179,6 +180,19 @@ public class DBServiceCachedTest extends DBServiceTestCommon {
 
         // idleTime уже должен был истечь
         assert cacheEngine.getHitCount() == 2 && cacheEngine.getMissCount() == 1;
+    }
+
+    @Test
+    public void getStatistics() {
+        cacheEngine = new DBServiceCacheEngineImpl(10, 1024L, 512L, false);
+        Map<String, Object> statistics = new DBServiceCachedImpl(connection, cacheEngine).getStatistics();
+        assert statistics.size() == 6
+                && (Integer)statistics.get(DBServiceCached.STATISTICS_MAXELEMENTS) == 10
+                && (Integer)statistics.get(DBServiceCached.STATISTICS_ELEMENTSCOUNT) == 0
+                && (Long)statistics.get(DBServiceCached.STATISTICS_LIFETIME) == 1024L
+                && (Long)statistics.get(DBServiceCached.STATISTICS_IDLETIME) == 512L
+                && (Integer)statistics.get(DBServiceCached.STATISTICS_HITCOUNT) == 0
+                && (Integer)statistics.get(DBServiceCached.STATISTICS_MISSCOUNT) == 0;
     }
 
     @After

@@ -2,6 +2,7 @@ package ru.otus.web;
 
 import org.eclipse.jetty.server.handler.ContextHandler;
 import ru.otus.datasets.UserDataSet;
+import ru.otus.db.dbservices.DBService;
 import ru.otus.db.dbservices.DBServiceCacheEngine;
 import ru.otus.db.dbservices.DBServiceCached;
 import ru.otus.jpa.JPAException;
@@ -25,7 +26,7 @@ import java.util.function.Supplier;
 public class AdminServlet extends HttpServlet {
     private static final String ADMIN_PAGE_TEMPLATE = "admin.html";
 
-    private static final String UNDEFINED_MESSAGE = "DBService or CacheEngine is undefined.";
+    private static final String UNDEFINED_MESSAGE = "DBService or its statistics map is undefined.";
 
     private static final String ACTION_LOGOUT = "logout";
     private static final String ACTION_USER_SAVE = "save";
@@ -33,14 +34,16 @@ public class AdminServlet extends HttpServlet {
     private static final String ACTION_CACHE_CLEAR = "clear";
     private static final String PARAMETER_USER_ID = "userID";
 
-    private final Supplier<DBServiceCached> dbServiceSupplier;
+    private static final String EMPTY_STATISTICS_STRING = "no_data";
+
+    private final Supplier<DBService> dbServiceSupplier;
 
     /**
      * @param dbServiceSupplier объект, который поставляет DBService, по которому требуется информация.
      *                          Использовал Supplier, а не просто ссылку на DBService, т.к. нам не важно,
      *                          за одним ли мы объектом следим или за разными - в общем случае мы можем их переключать
      */
-    public AdminServlet(Supplier<DBServiceCached> dbServiceSupplier) {
+    public AdminServlet(Supplier<DBService> dbServiceSupplier) {
         this.dbServiceSupplier = dbServiceSupplier;
     }
 
@@ -87,11 +90,11 @@ public class AdminServlet extends HttpServlet {
      * @throws IOException
      */
     private void showPage(HttpServletResponse resp) throws IOException {
-        DBServiceCached dbService = dbServiceSupplier.get();
+        DBService dbService = dbServiceSupplier.get();
         if (checkObject(dbService, resp)) {
-            DBServiceCacheEngine cacheEngine = dbService.getCacheEngine();
-            if (checkObject(cacheEngine, resp)) {
-                Map<String, Object> pageVariables = createPageVariablesMap(cacheEngine);
+            Map<String, Object> statistics = dbService.getStatistics();
+            if (checkObject(statistics, resp)) {
+                Map<String, Object> pageVariables = createPageVariablesMap(statistics);
 
                 resp.getWriter().println(TemplateProcessor.instance().getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
 
@@ -101,20 +104,32 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    private Object getStatisticsElement(Map<String, Object> statistics, String key) {
+        Object result = statistics.get(key);
+        if (result == null) {
+            return EMPTY_STATISTICS_STRING;
+        }
+        return result;
+    }
+
+    private void putVariable(Map<String, Object> dest, Map<String, Object> source, String key) {
+        dest.put(key, getStatisticsElement(source, key));
+    }
+
     /**
      * Заполняет значения переменных для Template'а
-     * @param cacheEngine   объект, информация по которому выводится на странице
+     * @param statistics    Map с информацией по наблюдаемому объекту
      * @return              Map со значениями переменных для вывода на админскую страничку
      */
-    private Map<String, Object> createPageVariablesMap(DBServiceCacheEngine cacheEngine) {
+    private Map<String, Object> createPageVariablesMap(Map<String, Object> statistics) {
         Map<String, Object> pageVariables = new HashMap<>();
 
-        pageVariables.put("maxElements", cacheEngine.getMaxElements());
-        pageVariables.put("elementsCount", cacheEngine.getElementsCount());
-        pageVariables.put("lifeTime", cacheEngine.getLifeTimeMs());
-        pageVariables.put("idleTime", cacheEngine.getIdleTimeMs());
-        pageVariables.put("hitCount", cacheEngine.getHitCount());
-        pageVariables.put("missCount", cacheEngine.getMissCount());
+        putVariable(pageVariables, statistics, DBServiceCached.STATISTICS_MAXELEMENTS);
+        putVariable(pageVariables, statistics, DBServiceCached.STATISTICS_ELEMENTSCOUNT);
+        putVariable(pageVariables, statistics, DBServiceCached.STATISTICS_LIFETIME);
+        putVariable(pageVariables, statistics, DBServiceCached.STATISTICS_IDLETIME);
+        putVariable(pageVariables, statistics, DBServiceCached.STATISTICS_HITCOUNT);
+        putVariable(pageVariables, statistics, DBServiceCached.STATISTICS_MISSCOUNT);
 
         return pageVariables;
     }
@@ -122,7 +137,7 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (checkAuthorization(req.getSession(), resp)) {
-            DBServiceCached dbService = dbServiceSupplier.get();
+            DBService dbService = dbServiceSupplier.get();
             if (checkObject(dbService, resp)) {
                 try {
                     dispatchParameters(dbService, req.getParameterMap());
@@ -142,7 +157,7 @@ public class AdminServlet extends HttpServlet {
      * @throws SQLException             при проблемах в DBService
      * @throws JPAException             при проблемах в DBService
      */
-    private void dispatchParameters(DBServiceCached dbService, Map<String, String[]> parameterMap) throws IllegalAccessException, SQLException, JPAException {
+    private void dispatchParameters(DBService dbService, Map<String, String[]> parameterMap) throws IllegalAccessException, SQLException, JPAException {
         if (parameterMap.containsKey(ACTION_USER_SAVE)) {
             Long id = getUserID(parameterMap);
             if (id != null) {
@@ -158,9 +173,11 @@ public class AdminServlet extends HttpServlet {
         }
 
         if (parameterMap.containsKey(ACTION_CACHE_CLEAR)) {
-            DBServiceCacheEngine cacheEngine = dbService.getCacheEngine();
-            if (cacheEngine != null) {
-                clearCache(cacheEngine);
+            if (dbService instanceof DBServiceCached) {
+                DBServiceCacheEngine cacheEngine = ((DBServiceCached)dbService).getCacheEngine();
+                if (cacheEngine != null) {
+                    clearCache(cacheEngine);
+                }
             }
         }
     }
@@ -173,7 +190,7 @@ public class AdminServlet extends HttpServlet {
      * @throws SQLException             при проблемах в DBService
      * @throws JPAException             при проблемах в DBService
      */
-    private void saveUser(DBServiceCached dbService, long id) throws IllegalAccessException, SQLException, JPAException {
+    private void saveUser(DBService dbService, long id) throws IllegalAccessException, SQLException, JPAException {
         dbService.save(new UserDataSet(id, "user_test", (int)(id % 100)));
     }
 
@@ -184,7 +201,7 @@ public class AdminServlet extends HttpServlet {
      * @throws JPAException     при проблемах в DBService
      * @throws SQLException     при проблемах в DBService
      */
-    private void loadUser(DBServiceCached dbService, long id) throws JPAException, SQLException {
+    private void loadUser(DBService dbService, long id) throws JPAException, SQLException {
         dbService.load(id, UserDataSet.class);
     }
 

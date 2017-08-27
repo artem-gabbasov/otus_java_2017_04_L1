@@ -4,6 +4,7 @@ import org.junit.*;
 import ru.otus.jpa.JPAException;
 
 import java.sql.SQLException;
+import java.util.Collections;
 
 /**
  * Created by Artem Gabbasov on 06.06.2017.
@@ -39,6 +40,11 @@ public class DBServiceTest extends DBServiceTestCommon {
     @Test
     public void insertAndUpdate() throws SQLException, IllegalAccessException, JPAException {
         super.insertAndUpdate();
+    }
+
+    @Test
+    public void getStatistics() {
+        assert createDBService().getStatistics().equals(Collections.emptyMap());
     }
 
     @After
